@@ -1,0 +1,213 @@
+type Price @db(name: "price") {
+  id: ID! @id @unique
+  amount: String! @default(value: "0.00")
+  currency: Currency! @db(name: "currency_id")
+  label: String
+  createdAt: DateTime! @createdAt @db(name: "created_at")
+}
+
+type CostUnit @db(name: "cost_unit") {
+  id: ID! @id @unique
+  amount: String! @default(value: "0.00")
+  currency: Currency! @db(name: "currency_id")
+  label: String
+  createdAt: DateTime! @createdAt @db(name: "created_at")
+}
+
+type Currency @db(name: "currency") {
+  id: ID! @id @unique
+  symbol: String!
+  isDefault: Boolean @db(name: "is_default")
+  createdAt: DateTime! @createdAt @db(name: "created_at")
+}
+
+type CostUnitByStockUnit @db(name: "cost_unit_by_stock_unit") {
+  id: ID! @id
+  stockUnit: StockUnit! @db(name: "stock_unit_id")
+  costUnit: CostUnit! @db(name: "cost_unit_id")
+}
+
+type LaborUnit @db(name: "labor_unit") {
+  id: ID! @id @unique
+  label: String!
+  createdAt: DateTime! @createdAt @db(name: "created_at")
+}
+
+type CostUnitByLaborUnit @db(name: "cost_unit_by_labor_unit") {
+  id: ID! @id
+  laborUnit: LaborUnit! @db(name: "labor_unit_id")
+  costUnit: CostUnit! @db(name: "cost_unit_id")
+}
+
+# type PriceByStockUnit @db(name: "price_by_stock_unit") {
+#   id: ID! @id
+#   stockUnit: StockUnit! @db(name: "stock_unit_id")
+#   price: Price!
+# }
+
+type StockUnit @db(name: "stock_unit") {
+  id: ID! @id @unique
+  name: String! @unique
+  sku: String @unique
+  supplier: [Supplier] @relation(name: "SupplierByStockUnit")
+  stockUnitCategory: StockUnitCategory @db(name: "stock_unit_category_id")
+  createdAt: DateTime! @createdAt @db(name: "created_at")
+}
+
+type StockUnitCategory @db(name: "stock_unit_category") {
+  id: ID! @id @unique
+  en_EN: String! @unique
+  es_ES: String! @unique
+  createdAt: DateTime! @createdAt @db(name: "created_at")
+}
+
+type Supplier @db(name: "supplier") {
+  id: ID! @id @unique
+  name: String! @unique
+  contact: Contact @db(name: "contact_id")
+  address: Address @db(name: "address_id")
+  createdAt: DateTime! @createdAt @db(name: "created_at")
+}
+
+type SupplierByStockUnit @db(name: "supplier_by_stock_unit") {
+  id: ID! @id
+  stockUnit: StockUnit! @db(name: "stock_unit_id")
+  supplier: Supplier! @db(name: "supplier_id")
+}
+
+type Contact @db(name: "contact") {
+  id: ID! @id @unique
+  email: String @unique
+  firstName: String
+  lastName: String
+  phoneNumber: String
+  createdAt: DateTime! @createdAt @db(name: "created_at")
+}
+
+type Address @db(name: "address") {
+  id: ID! @id @unique
+  line1: String
+  line2: String
+  city: String
+  region: String
+  country: String
+  zipCode: String
+  createdAt: DateTime! @createdAt @db(name: "created_at")
+}
+
+type MeasurementUnit @db(name: "measurement_unit") {
+  id: ID! @id @unique
+  symbol: MeasurementUnitSymbol! @db(name: "symbol_id")
+  name: MeasurementUnitName! @db(name: "name_id")
+}
+
+enum MeasurementUnitName {
+  UNITS
+  MILILITERS
+  LITERS
+  GRAMS
+  KILOGRAMS
+  POUNDS
+  METERS
+  CENTIMETERS
+  CUPS
+  OUNCES
+}
+
+enum MeasurementUnitSymbol {
+  U
+  ML
+  L
+  G
+  KG
+  LB
+  M
+  CM
+  CUP
+  OZ
+}
+
+type Inventory @db(name: "inventory") {
+  id: ID! @id @unique
+  label: String!
+  createdAt: DateTime! @createdAt @db(name: "created_at")
+}
+
+type InventoryByStockUnit @db(name: "inventory_by_stock_unit") {
+  id: ID! @id
+  amount: String! @default(value: "0.00")
+  stockUnit: StockUnit! @db(name: "stock_unit_id")
+  unit: MeasurementUnit! @db(name: "unit_id")
+  expiresAt: DateTime @db(name: "expires_at")
+}
+
+type MenuItem @db(name: "menu_item") {
+  id: ID! @id @unique
+  name: String! @unique
+  category: MenuItemCategory! @db(name: "menu_category_id")
+  createdAt: DateTime! @createdAt @db(name: "created_at")
+  updatedAt: DateTime! @updatedAt @db(name: "updated_at")
+}
+
+type MenuItemCategory @db(name: "menu_item_category") {
+  id: ID! @id @unique
+  name: MenuItemCategoryName! @unique @db(name: "menu_item_category_name_id")
+}
+
+enum MenuItemCategoryName {
+  STARTER
+  SIGNATURE
+  SOUP
+  DESSERT
+  BREAKFAST
+  POTS
+  WRAPS
+  COLD_DRINKS
+  HOT_DRINKS
+}
+
+type CostUnitByMenuItem @db(name: "cost_unit_by_menu_item") {
+  id: ID! @id @unique
+  menuItem: MenuItem! @db(name: "menu_item_id")
+  costUnit: CostUnit! @db(name: "cost_unit_id")
+}
+
+type StockUnitByMenuItem @db(name: "stock_unit_by_menu_item") {
+  id: ID! @id
+  menuItem: MenuItem! @db(name: "menu_item_id")
+  stockUnit: StockUnit! @db(name: "stock_unit_id")
+  amount: String! @default(value: "0.00")
+}
+
+type Menu @db(name: "menu") {
+  id: ID! @id @unique
+  label: String! @unique
+  createdAt: DateTime! @createdAt @db(name: "created_at")
+}
+
+type MenuItemByMenu @db(name: "menu_item_by_menu") {
+  id: ID! @id
+  menu: Menu! @db(name: "menu_id")
+  menuItem: MenuItem! @db(name: "menu_item_id")
+}
+
+type Table @db(name: "table") {
+  id: ID! @id @unique
+  label: String!
+  createdAt: DateTime! @createdAt @db(name: "created_at")
+}
+
+type Order @db(name: "order") {
+  id: ID! @id @unique
+  table: Table!
+  amount: String! @default(value: "0.00")
+  currency: Currency! @db(name: "currency_id")
+  orderedAt: DateTime!
+  paidAt: DateTime
+}
+
+type MenuItemByOrder @db(name: "menu_item_by_order") {
+  id: ID! @id
+  order: Order! @db(name: "order_id")
+  menuItem: MenuItem! @db(name: "menu_item_id")
+}
