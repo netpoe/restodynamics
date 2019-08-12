@@ -1,4 +1,4 @@
-import { Box, Container, TextField, Typography, withStyles } from "@material-ui/core";
+import { Box, Container, TextField, Theme, Typography, withStyles } from "@material-ui/core";
 import { get } from "lodash";
 import React from "react";
 import { RouteComponentProps } from "react-router";
@@ -9,7 +9,7 @@ interface IStockUnitDetailsProps extends RouteComponentProps<{ id: string }> {
   classes: any;
 }
 
-export const StockUnitDetails = withStyles(theme => ({}))(
+export const StockUnitDetails = withStyles((theme: Theme) => ({}))(
   ({ classes, match }: IStockUnitDetailsProps) => {
     const [stockUnitDetailsQuery] = useQuery({
       query: QueryStockUnit,

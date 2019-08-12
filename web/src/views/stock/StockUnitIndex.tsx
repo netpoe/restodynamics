@@ -86,7 +86,7 @@ export const StockUnitIndex = withStyles(theme => ({
                 </TableHead>
                 <TableBody>
                   {stockUnitsQuery.data.stockUnits.map((row: any, i: number) => (
-                    <TableRow key={i} onClick={(e: any) => handleOnTableRowClick(e, row.id)}>
+                    <TableRow key={i} hover onClick={(e: any) => handleOnTableRowClick(e, row.id)}>
                       <TableCell>{row.name}</TableCell>
                       <TableCell style={{ textTransform: "capitalize" }}>
                         {get(row.stockUnitCategory, ["es_ES"], null)}
