@@ -2798,8 +2798,7 @@ input StockUnitByMenuItemWhereUniqueInput {
 
 type StockUnitCategory {
   id: ID!
-  en_EN: String!
-  es_ES: String!
+  name: String!
   createdAt: DateTime!
 }
 
@@ -2811,8 +2810,7 @@ type StockUnitCategoryConnection {
 
 input StockUnitCategoryCreateInput {
   id: ID
-  en_EN: String!
-  es_ES: String!
+  name: String!
 }
 
 input StockUnitCategoryCreateOneInput {
@@ -2828,18 +2826,15 @@ type StockUnitCategoryEdge {
 enum StockUnitCategoryOrderByInput {
   id_ASC
   id_DESC
-  en_EN_ASC
-  en_EN_DESC
-  es_ES_ASC
-  es_ES_DESC
+  name_ASC
+  name_DESC
   createdAt_ASC
   createdAt_DESC
 }
 
 type StockUnitCategoryPreviousValues {
   id: ID!
-  en_EN: String!
-  es_ES: String!
+  name: String!
   createdAt: DateTime!
 }
 
@@ -2862,18 +2857,15 @@ input StockUnitCategorySubscriptionWhereInput {
 }
 
 input StockUnitCategoryUpdateDataInput {
-  en_EN: String
-  es_ES: String
+  name: String
 }
 
 input StockUnitCategoryUpdateInput {
-  en_EN: String
-  es_ES: String
+  name: String
 }
 
 input StockUnitCategoryUpdateManyMutationInput {
-  en_EN: String
-  es_ES: String
+  name: String
 }
 
 input StockUnitCategoryUpdateOneInput {
@@ -2905,34 +2897,20 @@ input StockUnitCategoryWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  en_EN: String
-  en_EN_not: String
-  en_EN_in: [String!]
-  en_EN_not_in: [String!]
-  en_EN_lt: String
-  en_EN_lte: String
-  en_EN_gt: String
-  en_EN_gte: String
-  en_EN_contains: String
-  en_EN_not_contains: String
-  en_EN_starts_with: String
-  en_EN_not_starts_with: String
-  en_EN_ends_with: String
-  en_EN_not_ends_with: String
-  es_ES: String
-  es_ES_not: String
-  es_ES_in: [String!]
-  es_ES_not_in: [String!]
-  es_ES_lt: String
-  es_ES_lte: String
-  es_ES_gt: String
-  es_ES_gte: String
-  es_ES_contains: String
-  es_ES_not_contains: String
-  es_ES_starts_with: String
-  es_ES_not_starts_with: String
-  es_ES_ends_with: String
-  es_ES_not_ends_with: String
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -2948,8 +2926,7 @@ input StockUnitCategoryWhereInput {
 
 input StockUnitCategoryWhereUniqueInput {
   id: ID
-  en_EN: String
-  es_ES: String
+  name: String
 }
 
 type StockUnitConnection {

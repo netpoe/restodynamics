@@ -1117,10 +1117,8 @@ export type MeasurementUnitOrderByInput =
 export type StockUnitCategoryOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "en_EN_ASC"
-  | "en_EN_DESC"
-  | "es_ES_ASC"
-  | "es_ES_DESC"
+  | "name_ASC"
+  | "name_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC";
 
@@ -1743,34 +1741,20 @@ export interface StockUnitCategoryWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  en_EN?: Maybe<String>;
-  en_EN_not?: Maybe<String>;
-  en_EN_in?: Maybe<String[] | String>;
-  en_EN_not_in?: Maybe<String[] | String>;
-  en_EN_lt?: Maybe<String>;
-  en_EN_lte?: Maybe<String>;
-  en_EN_gt?: Maybe<String>;
-  en_EN_gte?: Maybe<String>;
-  en_EN_contains?: Maybe<String>;
-  en_EN_not_contains?: Maybe<String>;
-  en_EN_starts_with?: Maybe<String>;
-  en_EN_not_starts_with?: Maybe<String>;
-  en_EN_ends_with?: Maybe<String>;
-  en_EN_not_ends_with?: Maybe<String>;
-  es_ES?: Maybe<String>;
-  es_ES_not?: Maybe<String>;
-  es_ES_in?: Maybe<String[] | String>;
-  es_ES_not_in?: Maybe<String[] | String>;
-  es_ES_lt?: Maybe<String>;
-  es_ES_lte?: Maybe<String>;
-  es_ES_gt?: Maybe<String>;
-  es_ES_gte?: Maybe<String>;
-  es_ES_contains?: Maybe<String>;
-  es_ES_not_contains?: Maybe<String>;
-  es_ES_starts_with?: Maybe<String>;
-  es_ES_not_starts_with?: Maybe<String>;
-  es_ES_ends_with?: Maybe<String>;
-  es_ES_not_ends_with?: Maybe<String>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -2044,8 +2028,7 @@ export interface SupplierUpdateOneRequiredInput {
 
 export type StockUnitCategoryWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
-  en_EN?: Maybe<String>;
-  es_ES?: Maybe<String>;
+  name?: Maybe<String>;
 }>;
 
 export interface SupplierCreateOneInput {
@@ -2294,8 +2277,7 @@ export type MenuWhereUniqueInput = AtLeastOne<{
 }>;
 
 export interface StockUnitCategoryUpdateDataInput {
-  en_EN?: Maybe<String>;
-  es_ES?: Maybe<String>;
+  name?: Maybe<String>;
 }
 
 export interface MenuWhereInput {
@@ -2973,8 +2955,7 @@ export interface LaborUnitCreateOneInput {
 }
 
 export interface StockUnitCategoryUpdateInput {
-  en_EN?: Maybe<String>;
-  es_ES?: Maybe<String>;
+  name?: Maybe<String>;
 }
 
 export interface LaborUnitCreateInput {
@@ -3539,8 +3520,7 @@ export interface MenuUpdateDataInput {
 
 export interface StockUnitCategoryCreateInput {
   id?: Maybe<ID_Input>;
-  en_EN: String;
-  es_ES: String;
+  name: String;
 }
 
 export interface MeasurementUnitSubscriptionWhereInput {
@@ -3632,8 +3612,7 @@ export interface OrderUpdateInput {
 }
 
 export interface StockUnitCategoryUpdateManyMutationInput {
-  en_EN?: Maybe<String>;
-  es_ES?: Maybe<String>;
+  name?: Maybe<String>;
 }
 
 export interface NodeNode {
@@ -5025,8 +5004,7 @@ export interface MenuEdgeSubscription
 
 export interface StockUnitCategory {
   id: ID_Output;
-  en_EN: String;
-  es_ES: String;
+  name: String;
   createdAt: DateTimeOutput;
 }
 
@@ -5034,8 +5012,7 @@ export interface StockUnitCategoryPromise
   extends Promise<StockUnitCategory>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  en_EN: () => Promise<String>;
-  es_ES: () => Promise<String>;
+  name: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
 }
 
@@ -5043,8 +5020,7 @@ export interface StockUnitCategorySubscription
   extends Promise<AsyncIterator<StockUnitCategory>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  en_EN: () => Promise<AsyncIterator<String>>;
-  es_ES: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
@@ -5052,8 +5028,7 @@ export interface StockUnitCategoryNullablePromise
   extends Promise<StockUnitCategory | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  en_EN: () => Promise<String>;
-  es_ES: () => Promise<String>;
+  name: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
 }
 
@@ -6836,8 +6811,7 @@ export interface AggregateCostUnitByLaborUnitSubscription
 
 export interface StockUnitCategoryPreviousValues {
   id: ID_Output;
-  en_EN: String;
-  es_ES: String;
+  name: String;
   createdAt: DateTimeOutput;
 }
 
@@ -6845,8 +6819,7 @@ export interface StockUnitCategoryPreviousValuesPromise
   extends Promise<StockUnitCategoryPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  en_EN: () => Promise<String>;
-  es_ES: () => Promise<String>;
+  name: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
 }
 
@@ -6854,8 +6827,7 @@ export interface StockUnitCategoryPreviousValuesSubscription
   extends Promise<AsyncIterator<StockUnitCategoryPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  en_EN: () => Promise<AsyncIterator<String>>;
-  es_ES: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 

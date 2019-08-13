@@ -1,4 +1,7 @@
 import { Box, Container, TextField, Theme, Typography, withStyles } from "@material-ui/core";
+import CachedOutlinedIcon from "@material-ui/icons/CachedOutlined";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import { get } from "lodash";
 import React from "react";
 import { RouteComponentProps } from "react-router";
@@ -43,8 +46,10 @@ export const StockUnitDetails = withStyles((theme: Theme) => ({}))(
 );
 
 const StockUnitNameField = ({ id, value }: { id: string; value: any }) => {
+  const [isLoading, setLoading] = React.useState(false);
   const [name, setName] = React.useState(value);
   const [error, setError] = React.useState<CombinedError | undefined>(undefined);
+  const [success, setSuccess] = React.useState(false);
   const [mutation, executeMutation] = useMutation(`
     mutation ($where: StockUnitWhereUniqueInput!, $create: StockUnitCreateInput!, $update: StockUnitUpdateInput!) {
       upsertStockUnit(where: $where, create: $create, update: $update) {
@@ -59,6 +64,9 @@ const StockUnitNameField = ({ id, value }: { id: string; value: any }) => {
       return;
     }
 
+    setSuccess(false);
+    setLoading(true);
+
     const { data, error: mutationError } = await executeMutation({
       where: {
         id,
@@ -70,21 +78,54 @@ const StockUnitNameField = ({ id, value }: { id: string; value: any }) => {
         name,
       },
     });
-    setError(mutationError);
+
+    setLoading(false);
+
+    if (mutationError) {
+      setSuccess(false);
+      setError(mutationError);
+      console.error(mutationError);
+    } else {
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+      }, 3000);
+    }
   };
 
   return (
-    <TextField
-      error={Boolean(error)}
-      fullWidth
-      id={id}
-      name="name"
-      variant="outlined"
-      label="Nombre"
-      autoFocus={!Boolean(id)}
-      value={name}
-      onChange={(e: any) => setName(e.target.value)}
-      onBlur={upsert}
-    />
+    <Box position="relative">
+      <Box
+        position="absolute"
+        right={14}
+        width={35}
+        height="100%"
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+      >
+        {isLoading ? (
+          <CachedOutlinedIcon />
+        ) : error ? (
+          <InfoOutlinedIcon />
+        ) : success ? (
+          <CheckCircleOutlineIcon color="primary" />
+        ) : (
+          <></>
+        )}
+      </Box>
+      <TextField
+        error={Boolean(error)}
+        fullWidth
+        id={id}
+        name="name"
+        variant="outlined"
+        label="Nombre"
+        autoFocus={!Boolean(id)}
+        value={name}
+        onChange={(e: any) => setName(e.target.value)}
+        onBlur={upsert}
+      />
+    </Box>
   );
 };

@@ -10,6 +10,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Theme,
   Toolbar,
   Typography,
   withStyles,
@@ -22,7 +23,7 @@ import { useQuery } from "urql";
 import { QueryStockUnits } from "../../api/queries";
 import { routes } from "../routes";
 
-export const StockUnitIndex = withStyles(theme => ({
+export const StockUnitIndex = withStyles((theme: Theme) => ({
   appBar: {
     marginBottom: theme.spacing(3),
     [theme.breakpoints.down("sm")]: {},
@@ -89,7 +90,7 @@ export const StockUnitIndex = withStyles(theme => ({
                     <TableRow key={i} hover onClick={(e: any) => handleOnTableRowClick(e, row.id)}>
                       <TableCell>{row.name}</TableCell>
                       <TableCell style={{ textTransform: "capitalize" }}>
-                        {get(row.stockUnitCategory, ["es_ES"], null)}
+                        {get(row.stockUnitCategory, ["name"], null)}
                       </TableCell>
                     </TableRow>
                   ))}

@@ -56,8 +56,7 @@ type StockUnit @db(name: "stock_unit") {
 
 type StockUnitCategory @db(name: "stock_unit_category") {
   id: ID! @id @unique
-  en_EN: String! @unique
-  es_ES: String! @unique
+  name: String! @unique
   createdAt: DateTime! @createdAt @db(name: "created_at")
 }
 

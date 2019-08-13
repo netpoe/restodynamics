@@ -7,8 +7,7 @@ export const QueryStockUnits = gql`
       name
       stockUnitCategory {
         id
-        en_EN
-        es_ES
+        name
       }
     }
   }
