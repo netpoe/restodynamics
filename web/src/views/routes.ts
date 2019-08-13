@@ -6,7 +6,11 @@ export const routes = {
   },
   stock: {
     index: "/stock/index",
+    overview: "/stock/overview",
     details: "/stock/details",
+    inventory: "/stock/inventory",
+    costs: "/stock/costs",
+    suppliers: "/stock/suppliers",
   },
   home: {
     faqs: "/preguntas-frecuentes",

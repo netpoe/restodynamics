@@ -38,7 +38,7 @@ export const StockUnitIndex = withStyles((theme: Theme) => ({
   });
 
   const handleOnTableRowClick = (e: any, id: string) => {
-    history.push(`${routes.stock.details}/${id}`);
+    history.push(`${routes.stock.overview}/${id}`);
   };
 
   return (
