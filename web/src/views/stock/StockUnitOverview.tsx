@@ -1,7 +1,15 @@
 import {
   Box,
   Breadcrumbs,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
   Container,
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
   Paper,
   TextField,
   Theme,
@@ -11,6 +19,7 @@ import {
 import CachedOutlinedIcon from "@material-ui/icons/CachedOutlined";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import { History } from "history";
 import { get } from "lodash";
 import React from "react";
 import { RouteComponentProps } from "react-router";
@@ -22,6 +31,7 @@ import { StockUnitDetailsDrawer } from "./components";
 
 interface IStockUnitDetailsProps extends RouteComponentProps<{ id: string }> {
   classes: any;
+  history: History;
 }
 
 export const StockUnitOverview = withStyles((theme: Theme) => ({
@@ -40,22 +50,35 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({
   breadcrumbContainer: {
     marginBottom: theme.spacing(5),
   },
-}))(({ classes, match }: IStockUnitDetailsProps) => {
+  card: {
+    minHeight: 140,
+    "&.urgent": {
+      backgroundColor: theme.palette.error.main,
+      color: "white",
+      "& .card-title": {
+        color: "inherit",
+      },
+    },
+    "& .card-title": {
+      color: theme.palette.text.secondary,
+    },
+  },
+}))(({ classes, match, history }: IStockUnitDetailsProps) => {
   const [stockUnitDetailsQuery] = useQuery({
     query: QueryStockUnit,
     variables: { where: { id: match.params.id || "" } },
   });
 
   return (
-    <>
-      {stockUnitDetailsQuery.fetching ? (
-        <Typography>Cargando</Typography>
-      ) : stockUnitDetailsQuery.error || stockUnitDetailsQuery.data == null ? (
-        <Typography>Error</Typography>
-      ) : (
-        <div className={classes.root}>
-          <StockUnitDetailsDrawer />
-          <Box minHeight="100vh" bgcolor="default" className={classes.content}>
+    <div className={classes.root}>
+      <StockUnitDetailsDrawer history={history} />
+      <Box minHeight="100vh" bgcolor="default" className={classes.content}>
+        {stockUnitDetailsQuery.fetching ? (
+          <Typography>Cargando</Typography>
+        ) : stockUnitDetailsQuery.error || stockUnitDetailsQuery.data == null ? (
+          <Typography>Error</Typography>
+        ) : (
+          <>
             <div className={classes.toolbar} />
             <Container maxWidth="xl" className={classes.breadcrumbContainer}>
               <Paper elevation={1} className={classes.paper}>
@@ -73,15 +96,105 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({
               </Paper>
             </Container>
             <Container maxWidth="xl">
-              <StockUnitNameField
-                id={get(stockUnitDetailsQuery.data.stockUnit, ["id"], "")}
-                value={get(stockUnitDetailsQuery.data.stockUnit, ["name"], "")}
-              />
+              <Box mb={3}>
+                <StockUnitNameField
+                  id={get(stockUnitDetailsQuery.data.stockUnit, ["id"], "")}
+                  value={get(stockUnitDetailsQuery.data.stockUnit, ["name"], "")}
+                />
+              </Box>
+              <Grid container spacing={2}>
+                <Grid item lg={4}>
+                  <Card className={classes.card}>
+                    <CardContent>
+                      <Typography
+                        variant="overline"
+                        color="inherit"
+                        gutterBottom
+                        className={`card-title`}
+                      >
+                        Categoría
+                      </Typography>
+                      <Typography variant="h5" color="inherit">
+                        Ingrediente
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button size="small">Editar</Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+                <Grid item lg={4}>
+                  <Card className={`${classes.card}`}>
+                    <CardContent>
+                      <Typography
+                        variant="overline"
+                        color="inherit"
+                        gutterBottom
+                        className={`card-title`}
+                      >
+                        Cantidad disponible
+                      </Typography>
+                      <Typography variant="h5" color="inherit">
+                        3 libras
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button size="small" color="inherit">
+                        Inventario
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+                <Grid item lg={4}>
+                  <Card className={`${classes.card} urgent`}>
+                    <CardContent>
+                      <Typography
+                        variant="overline"
+                        color="inherit"
+                        gutterBottom
+                        className={`card-title`}
+                      >
+                        Expira en
+                      </Typography>
+                      <Typography variant="h5" color="inherit">
+                        5 días
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button size="small" color="inherit">
+                        Inventario
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              </Grid>
+              <Box mt={3}>
+                <Card className={classes.card}>
+                  <CardContent>
+                    <Typography
+                      variant="overline"
+                      color="inherit"
+                      gutterBottom
+                      className={`card-title`}
+                    >
+                      Se utiliza en estos productos
+                    </Typography>
+                    <List>
+                      <ListItem button>
+                        <ListItemText primary="Cazuela de Pepián" />
+                      </ListItem>
+                      <ListItem button>
+                        <ListItemText primary="Cazuela de Hilachas" />
+                      </ListItem>
+                    </List>
+                  </CardContent>
+                </Card>
+              </Box>
             </Container>
-          </Box>
-        </div>
-      )}
-    </>
+          </>
+        )}
+      </Box>
+    </div>
   );
 });
 
@@ -89,6 +202,12 @@ const StockUnitNameField = withStyles((theme: Theme) => ({
   paper: {
     position: "relative",
     padding: theme.spacing(2),
+  },
+  textField: {
+    "& input": {
+      ...theme.typography.h5,
+      fontWeight: 500,
+    },
   },
   iconBox: {
     position: "absolute",
@@ -172,6 +291,7 @@ const StockUnitNameField = withStyles((theme: Theme) => ({
         label="Nombre"
         autoFocus={!Boolean(id)}
         value={name}
+        className={classes.textField}
         onChange={(e: any) => setName(e.target.value)}
         onBlur={upsert}
       />

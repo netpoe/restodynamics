@@ -50,7 +50,7 @@ export const StockUnitIndex = withStyles((theme: Theme) => ({
       ) : (
         <Box minHeight="100vh" bgcolor="default" pt={4}>
           <Container maxWidth="xl">
-            <AppBar className={classes.appBar} elevation={0} position="relative" color="inherit">
+            <AppBar className={classes.appBar} elevation={0} position="relative" color="default">
               <Toolbar className={classes.toolbar} disableGutters>
                 <Box>
                   <Typography variant="h6">Inventario [fecha de último inventario]</Typography>

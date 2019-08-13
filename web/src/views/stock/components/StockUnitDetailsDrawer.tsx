@@ -14,7 +14,9 @@ import GroupOutlinedIcon from "@material-ui/icons/GroupOutlined";
 import ListOutlinedIcon from "@material-ui/icons/ListOutlined";
 import TimelapseOutlinedIcon from "@material-ui/icons/TimelapseOutlined";
 import { withStyles } from "@material-ui/styles";
+import { History } from "history";
 import React from "react";
+import { routes } from "../../routes";
 
 const drawerWidth = 240;
 
@@ -27,7 +29,7 @@ export const StockUnitDetailsDrawer = withStyles((theme: Theme) => ({
     width: drawerWidth,
   },
   toolbar: theme.mixins.toolbar,
-}))(({ classes }: { classes: any }) => (
+}))(({ classes, history }: { classes: any; history: History }) => (
   <Drawer
     className={classes.drawer}
     variant="permanent"
@@ -70,7 +72,12 @@ export const StockUnitDetailsDrawer = withStyles((theme: Theme) => ({
     </List>
     <Divider />
     <List>
-      <ListItem button>
+      <ListItem
+        button
+        onClick={() => {
+          history.push(`${routes.stock.index}`);
+        }}
+      >
         <ListItemIcon>
           <ArrowBackOutlinedIcon />
         </ListItemIcon>
