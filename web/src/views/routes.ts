@@ -12,6 +12,11 @@ export const routes = {
     costs: "/stock/costs",
     suppliers: "/stock/suppliers",
   },
+  inventory: {
+    index: "/inventory/index",
+    overview: "/inventory/overview",
+    details: "/inventory/details",
+  },
   home: {
     faqs: "/preguntas-frecuentes",
     prices: "/premios",

@@ -38,16 +38,14 @@ export const CreateSupplier = `
 `;
 
 export const CreateStockUnitCategory = `
-  mutation ($en_EN: String!, $es_ES: String!) {
+  mutation ($name: String!) {
     createStockUnitCategory(
       data: {
-        en_EN: $en_EN
-        es_ES: $es_ES
+        name: $name
       }
     ) {
       id
-      en_EN
-      es_ES
+      name
       createdAt
     }
   }

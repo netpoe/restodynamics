@@ -32,8 +32,25 @@ async function createSuppliers() {
 
 async function createStockUnitCategories() {
   await prisma.$graphql(CreateStockUnitCategory, {
-    en_ES: "ingredient",
-    es_ES: "ingredientes"
+    name: "ingredient"
+  });
+  await prisma.$graphql(CreateStockUnitCategory, {
+    name: "fuel"
+  });
+  await prisma.$graphql(CreateStockUnitCategory, {
+    name: "furniture"
+  });
+  await prisma.$graphql(CreateStockUnitCategory, {
+    name: "cutlery"
+  });
+  await prisma.$graphql(CreateStockUnitCategory, {
+    name: "tableware"
+  });
+  await prisma.$graphql(CreateStockUnitCategory, {
+    name: "kitchenware"
+  });
+  await prisma.$graphql(CreateStockUnitCategory, {
+    name: "raw material"
   });
 }
 
@@ -45,9 +62,9 @@ async function createStockUnit() {
 
 (async function() {
   try {
-    await createSuppliers();
+    // await createSuppliers();
     await createStockUnitCategories();
-    await createStockUnit();
+    // await createStockUnit();
   } catch (error) {
     console.error(error);
   }

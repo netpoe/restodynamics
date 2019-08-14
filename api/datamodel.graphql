@@ -128,14 +128,15 @@ enum MeasurementUnitSymbol {
 
 type Inventory @db(name: "inventory") {
   id: ID! @id @unique
-  label: String!
+  label: String
   createdAt: DateTime! @createdAt @db(name: "created_at")
 }
 
 type InventoryByStockUnit @db(name: "inventory_by_stock_unit") {
   id: ID! @id
-  amount: String! @default(value: "0.00")
+  inventory: Inventory! @db(name: "inventory_id")
   stockUnit: StockUnit! @db(name: "stock_unit_id")
+  amount: String! @default(value: "0.00")
   unit: MeasurementUnit! @db(name: "unit_id")
   expiresAt: DateTime @db(name: "expires_at")
 }

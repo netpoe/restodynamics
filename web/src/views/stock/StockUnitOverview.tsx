@@ -1,10 +1,6 @@
 import {
   Box,
-  Breadcrumbs,
   Button,
-  Card,
-  CardActions,
-  CardContent,
   Container,
   Grid,
   List,
@@ -26,6 +22,13 @@ import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { CombinedError, useMutation, useQuery } from "urql";
 import { QueryStockUnit } from "../../api/queries";
+import {
+  Breadcrumbs,
+  Card,
+  CardTitle,
+  DashboardNavigationDrawer,
+  ToolbarPadding,
+} from "../../components";
 import { routes } from "../routes";
 import { StockUnitDetailsDrawer } from "./components";
 
@@ -40,28 +43,6 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-  paper: {
-    padding: theme.spacing(1, 2),
-    width: "fit-content",
-  },
-  toolbar: theme.mixins.toolbar,
-  breadcrumbContainer: {
-    marginBottom: theme.spacing(5),
-  },
-  card: {
-    minHeight: 140,
-    "&.urgent": {
-      backgroundColor: theme.palette.error.main,
-      color: "white",
-      "& .card-title": {
-        color: "inherit",
-      },
-    },
-    "& .card-title": {
-      color: theme.palette.text.secondary,
-    },
   },
 }))(({ classes, match, history }: IStockUnitDetailsProps) => {
   const [stockUnitDetailsQuery] = useQuery({
@@ -71,18 +52,19 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({
 
   return (
     <div className={classes.root}>
+      <DashboardNavigationDrawer history={history} />
       <StockUnitDetailsDrawer history={history} />
       <Box minHeight="100vh" bgcolor="default" className={classes.content}>
+        <ToolbarPadding />
         {stockUnitDetailsQuery.fetching ? (
           <Typography>Cargando</Typography>
         ) : stockUnitDetailsQuery.error || stockUnitDetailsQuery.data == null ? (
           <Typography>Error</Typography>
         ) : (
           <>
-            <div className={classes.toolbar} />
-            <Container maxWidth="xl" className={classes.breadcrumbContainer}>
-              <Paper elevation={1} className={classes.paper}>
-                <Breadcrumbs aria-label="breadcrumb">
+            <Box mb={3}>
+              <Container maxWidth="xl">
+                <Breadcrumbs>
                   <Link color="inherit" to={routes.stock.index}>
                     Stock
                   </Link>
@@ -93,8 +75,8 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({
                       : "Nueva Unidad de Inventario"}
                   </Typography>
                 </Breadcrumbs>
-              </Paper>
-            </Container>
+              </Container>
+            </Box>
             <Container maxWidth="xl">
               <Box mb={3}>
                 <StockUnitNameField
@@ -104,90 +86,54 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({
               </Box>
               <Grid container spacing={2}>
                 <Grid item lg={4}>
-                  <Card className={classes.card}>
-                    <CardContent>
-                      <Typography
-                        variant="overline"
-                        color="inherit"
-                        gutterBottom
-                        className={`card-title`}
-                      >
-                        Categoría
-                      </Typography>
-                      <Typography variant="h5" color="inherit">
-                        Ingrediente
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                      <Button size="small">Editar</Button>
-                    </CardActions>
+                  <Card actions={<Button size="small">Editar</Button>}>
+                    <CardTitle>Categoría</CardTitle>
+                    <Typography variant="h5" color="inherit">
+                      Ingrediente
+                    </Typography>
                   </Card>
                 </Grid>
                 <Grid item lg={4}>
-                  <Card className={`${classes.card}`}>
-                    <CardContent>
-                      <Typography
-                        variant="overline"
-                        color="inherit"
-                        gutterBottom
-                        className={`card-title`}
-                      >
-                        Cantidad disponible
-                      </Typography>
-                      <Typography variant="h5" color="inherit">
-                        3 libras
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
+                  <Card
+                    actions={
                       <Button size="small" color="inherit">
                         Inventario
                       </Button>
-                    </CardActions>
+                    }
+                  >
+                    <CardTitle>Cantidad disponible</CardTitle>
+                    <Typography variant="h5" color="inherit">
+                      3 libras
+                    </Typography>
                   </Card>
                 </Grid>
                 <Grid item lg={4}>
-                  <Card className={`${classes.card} urgent`}>
-                    <CardContent>
-                      <Typography
-                        variant="overline"
-                        color="inherit"
-                        gutterBottom
-                        className={`card-title`}
-                      >
-                        Expira en
-                      </Typography>
-                      <Typography variant="h5" color="inherit">
-                        5 días
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
+                  <Card
+                    variant="urgent"
+                    actions={
                       <Button size="small" color="inherit">
                         Inventario
                       </Button>
-                    </CardActions>
+                    }
+                  >
+                    <CardTitle>Expira en</CardTitle>
+                    <Typography variant="h5" color="inherit">
+                      5 días
+                    </Typography>
                   </Card>
                 </Grid>
               </Grid>
               <Box mt={3}>
-                <Card className={classes.card}>
-                  <CardContent>
-                    <Typography
-                      variant="overline"
-                      color="inherit"
-                      gutterBottom
-                      className={`card-title`}
-                    >
-                      Se utiliza en estos productos
-                    </Typography>
-                    <List>
-                      <ListItem button>
-                        <ListItemText primary="Cazuela de Pepián" />
-                      </ListItem>
-                      <ListItem button>
-                        <ListItemText primary="Cazuela de Hilachas" />
-                      </ListItem>
-                    </List>
-                  </CardContent>
+                <Card>
+                  <CardTitle>Se utiliza en estos productos</CardTitle>
+                  <List>
+                    <ListItem button>
+                      <ListItemText primary="Cazuela de Pepián" />
+                    </ListItem>
+                    <ListItem button>
+                      <ListItemText primary="Cazuela de Hilachas" />
+                    </ListItem>
+                  </List>
                 </Card>
               </Box>
             </Container>

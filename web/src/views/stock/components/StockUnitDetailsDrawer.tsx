@@ -27,6 +27,7 @@ export const StockUnitDetailsDrawer = withStyles((theme: Theme) => ({
   },
   drawerPaper: {
     width: drawerWidth,
+    left: "inherit",
   },
   toolbar: theme.mixins.toolbar,
 }))(({ classes, history }: { classes: any; history: History }) => (
@@ -39,7 +40,7 @@ export const StockUnitDetailsDrawer = withStyles((theme: Theme) => ({
   >
     <div className={classes.toolbar} />
     <List>
-      <ListItem button>
+      <ListItem button selected>
         <ListItemIcon>
           <DashboardOutlinedIcon />
         </ListItemIcon>

@@ -1087,14 +1087,15 @@ scalar DateTime
 
 type Inventory {
   id: ID!
-  label: String!
+  label: String
   createdAt: DateTime!
 }
 
 type InventoryByStockUnit {
   id: ID!
-  amount: String!
+  inventory: Inventory!
   stockUnit: StockUnit!
+  amount: String!
   unit: MeasurementUnit!
   expiresAt: DateTime
 }
@@ -1107,8 +1108,9 @@ type InventoryByStockUnitConnection {
 
 input InventoryByStockUnitCreateInput {
   id: ID
-  amount: String
+  inventory: InventoryCreateOneInput!
   stockUnit: StockUnitCreateOneInput!
+  amount: String
   unit: MeasurementUnitCreateOneInput!
   expiresAt: DateTime
 }
@@ -1152,8 +1154,9 @@ input InventoryByStockUnitSubscriptionWhereInput {
 }
 
 input InventoryByStockUnitUpdateInput {
-  amount: String
+  inventory: InventoryUpdateOneRequiredInput
   stockUnit: StockUnitUpdateOneRequiredInput
+  amount: String
   unit: MeasurementUnitUpdateOneRequiredInput
   expiresAt: DateTime
 }
@@ -1178,6 +1181,8 @@ input InventoryByStockUnitWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  inventory: InventoryWhereInput
+  stockUnit: StockUnitWhereInput
   amount: String
   amount_not: String
   amount_in: [String!]
@@ -1192,7 +1197,6 @@ input InventoryByStockUnitWhereInput {
   amount_not_starts_with: String
   amount_ends_with: String
   amount_not_ends_with: String
-  stockUnit: StockUnitWhereInput
   unit: MeasurementUnitWhereInput
   expiresAt: DateTime
   expiresAt_not: DateTime
@@ -1219,7 +1223,12 @@ type InventoryConnection {
 
 input InventoryCreateInput {
   id: ID
-  label: String!
+  label: String
+}
+
+input InventoryCreateOneInput {
+  create: InventoryCreateInput
+  connect: InventoryWhereUniqueInput
 }
 
 type InventoryEdge {
@@ -1238,7 +1247,7 @@ enum InventoryOrderByInput {
 
 type InventoryPreviousValues {
   id: ID!
-  label: String!
+  label: String
   createdAt: DateTime!
 }
 
@@ -1260,12 +1269,28 @@ input InventorySubscriptionWhereInput {
   NOT: [InventorySubscriptionWhereInput!]
 }
 
+input InventoryUpdateDataInput {
+  label: String
+}
+
 input InventoryUpdateInput {
   label: String
 }
 
 input InventoryUpdateManyMutationInput {
   label: String
+}
+
+input InventoryUpdateOneRequiredInput {
+  create: InventoryCreateInput
+  update: InventoryUpdateDataInput
+  upsert: InventoryUpsertNestedInput
+  connect: InventoryWhereUniqueInput
+}
+
+input InventoryUpsertNestedInput {
+  update: InventoryUpdateDataInput!
+  create: InventoryCreateInput!
 }
 
 input InventoryWhereInput {
