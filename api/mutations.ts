@@ -46,7 +46,34 @@ export const CreateStockUnitCategory = `
     ) {
       id
       name
-      createdAt
+    }
+  }
+`;
+
+export const CreateCurrency = `
+  mutation ($symbol: String!) {
+    createCurrency(
+      data: {
+        symbol: $symbol
+      }
+    ) {
+      id
+      symbol
+    }
+  }
+`;
+
+export const CreateMeasurementUnit = `
+  mutation ($name: String!, $symbol: String!) {
+    createMeasurementUnit(
+      data: {
+        name: $name
+        symbol: $symbol
+      }
+    ) {
+      id
+      name
+      symbol
     }
   }
 `;

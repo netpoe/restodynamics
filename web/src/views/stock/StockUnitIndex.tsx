@@ -11,11 +11,11 @@ import {
   withStyles,
 } from "@material-ui/core";
 import { History } from "history";
-import { get } from "lodash";
+import { first, get } from "lodash";
+import { DateTime as LuxonDateTime } from "luxon";
 import React from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "urql";
-import { QueryStockUnits } from "../../api/queries";
 import {
   Breadcrumbs,
   Card,
@@ -23,12 +23,11 @@ import {
   DashboardNavigationDrawer,
   ToolbarPadding,
 } from "../../components";
+import { QueryStockUnits } from "../../graphql/queries";
+import { datetime } from "../../utils";
 import { routes } from "../routes";
 
 export const StockUnitIndex = withStyles((theme: Theme) => ({
-  root: {
-    display: "flex",
-  },
   content: {
     flexGrow: 1,
   },
@@ -50,7 +49,7 @@ export const StockUnitIndex = withStyles((theme: Theme) => ({
   };
 
   return (
-    <div className={classes.root}>
+    <Box display="flex">
       <DashboardNavigationDrawer history={history} />
       <Box minHeight="100vh" bgcolor="default" className={classes.content}>
         <ToolbarPadding />
@@ -88,12 +87,22 @@ export const StockUnitIndex = withStyles((theme: Theme) => ({
                 </Toolbar>
               </AppBar>
               <Grid container spacing={2}>
-                {stockUnitsQuery.data.stockUnits.map((row: any, i: number) => (
+                {stockUnitsQuery.data.stockUnits.map((stockUnit: any, i: number) => (
                   <Grid item lg={4} key={i}>
-                    <Card onClick={(e: any) => handleOnTableRowClick(e, row.id)}>
-                      <CardTitle>{get(row.stockUnitCategory, ["name"], null)}</CardTitle>
+                    <Card onClick={(e: any) => handleOnTableRowClick(e, stockUnit.id)}>
+                      <CardTitle>{get(stockUnit, "category.name", null)}</CardTitle>
                       <Typography variant="h5" color="inherit">
-                        {row.name}
+                        {stockUnit.name}
+                      </Typography>
+                      <Typography variant="body1" color="inherit">
+                        {get(first(stockUnit.inventory), "quantity", null)}
+                        {get(first(stockUnit.inventory), "unit.symbol", null)}.
+                        <Typography variant="body2" component="span">
+                          {" el "}
+                          {datetime
+                            .locale(get(first(stockUnit.inventory), "createdAt", ""))
+                            .toLocaleString(LuxonDateTime.DATE_HUGE)}
+                        </Typography>
                       </Typography>
                     </Card>
                   </Grid>
@@ -103,7 +112,7 @@ export const StockUnitIndex = withStyles((theme: Theme) => ({
           </>
         )}
       </Box>
-    </div>
+    </Box>
   );
 });
 

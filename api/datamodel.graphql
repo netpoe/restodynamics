@@ -2,11 +2,11 @@ type ExpenseUnit {
   id: ID! @id @unique
   amount: String! @default(value: "0.00")
   currency: Currency!
-  item: [Item]!
+  stockUnit: [StockUnit]!
   createdAt: DateTime! @createdAt
 }
 
-type ExpenseUnitCategory {
+type StockUnitCategory {
   id: ID! @id @unique
   name: String! @unique
 }
@@ -15,15 +15,7 @@ type Inventory {
   id: ID! @id @unique
   quantity: String! @default(value: "0.00")
   unit: MeasurementUnit!
-  item: [Item]!
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
-}
-
-type Merchandise {
-  id: ID! @id @unique
-  quantity: String! @default(value: "0.00")
-  product: [Product]!
+  stockUnit: [StockUnit]!
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
@@ -34,14 +26,20 @@ type MeasurementUnit {
   symbol: String!
 }
 
-type Item {
+type StockUnit {
   id: ID! @id @unique
   name: String
+  inventory: [Inventory]!
+  category: StockUnitCategory!
+  expenseUnit: [ExpenseUnit]!
 }
 
 type Product {
   id: ID! @id @unique
-  name: String
+  item: StockUnit! @relation(name: "ProductToStockUnit")
+  stockUnit: [StockUnit] @relation(name: "ProductToStockUnits")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Currency {

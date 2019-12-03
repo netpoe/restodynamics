@@ -1,0 +1,37 @@
+{
+  "name": "with-typescript",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "type-check": "tsc"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.7.1",
+    "@material-ui/icons": "^4.5.1",
+    "graphql": "^14.5.8",
+    "graphql-tag": "^2.10.1",
+    "isomorphic-unfetch": "^3.0.0",
+    "next": "latest",
+    "next-urql": "^0.1.1",
+    "polished": "^3.4.2",
+    "react": "^16.10.1",
+    "react-dom": "^16.10.1",
+    "react-is": "^16.12.0",
+    "styled-components": "^4.4.1",
+    "urql": "^1.6.3"
+  },
+  "devDependencies": {
+    "@types/node": "^12.7.8",
+    "@types/react": "^16.9.3",
+    "@types/react-dom": "^16.9.1",
+    "prettier": "^1.19.1",
+    "typescript": "3.6.3"
+  },
+  "license": "ISC",
+  "prettier": {
+    "trailingComma": "all",
+    "printWidth": 100
+  }
+}

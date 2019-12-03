@@ -10,15 +10,7 @@ type AggregateExpenseUnit {
   count: Int!
 }
 
-type AggregateExpenseUnitCategory {
-  count: Int!
-}
-
 type AggregateInventory {
-  count: Int!
-}
-
-type AggregateItem {
   count: Int!
 }
 
@@ -26,11 +18,15 @@ type AggregateMeasurementUnit {
   count: Int!
 }
 
-type AggregateMerchandise {
+type AggregateProduct {
   count: Int!
 }
 
-type AggregateProduct {
+type AggregateStockUnit {
+  count: Int!
+}
+
+type AggregateStockUnitCategory {
   count: Int!
 }
 
@@ -184,106 +180,8 @@ type ExpenseUnit {
   id: ID!
   amount: String!
   currency: Currency!
-  item(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item!]
+  stockUnit(where: StockUnitWhereInput, orderBy: StockUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [StockUnit!]
   createdAt: DateTime!
-}
-
-type ExpenseUnitCategory {
-  id: ID!
-  name: String!
-}
-
-type ExpenseUnitCategoryConnection {
-  pageInfo: PageInfo!
-  edges: [ExpenseUnitCategoryEdge]!
-  aggregate: AggregateExpenseUnitCategory!
-}
-
-input ExpenseUnitCategoryCreateInput {
-  id: ID
-  name: String!
-}
-
-type ExpenseUnitCategoryEdge {
-  node: ExpenseUnitCategory!
-  cursor: String!
-}
-
-enum ExpenseUnitCategoryOrderByInput {
-  id_ASC
-  id_DESC
-  name_ASC
-  name_DESC
-}
-
-type ExpenseUnitCategoryPreviousValues {
-  id: ID!
-  name: String!
-}
-
-type ExpenseUnitCategorySubscriptionPayload {
-  mutation: MutationType!
-  node: ExpenseUnitCategory
-  updatedFields: [String!]
-  previousValues: ExpenseUnitCategoryPreviousValues
-}
-
-input ExpenseUnitCategorySubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: ExpenseUnitCategoryWhereInput
-  AND: [ExpenseUnitCategorySubscriptionWhereInput!]
-  OR: [ExpenseUnitCategorySubscriptionWhereInput!]
-  NOT: [ExpenseUnitCategorySubscriptionWhereInput!]
-}
-
-input ExpenseUnitCategoryUpdateInput {
-  name: String
-}
-
-input ExpenseUnitCategoryUpdateManyMutationInput {
-  name: String
-}
-
-input ExpenseUnitCategoryWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  AND: [ExpenseUnitCategoryWhereInput!]
-  OR: [ExpenseUnitCategoryWhereInput!]
-  NOT: [ExpenseUnitCategoryWhereInput!]
-}
-
-input ExpenseUnitCategoryWhereUniqueInput {
-  id: ID
-  name: String
 }
 
 type ExpenseUnitConnection {
@@ -296,7 +194,18 @@ input ExpenseUnitCreateInput {
   id: ID
   amount: String
   currency: CurrencyCreateOneInput!
-  item: ItemCreateManyInput
+  stockUnit: StockUnitCreateManyWithoutExpenseUnitInput
+}
+
+input ExpenseUnitCreateManyWithoutStockUnitInput {
+  create: [ExpenseUnitCreateWithoutStockUnitInput!]
+  connect: [ExpenseUnitWhereUniqueInput!]
+}
+
+input ExpenseUnitCreateWithoutStockUnitInput {
+  id: ID
+  amount: String
+  currency: CurrencyCreateOneInput!
 }
 
 type ExpenseUnitEdge {
@@ -317,6 +226,48 @@ type ExpenseUnitPreviousValues {
   id: ID!
   amount: String!
   createdAt: DateTime!
+}
+
+input ExpenseUnitScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  amount: String
+  amount_not: String
+  amount_in: [String!]
+  amount_not_in: [String!]
+  amount_lt: String
+  amount_lte: String
+  amount_gt: String
+  amount_gte: String
+  amount_contains: String
+  amount_not_contains: String
+  amount_starts_with: String
+  amount_not_starts_with: String
+  amount_ends_with: String
+  amount_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [ExpenseUnitScalarWhereInput!]
+  OR: [ExpenseUnitScalarWhereInput!]
+  NOT: [ExpenseUnitScalarWhereInput!]
 }
 
 type ExpenseUnitSubscriptionPayload {
@@ -340,11 +291,48 @@ input ExpenseUnitSubscriptionWhereInput {
 input ExpenseUnitUpdateInput {
   amount: String
   currency: CurrencyUpdateOneRequiredInput
-  item: ItemUpdateManyInput
+  stockUnit: StockUnitUpdateManyWithoutExpenseUnitInput
+}
+
+input ExpenseUnitUpdateManyDataInput {
+  amount: String
 }
 
 input ExpenseUnitUpdateManyMutationInput {
   amount: String
+}
+
+input ExpenseUnitUpdateManyWithoutStockUnitInput {
+  create: [ExpenseUnitCreateWithoutStockUnitInput!]
+  delete: [ExpenseUnitWhereUniqueInput!]
+  connect: [ExpenseUnitWhereUniqueInput!]
+  set: [ExpenseUnitWhereUniqueInput!]
+  disconnect: [ExpenseUnitWhereUniqueInput!]
+  update: [ExpenseUnitUpdateWithWhereUniqueWithoutStockUnitInput!]
+  upsert: [ExpenseUnitUpsertWithWhereUniqueWithoutStockUnitInput!]
+  deleteMany: [ExpenseUnitScalarWhereInput!]
+  updateMany: [ExpenseUnitUpdateManyWithWhereNestedInput!]
+}
+
+input ExpenseUnitUpdateManyWithWhereNestedInput {
+  where: ExpenseUnitScalarWhereInput!
+  data: ExpenseUnitUpdateManyDataInput!
+}
+
+input ExpenseUnitUpdateWithoutStockUnitDataInput {
+  amount: String
+  currency: CurrencyUpdateOneRequiredInput
+}
+
+input ExpenseUnitUpdateWithWhereUniqueWithoutStockUnitInput {
+  where: ExpenseUnitWhereUniqueInput!
+  data: ExpenseUnitUpdateWithoutStockUnitDataInput!
+}
+
+input ExpenseUnitUpsertWithWhereUniqueWithoutStockUnitInput {
+  where: ExpenseUnitWhereUniqueInput!
+  update: ExpenseUnitUpdateWithoutStockUnitDataInput!
+  create: ExpenseUnitCreateWithoutStockUnitInput!
 }
 
 input ExpenseUnitWhereInput {
@@ -377,9 +365,9 @@ input ExpenseUnitWhereInput {
   amount_ends_with: String
   amount_not_ends_with: String
   currency: CurrencyWhereInput
-  item_every: ItemWhereInput
-  item_some: ItemWhereInput
-  item_none: ItemWhereInput
+  stockUnit_every: StockUnitWhereInput
+  stockUnit_some: StockUnitWhereInput
+  stockUnit_none: StockUnitWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -401,7 +389,7 @@ type Inventory {
   id: ID!
   quantity: String!
   unit: MeasurementUnit!
-  item(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item!]
+  stockUnit(where: StockUnitWhereInput, orderBy: StockUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [StockUnit!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -416,7 +404,18 @@ input InventoryCreateInput {
   id: ID
   quantity: String
   unit: MeasurementUnitCreateOneInput!
-  item: ItemCreateManyInput
+  stockUnit: StockUnitCreateManyWithoutInventoryInput
+}
+
+input InventoryCreateManyWithoutStockUnitInput {
+  create: [InventoryCreateWithoutStockUnitInput!]
+  connect: [InventoryWhereUniqueInput!]
+}
+
+input InventoryCreateWithoutStockUnitInput {
+  id: ID
+  quantity: String
+  unit: MeasurementUnitCreateOneInput!
 }
 
 type InventoryEdge {
@@ -442,6 +441,56 @@ type InventoryPreviousValues {
   updatedAt: DateTime!
 }
 
+input InventoryScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  quantity: String
+  quantity_not: String
+  quantity_in: [String!]
+  quantity_not_in: [String!]
+  quantity_lt: String
+  quantity_lte: String
+  quantity_gt: String
+  quantity_gte: String
+  quantity_contains: String
+  quantity_not_contains: String
+  quantity_starts_with: String
+  quantity_not_starts_with: String
+  quantity_ends_with: String
+  quantity_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [InventoryScalarWhereInput!]
+  OR: [InventoryScalarWhereInput!]
+  NOT: [InventoryScalarWhereInput!]
+}
+
 type InventorySubscriptionPayload {
   mutation: MutationType!
   node: Inventory
@@ -463,11 +512,48 @@ input InventorySubscriptionWhereInput {
 input InventoryUpdateInput {
   quantity: String
   unit: MeasurementUnitUpdateOneRequiredInput
-  item: ItemUpdateManyInput
+  stockUnit: StockUnitUpdateManyWithoutInventoryInput
+}
+
+input InventoryUpdateManyDataInput {
+  quantity: String
 }
 
 input InventoryUpdateManyMutationInput {
   quantity: String
+}
+
+input InventoryUpdateManyWithoutStockUnitInput {
+  create: [InventoryCreateWithoutStockUnitInput!]
+  delete: [InventoryWhereUniqueInput!]
+  connect: [InventoryWhereUniqueInput!]
+  set: [InventoryWhereUniqueInput!]
+  disconnect: [InventoryWhereUniqueInput!]
+  update: [InventoryUpdateWithWhereUniqueWithoutStockUnitInput!]
+  upsert: [InventoryUpsertWithWhereUniqueWithoutStockUnitInput!]
+  deleteMany: [InventoryScalarWhereInput!]
+  updateMany: [InventoryUpdateManyWithWhereNestedInput!]
+}
+
+input InventoryUpdateManyWithWhereNestedInput {
+  where: InventoryScalarWhereInput!
+  data: InventoryUpdateManyDataInput!
+}
+
+input InventoryUpdateWithoutStockUnitDataInput {
+  quantity: String
+  unit: MeasurementUnitUpdateOneRequiredInput
+}
+
+input InventoryUpdateWithWhereUniqueWithoutStockUnitInput {
+  where: InventoryWhereUniqueInput!
+  data: InventoryUpdateWithoutStockUnitDataInput!
+}
+
+input InventoryUpsertWithWhereUniqueWithoutStockUnitInput {
+  where: InventoryWhereUniqueInput!
+  update: InventoryUpdateWithoutStockUnitDataInput!
+  create: InventoryCreateWithoutStockUnitInput!
 }
 
 input InventoryWhereInput {
@@ -500,9 +586,9 @@ input InventoryWhereInput {
   quantity_ends_with: String
   quantity_not_ends_with: String
   unit: MeasurementUnitWhereInput
-  item_every: ItemWhereInput
-  item_some: ItemWhereInput
-  item_none: ItemWhereInput
+  stockUnit_every: StockUnitWhereInput
+  stockUnit_some: StockUnitWhereInput
+  stockUnit_none: StockUnitWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -525,178 +611,6 @@ input InventoryWhereInput {
 }
 
 input InventoryWhereUniqueInput {
-  id: ID
-}
-
-type Item {
-  id: ID!
-  name: String
-}
-
-type ItemConnection {
-  pageInfo: PageInfo!
-  edges: [ItemEdge]!
-  aggregate: AggregateItem!
-}
-
-input ItemCreateInput {
-  id: ID
-  name: String
-}
-
-input ItemCreateManyInput {
-  create: [ItemCreateInput!]
-  connect: [ItemWhereUniqueInput!]
-}
-
-type ItemEdge {
-  node: Item!
-  cursor: String!
-}
-
-enum ItemOrderByInput {
-  id_ASC
-  id_DESC
-  name_ASC
-  name_DESC
-}
-
-type ItemPreviousValues {
-  id: ID!
-  name: String
-}
-
-input ItemScalarWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  AND: [ItemScalarWhereInput!]
-  OR: [ItemScalarWhereInput!]
-  NOT: [ItemScalarWhereInput!]
-}
-
-type ItemSubscriptionPayload {
-  mutation: MutationType!
-  node: Item
-  updatedFields: [String!]
-  previousValues: ItemPreviousValues
-}
-
-input ItemSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: ItemWhereInput
-  AND: [ItemSubscriptionWhereInput!]
-  OR: [ItemSubscriptionWhereInput!]
-  NOT: [ItemSubscriptionWhereInput!]
-}
-
-input ItemUpdateDataInput {
-  name: String
-}
-
-input ItemUpdateInput {
-  name: String
-}
-
-input ItemUpdateManyDataInput {
-  name: String
-}
-
-input ItemUpdateManyInput {
-  create: [ItemCreateInput!]
-  update: [ItemUpdateWithWhereUniqueNestedInput!]
-  upsert: [ItemUpsertWithWhereUniqueNestedInput!]
-  delete: [ItemWhereUniqueInput!]
-  connect: [ItemWhereUniqueInput!]
-  set: [ItemWhereUniqueInput!]
-  disconnect: [ItemWhereUniqueInput!]
-  deleteMany: [ItemScalarWhereInput!]
-  updateMany: [ItemUpdateManyWithWhereNestedInput!]
-}
-
-input ItemUpdateManyMutationInput {
-  name: String
-}
-
-input ItemUpdateManyWithWhereNestedInput {
-  where: ItemScalarWhereInput!
-  data: ItemUpdateManyDataInput!
-}
-
-input ItemUpdateWithWhereUniqueNestedInput {
-  where: ItemWhereUniqueInput!
-  data: ItemUpdateDataInput!
-}
-
-input ItemUpsertWithWhereUniqueNestedInput {
-  where: ItemWhereUniqueInput!
-  update: ItemUpdateDataInput!
-  create: ItemCreateInput!
-}
-
-input ItemWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  AND: [ItemWhereInput!]
-  OR: [ItemWhereInput!]
-  NOT: [ItemWhereInput!]
-}
-
-input ItemWhereUniqueInput {
   id: ID
 }
 
@@ -842,133 +756,6 @@ input MeasurementUnitWhereUniqueInput {
   id: ID
 }
 
-type Merchandise {
-  id: ID!
-  quantity: String!
-  product(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product!]
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type MerchandiseConnection {
-  pageInfo: PageInfo!
-  edges: [MerchandiseEdge]!
-  aggregate: AggregateMerchandise!
-}
-
-input MerchandiseCreateInput {
-  id: ID
-  quantity: String
-  product: ProductCreateManyInput
-}
-
-type MerchandiseEdge {
-  node: Merchandise!
-  cursor: String!
-}
-
-enum MerchandiseOrderByInput {
-  id_ASC
-  id_DESC
-  quantity_ASC
-  quantity_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type MerchandisePreviousValues {
-  id: ID!
-  quantity: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type MerchandiseSubscriptionPayload {
-  mutation: MutationType!
-  node: Merchandise
-  updatedFields: [String!]
-  previousValues: MerchandisePreviousValues
-}
-
-input MerchandiseSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: MerchandiseWhereInput
-  AND: [MerchandiseSubscriptionWhereInput!]
-  OR: [MerchandiseSubscriptionWhereInput!]
-  NOT: [MerchandiseSubscriptionWhereInput!]
-}
-
-input MerchandiseUpdateInput {
-  quantity: String
-  product: ProductUpdateManyInput
-}
-
-input MerchandiseUpdateManyMutationInput {
-  quantity: String
-}
-
-input MerchandiseWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  quantity: String
-  quantity_not: String
-  quantity_in: [String!]
-  quantity_not_in: [String!]
-  quantity_lt: String
-  quantity_lte: String
-  quantity_gt: String
-  quantity_gte: String
-  quantity_contains: String
-  quantity_not_contains: String
-  quantity_starts_with: String
-  quantity_not_starts_with: String
-  quantity_ends_with: String
-  quantity_not_ends_with: String
-  product_every: ProductWhereInput
-  product_some: ProductWhereInput
-  product_none: ProductWhereInput
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-  updatedAt_not: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_not_in: [DateTime!]
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  AND: [MerchandiseWhereInput!]
-  OR: [MerchandiseWhereInput!]
-  NOT: [MerchandiseWhereInput!]
-}
-
-input MerchandiseWhereUniqueInput {
-  id: ID
-}
-
 type Mutation {
   createCurrency(data: CurrencyCreateInput!): Currency!
   updateCurrency(data: CurrencyUpdateInput!, where: CurrencyWhereUniqueInput!): Currency
@@ -982,42 +769,35 @@ type Mutation {
   upsertExpenseUnit(where: ExpenseUnitWhereUniqueInput!, create: ExpenseUnitCreateInput!, update: ExpenseUnitUpdateInput!): ExpenseUnit!
   deleteExpenseUnit(where: ExpenseUnitWhereUniqueInput!): ExpenseUnit
   deleteManyExpenseUnits(where: ExpenseUnitWhereInput): BatchPayload!
-  createExpenseUnitCategory(data: ExpenseUnitCategoryCreateInput!): ExpenseUnitCategory!
-  updateExpenseUnitCategory(data: ExpenseUnitCategoryUpdateInput!, where: ExpenseUnitCategoryWhereUniqueInput!): ExpenseUnitCategory
-  updateManyExpenseUnitCategories(data: ExpenseUnitCategoryUpdateManyMutationInput!, where: ExpenseUnitCategoryWhereInput): BatchPayload!
-  upsertExpenseUnitCategory(where: ExpenseUnitCategoryWhereUniqueInput!, create: ExpenseUnitCategoryCreateInput!, update: ExpenseUnitCategoryUpdateInput!): ExpenseUnitCategory!
-  deleteExpenseUnitCategory(where: ExpenseUnitCategoryWhereUniqueInput!): ExpenseUnitCategory
-  deleteManyExpenseUnitCategories(where: ExpenseUnitCategoryWhereInput): BatchPayload!
   createInventory(data: InventoryCreateInput!): Inventory!
   updateInventory(data: InventoryUpdateInput!, where: InventoryWhereUniqueInput!): Inventory
   updateManyInventories(data: InventoryUpdateManyMutationInput!, where: InventoryWhereInput): BatchPayload!
   upsertInventory(where: InventoryWhereUniqueInput!, create: InventoryCreateInput!, update: InventoryUpdateInput!): Inventory!
   deleteInventory(where: InventoryWhereUniqueInput!): Inventory
   deleteManyInventories(where: InventoryWhereInput): BatchPayload!
-  createItem(data: ItemCreateInput!): Item!
-  updateItem(data: ItemUpdateInput!, where: ItemWhereUniqueInput!): Item
-  updateManyItems(data: ItemUpdateManyMutationInput!, where: ItemWhereInput): BatchPayload!
-  upsertItem(where: ItemWhereUniqueInput!, create: ItemCreateInput!, update: ItemUpdateInput!): Item!
-  deleteItem(where: ItemWhereUniqueInput!): Item
-  deleteManyItems(where: ItemWhereInput): BatchPayload!
   createMeasurementUnit(data: MeasurementUnitCreateInput!): MeasurementUnit!
   updateMeasurementUnit(data: MeasurementUnitUpdateInput!, where: MeasurementUnitWhereUniqueInput!): MeasurementUnit
   updateManyMeasurementUnits(data: MeasurementUnitUpdateManyMutationInput!, where: MeasurementUnitWhereInput): BatchPayload!
   upsertMeasurementUnit(where: MeasurementUnitWhereUniqueInput!, create: MeasurementUnitCreateInput!, update: MeasurementUnitUpdateInput!): MeasurementUnit!
   deleteMeasurementUnit(where: MeasurementUnitWhereUniqueInput!): MeasurementUnit
   deleteManyMeasurementUnits(where: MeasurementUnitWhereInput): BatchPayload!
-  createMerchandise(data: MerchandiseCreateInput!): Merchandise!
-  updateMerchandise(data: MerchandiseUpdateInput!, where: MerchandiseWhereUniqueInput!): Merchandise
-  updateManyMerchandises(data: MerchandiseUpdateManyMutationInput!, where: MerchandiseWhereInput): BatchPayload!
-  upsertMerchandise(where: MerchandiseWhereUniqueInput!, create: MerchandiseCreateInput!, update: MerchandiseUpdateInput!): Merchandise!
-  deleteMerchandise(where: MerchandiseWhereUniqueInput!): Merchandise
-  deleteManyMerchandises(where: MerchandiseWhereInput): BatchPayload!
   createProduct(data: ProductCreateInput!): Product!
   updateProduct(data: ProductUpdateInput!, where: ProductWhereUniqueInput!): Product
-  updateManyProducts(data: ProductUpdateManyMutationInput!, where: ProductWhereInput): BatchPayload!
   upsertProduct(where: ProductWhereUniqueInput!, create: ProductCreateInput!, update: ProductUpdateInput!): Product!
   deleteProduct(where: ProductWhereUniqueInput!): Product
   deleteManyProducts(where: ProductWhereInput): BatchPayload!
+  createStockUnit(data: StockUnitCreateInput!): StockUnit!
+  updateStockUnit(data: StockUnitUpdateInput!, where: StockUnitWhereUniqueInput!): StockUnit
+  updateManyStockUnits(data: StockUnitUpdateManyMutationInput!, where: StockUnitWhereInput): BatchPayload!
+  upsertStockUnit(where: StockUnitWhereUniqueInput!, create: StockUnitCreateInput!, update: StockUnitUpdateInput!): StockUnit!
+  deleteStockUnit(where: StockUnitWhereUniqueInput!): StockUnit
+  deleteManyStockUnits(where: StockUnitWhereInput): BatchPayload!
+  createStockUnitCategory(data: StockUnitCategoryCreateInput!): StockUnitCategory!
+  updateStockUnitCategory(data: StockUnitCategoryUpdateInput!, where: StockUnitCategoryWhereUniqueInput!): StockUnitCategory
+  updateManyStockUnitCategories(data: StockUnitCategoryUpdateManyMutationInput!, where: StockUnitCategoryWhereInput): BatchPayload!
+  upsertStockUnitCategory(where: StockUnitCategoryWhereUniqueInput!, create: StockUnitCategoryCreateInput!, update: StockUnitCategoryUpdateInput!): StockUnitCategory!
+  deleteStockUnitCategory(where: StockUnitCategoryWhereUniqueInput!): StockUnitCategory
+  deleteManyStockUnitCategories(where: StockUnitCategoryWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -1039,7 +819,10 @@ type PageInfo {
 
 type Product {
   id: ID!
-  name: String
+  item: StockUnit!
+  stockUnit(where: StockUnitWhereInput, orderBy: StockUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [StockUnit!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type ProductConnection {
@@ -1050,12 +833,8 @@ type ProductConnection {
 
 input ProductCreateInput {
   id: ID
-  name: String
-}
-
-input ProductCreateManyInput {
-  create: [ProductCreateInput!]
-  connect: [ProductWhereUniqueInput!]
+  item: StockUnitCreateOneInput!
+  stockUnit: StockUnitCreateManyInput
 }
 
 type ProductEdge {
@@ -1066,47 +845,16 @@ type ProductEdge {
 enum ProductOrderByInput {
   id_ASC
   id_DESC
-  name_ASC
-  name_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type ProductPreviousValues {
   id: ID!
-  name: String
-}
-
-input ProductScalarWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  AND: [ProductScalarWhereInput!]
-  OR: [ProductScalarWhereInput!]
-  NOT: [ProductScalarWhereInput!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type ProductSubscriptionPayload {
@@ -1127,51 +875,169 @@ input ProductSubscriptionWhereInput {
   NOT: [ProductSubscriptionWhereInput!]
 }
 
-input ProductUpdateDataInput {
-  name: String
-}
-
 input ProductUpdateInput {
-  name: String
-}
-
-input ProductUpdateManyDataInput {
-  name: String
-}
-
-input ProductUpdateManyInput {
-  create: [ProductCreateInput!]
-  update: [ProductUpdateWithWhereUniqueNestedInput!]
-  upsert: [ProductUpsertWithWhereUniqueNestedInput!]
-  delete: [ProductWhereUniqueInput!]
-  connect: [ProductWhereUniqueInput!]
-  set: [ProductWhereUniqueInput!]
-  disconnect: [ProductWhereUniqueInput!]
-  deleteMany: [ProductScalarWhereInput!]
-  updateMany: [ProductUpdateManyWithWhereNestedInput!]
-}
-
-input ProductUpdateManyMutationInput {
-  name: String
-}
-
-input ProductUpdateManyWithWhereNestedInput {
-  where: ProductScalarWhereInput!
-  data: ProductUpdateManyDataInput!
-}
-
-input ProductUpdateWithWhereUniqueNestedInput {
-  where: ProductWhereUniqueInput!
-  data: ProductUpdateDataInput!
-}
-
-input ProductUpsertWithWhereUniqueNestedInput {
-  where: ProductWhereUniqueInput!
-  update: ProductUpdateDataInput!
-  create: ProductCreateInput!
+  item: StockUnitUpdateOneRequiredInput
+  stockUnit: StockUnitUpdateManyInput
 }
 
 input ProductWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  item: StockUnitWhereInput
+  stockUnit_every: StockUnitWhereInput
+  stockUnit_some: StockUnitWhereInput
+  stockUnit_none: StockUnitWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [ProductWhereInput!]
+  OR: [ProductWhereInput!]
+  NOT: [ProductWhereInput!]
+}
+
+input ProductWhereUniqueInput {
+  id: ID
+}
+
+type Query {
+  currency(where: CurrencyWhereUniqueInput!): Currency
+  currencies(where: CurrencyWhereInput, orderBy: CurrencyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Currency]!
+  currenciesConnection(where: CurrencyWhereInput, orderBy: CurrencyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CurrencyConnection!
+  expenseUnit(where: ExpenseUnitWhereUniqueInput!): ExpenseUnit
+  expenseUnits(where: ExpenseUnitWhereInput, orderBy: ExpenseUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExpenseUnit]!
+  expenseUnitsConnection(where: ExpenseUnitWhereInput, orderBy: ExpenseUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ExpenseUnitConnection!
+  inventory(where: InventoryWhereUniqueInput!): Inventory
+  inventories(where: InventoryWhereInput, orderBy: InventoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Inventory]!
+  inventoriesConnection(where: InventoryWhereInput, orderBy: InventoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InventoryConnection!
+  measurementUnit(where: MeasurementUnitWhereUniqueInput!): MeasurementUnit
+  measurementUnits(where: MeasurementUnitWhereInput, orderBy: MeasurementUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MeasurementUnit]!
+  measurementUnitsConnection(where: MeasurementUnitWhereInput, orderBy: MeasurementUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MeasurementUnitConnection!
+  product(where: ProductWhereUniqueInput!): Product
+  products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product]!
+  productsConnection(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProductConnection!
+  stockUnit(where: StockUnitWhereUniqueInput!): StockUnit
+  stockUnits(where: StockUnitWhereInput, orderBy: StockUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [StockUnit]!
+  stockUnitsConnection(where: StockUnitWhereInput, orderBy: StockUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StockUnitConnection!
+  stockUnitCategory(where: StockUnitCategoryWhereUniqueInput!): StockUnitCategory
+  stockUnitCategories(where: StockUnitCategoryWhereInput, orderBy: StockUnitCategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [StockUnitCategory]!
+  stockUnitCategoriesConnection(where: StockUnitCategoryWhereInput, orderBy: StockUnitCategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): StockUnitCategoryConnection!
+  node(id: ID!): Node
+}
+
+type StockUnit {
+  id: ID!
+  name: String
+  inventory(where: InventoryWhereInput, orderBy: InventoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Inventory!]
+  category: StockUnitCategory!
+  expenseUnit(where: ExpenseUnitWhereInput, orderBy: ExpenseUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExpenseUnit!]
+}
+
+type StockUnitCategory {
+  id: ID!
+  name: String!
+}
+
+type StockUnitCategoryConnection {
+  pageInfo: PageInfo!
+  edges: [StockUnitCategoryEdge]!
+  aggregate: AggregateStockUnitCategory!
+}
+
+input StockUnitCategoryCreateInput {
+  id: ID
+  name: String!
+}
+
+input StockUnitCategoryCreateOneInput {
+  create: StockUnitCategoryCreateInput
+  connect: StockUnitCategoryWhereUniqueInput
+}
+
+type StockUnitCategoryEdge {
+  node: StockUnitCategory!
+  cursor: String!
+}
+
+enum StockUnitCategoryOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+}
+
+type StockUnitCategoryPreviousValues {
+  id: ID!
+  name: String!
+}
+
+type StockUnitCategorySubscriptionPayload {
+  mutation: MutationType!
+  node: StockUnitCategory
+  updatedFields: [String!]
+  previousValues: StockUnitCategoryPreviousValues
+}
+
+input StockUnitCategorySubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: StockUnitCategoryWhereInput
+  AND: [StockUnitCategorySubscriptionWhereInput!]
+  OR: [StockUnitCategorySubscriptionWhereInput!]
+  NOT: [StockUnitCategorySubscriptionWhereInput!]
+}
+
+input StockUnitCategoryUpdateDataInput {
+  name: String
+}
+
+input StockUnitCategoryUpdateInput {
+  name: String
+}
+
+input StockUnitCategoryUpdateManyMutationInput {
+  name: String
+}
+
+input StockUnitCategoryUpdateOneRequiredInput {
+  create: StockUnitCategoryCreateInput
+  update: StockUnitCategoryUpdateDataInput
+  upsert: StockUnitCategoryUpsertNestedInput
+  connect: StockUnitCategoryWhereUniqueInput
+}
+
+input StockUnitCategoryUpsertNestedInput {
+  update: StockUnitCategoryUpdateDataInput!
+  create: StockUnitCategoryCreateInput!
+}
+
+input StockUnitCategoryWhereInput {
   id: ID
   id_not: ID
   id_in: [ID!]
@@ -1200,51 +1066,305 @@ input ProductWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
-  AND: [ProductWhereInput!]
-  OR: [ProductWhereInput!]
-  NOT: [ProductWhereInput!]
+  AND: [StockUnitCategoryWhereInput!]
+  OR: [StockUnitCategoryWhereInput!]
+  NOT: [StockUnitCategoryWhereInput!]
 }
 
-input ProductWhereUniqueInput {
+input StockUnitCategoryWhereUniqueInput {
   id: ID
+  name: String
 }
 
-type Query {
-  currency(where: CurrencyWhereUniqueInput!): Currency
-  currencies(where: CurrencyWhereInput, orderBy: CurrencyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Currency]!
-  currenciesConnection(where: CurrencyWhereInput, orderBy: CurrencyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CurrencyConnection!
-  expenseUnit(where: ExpenseUnitWhereUniqueInput!): ExpenseUnit
-  expenseUnits(where: ExpenseUnitWhereInput, orderBy: ExpenseUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExpenseUnit]!
-  expenseUnitsConnection(where: ExpenseUnitWhereInput, orderBy: ExpenseUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ExpenseUnitConnection!
-  expenseUnitCategory(where: ExpenseUnitCategoryWhereUniqueInput!): ExpenseUnitCategory
-  expenseUnitCategories(where: ExpenseUnitCategoryWhereInput, orderBy: ExpenseUnitCategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExpenseUnitCategory]!
-  expenseUnitCategoriesConnection(where: ExpenseUnitCategoryWhereInput, orderBy: ExpenseUnitCategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ExpenseUnitCategoryConnection!
-  inventory(where: InventoryWhereUniqueInput!): Inventory
-  inventories(where: InventoryWhereInput, orderBy: InventoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Inventory]!
-  inventoriesConnection(where: InventoryWhereInput, orderBy: InventoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InventoryConnection!
-  item(where: ItemWhereUniqueInput!): Item
-  items(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item]!
-  itemsConnection(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ItemConnection!
-  measurementUnit(where: MeasurementUnitWhereUniqueInput!): MeasurementUnit
-  measurementUnits(where: MeasurementUnitWhereInput, orderBy: MeasurementUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MeasurementUnit]!
-  measurementUnitsConnection(where: MeasurementUnitWhereInput, orderBy: MeasurementUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MeasurementUnitConnection!
-  merchandise(where: MerchandiseWhereUniqueInput!): Merchandise
-  merchandises(where: MerchandiseWhereInput, orderBy: MerchandiseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Merchandise]!
-  merchandisesConnection(where: MerchandiseWhereInput, orderBy: MerchandiseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MerchandiseConnection!
-  product(where: ProductWhereUniqueInput!): Product
-  products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product]!
-  productsConnection(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProductConnection!
-  node(id: ID!): Node
+type StockUnitConnection {
+  pageInfo: PageInfo!
+  edges: [StockUnitEdge]!
+  aggregate: AggregateStockUnit!
+}
+
+input StockUnitCreateInput {
+  id: ID
+  name: String
+  inventory: InventoryCreateManyWithoutStockUnitInput
+  category: StockUnitCategoryCreateOneInput!
+  expenseUnit: ExpenseUnitCreateManyWithoutStockUnitInput
+}
+
+input StockUnitCreateManyInput {
+  create: [StockUnitCreateInput!]
+  connect: [StockUnitWhereUniqueInput!]
+}
+
+input StockUnitCreateManyWithoutExpenseUnitInput {
+  create: [StockUnitCreateWithoutExpenseUnitInput!]
+  connect: [StockUnitWhereUniqueInput!]
+}
+
+input StockUnitCreateManyWithoutInventoryInput {
+  create: [StockUnitCreateWithoutInventoryInput!]
+  connect: [StockUnitWhereUniqueInput!]
+}
+
+input StockUnitCreateOneInput {
+  create: StockUnitCreateInput
+  connect: StockUnitWhereUniqueInput
+}
+
+input StockUnitCreateWithoutExpenseUnitInput {
+  id: ID
+  name: String
+  inventory: InventoryCreateManyWithoutStockUnitInput
+  category: StockUnitCategoryCreateOneInput!
+}
+
+input StockUnitCreateWithoutInventoryInput {
+  id: ID
+  name: String
+  category: StockUnitCategoryCreateOneInput!
+  expenseUnit: ExpenseUnitCreateManyWithoutStockUnitInput
+}
+
+type StockUnitEdge {
+  node: StockUnit!
+  cursor: String!
+}
+
+enum StockUnitOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+}
+
+type StockUnitPreviousValues {
+  id: ID!
+  name: String
+}
+
+input StockUnitScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [StockUnitScalarWhereInput!]
+  OR: [StockUnitScalarWhereInput!]
+  NOT: [StockUnitScalarWhereInput!]
+}
+
+type StockUnitSubscriptionPayload {
+  mutation: MutationType!
+  node: StockUnit
+  updatedFields: [String!]
+  previousValues: StockUnitPreviousValues
+}
+
+input StockUnitSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: StockUnitWhereInput
+  AND: [StockUnitSubscriptionWhereInput!]
+  OR: [StockUnitSubscriptionWhereInput!]
+  NOT: [StockUnitSubscriptionWhereInput!]
+}
+
+input StockUnitUpdateDataInput {
+  name: String
+  inventory: InventoryUpdateManyWithoutStockUnitInput
+  category: StockUnitCategoryUpdateOneRequiredInput
+  expenseUnit: ExpenseUnitUpdateManyWithoutStockUnitInput
+}
+
+input StockUnitUpdateInput {
+  name: String
+  inventory: InventoryUpdateManyWithoutStockUnitInput
+  category: StockUnitCategoryUpdateOneRequiredInput
+  expenseUnit: ExpenseUnitUpdateManyWithoutStockUnitInput
+}
+
+input StockUnitUpdateManyDataInput {
+  name: String
+}
+
+input StockUnitUpdateManyInput {
+  create: [StockUnitCreateInput!]
+  update: [StockUnitUpdateWithWhereUniqueNestedInput!]
+  upsert: [StockUnitUpsertWithWhereUniqueNestedInput!]
+  delete: [StockUnitWhereUniqueInput!]
+  connect: [StockUnitWhereUniqueInput!]
+  set: [StockUnitWhereUniqueInput!]
+  disconnect: [StockUnitWhereUniqueInput!]
+  deleteMany: [StockUnitScalarWhereInput!]
+  updateMany: [StockUnitUpdateManyWithWhereNestedInput!]
+}
+
+input StockUnitUpdateManyMutationInput {
+  name: String
+}
+
+input StockUnitUpdateManyWithoutExpenseUnitInput {
+  create: [StockUnitCreateWithoutExpenseUnitInput!]
+  delete: [StockUnitWhereUniqueInput!]
+  connect: [StockUnitWhereUniqueInput!]
+  set: [StockUnitWhereUniqueInput!]
+  disconnect: [StockUnitWhereUniqueInput!]
+  update: [StockUnitUpdateWithWhereUniqueWithoutExpenseUnitInput!]
+  upsert: [StockUnitUpsertWithWhereUniqueWithoutExpenseUnitInput!]
+  deleteMany: [StockUnitScalarWhereInput!]
+  updateMany: [StockUnitUpdateManyWithWhereNestedInput!]
+}
+
+input StockUnitUpdateManyWithoutInventoryInput {
+  create: [StockUnitCreateWithoutInventoryInput!]
+  delete: [StockUnitWhereUniqueInput!]
+  connect: [StockUnitWhereUniqueInput!]
+  set: [StockUnitWhereUniqueInput!]
+  disconnect: [StockUnitWhereUniqueInput!]
+  update: [StockUnitUpdateWithWhereUniqueWithoutInventoryInput!]
+  upsert: [StockUnitUpsertWithWhereUniqueWithoutInventoryInput!]
+  deleteMany: [StockUnitScalarWhereInput!]
+  updateMany: [StockUnitUpdateManyWithWhereNestedInput!]
+}
+
+input StockUnitUpdateManyWithWhereNestedInput {
+  where: StockUnitScalarWhereInput!
+  data: StockUnitUpdateManyDataInput!
+}
+
+input StockUnitUpdateOneRequiredInput {
+  create: StockUnitCreateInput
+  update: StockUnitUpdateDataInput
+  upsert: StockUnitUpsertNestedInput
+  connect: StockUnitWhereUniqueInput
+}
+
+input StockUnitUpdateWithoutExpenseUnitDataInput {
+  name: String
+  inventory: InventoryUpdateManyWithoutStockUnitInput
+  category: StockUnitCategoryUpdateOneRequiredInput
+}
+
+input StockUnitUpdateWithoutInventoryDataInput {
+  name: String
+  category: StockUnitCategoryUpdateOneRequiredInput
+  expenseUnit: ExpenseUnitUpdateManyWithoutStockUnitInput
+}
+
+input StockUnitUpdateWithWhereUniqueNestedInput {
+  where: StockUnitWhereUniqueInput!
+  data: StockUnitUpdateDataInput!
+}
+
+input StockUnitUpdateWithWhereUniqueWithoutExpenseUnitInput {
+  where: StockUnitWhereUniqueInput!
+  data: StockUnitUpdateWithoutExpenseUnitDataInput!
+}
+
+input StockUnitUpdateWithWhereUniqueWithoutInventoryInput {
+  where: StockUnitWhereUniqueInput!
+  data: StockUnitUpdateWithoutInventoryDataInput!
+}
+
+input StockUnitUpsertNestedInput {
+  update: StockUnitUpdateDataInput!
+  create: StockUnitCreateInput!
+}
+
+input StockUnitUpsertWithWhereUniqueNestedInput {
+  where: StockUnitWhereUniqueInput!
+  update: StockUnitUpdateDataInput!
+  create: StockUnitCreateInput!
+}
+
+input StockUnitUpsertWithWhereUniqueWithoutExpenseUnitInput {
+  where: StockUnitWhereUniqueInput!
+  update: StockUnitUpdateWithoutExpenseUnitDataInput!
+  create: StockUnitCreateWithoutExpenseUnitInput!
+}
+
+input StockUnitUpsertWithWhereUniqueWithoutInventoryInput {
+  where: StockUnitWhereUniqueInput!
+  update: StockUnitUpdateWithoutInventoryDataInput!
+  create: StockUnitCreateWithoutInventoryInput!
+}
+
+input StockUnitWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  inventory_every: InventoryWhereInput
+  inventory_some: InventoryWhereInput
+  inventory_none: InventoryWhereInput
+  category: StockUnitCategoryWhereInput
+  expenseUnit_every: ExpenseUnitWhereInput
+  expenseUnit_some: ExpenseUnitWhereInput
+  expenseUnit_none: ExpenseUnitWhereInput
+  AND: [StockUnitWhereInput!]
+  OR: [StockUnitWhereInput!]
+  NOT: [StockUnitWhereInput!]
+}
+
+input StockUnitWhereUniqueInput {
+  id: ID
 }
 
 type Subscription {
   currency(where: CurrencySubscriptionWhereInput): CurrencySubscriptionPayload
   expenseUnit(where: ExpenseUnitSubscriptionWhereInput): ExpenseUnitSubscriptionPayload
-  expenseUnitCategory(where: ExpenseUnitCategorySubscriptionWhereInput): ExpenseUnitCategorySubscriptionPayload
   inventory(where: InventorySubscriptionWhereInput): InventorySubscriptionPayload
-  item(where: ItemSubscriptionWhereInput): ItemSubscriptionPayload
   measurementUnit(where: MeasurementUnitSubscriptionWhereInput): MeasurementUnitSubscriptionPayload
-  merchandise(where: MerchandiseSubscriptionWhereInput): MerchandiseSubscriptionPayload
   product(where: ProductSubscriptionWhereInput): ProductSubscriptionPayload
+  stockUnit(where: StockUnitSubscriptionWhereInput): StockUnitSubscriptionPayload
+  stockUnitCategory(where: StockUnitCategorySubscriptionWhereInput): StockUnitCategorySubscriptionPayload
 }
 `

@@ -18,14 +18,11 @@ export type Maybe<T> = T | undefined | null;
 export interface Exists {
   currency: (where?: CurrencyWhereInput) => Promise<boolean>;
   expenseUnit: (where?: ExpenseUnitWhereInput) => Promise<boolean>;
-  expenseUnitCategory: (
-    where?: ExpenseUnitCategoryWhereInput
-  ) => Promise<boolean>;
   inventory: (where?: InventoryWhereInput) => Promise<boolean>;
-  item: (where?: ItemWhereInput) => Promise<boolean>;
   measurementUnit: (where?: MeasurementUnitWhereInput) => Promise<boolean>;
-  merchandise: (where?: MerchandiseWhereInput) => Promise<boolean>;
   product: (where?: ProductWhereInput) => Promise<boolean>;
+  stockUnit: (where?: StockUnitWhereInput) => Promise<boolean>;
+  stockUnitCategory: (where?: StockUnitCategoryWhereInput) => Promise<boolean>;
 }
 
 export interface Node {}
@@ -87,27 +84,6 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => ExpenseUnitConnectionPromise;
-  expenseUnitCategory: (
-    where: ExpenseUnitCategoryWhereUniqueInput
-  ) => ExpenseUnitCategoryNullablePromise;
-  expenseUnitCategories: (args?: {
-    where?: ExpenseUnitCategoryWhereInput;
-    orderBy?: ExpenseUnitCategoryOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => FragmentableArray<ExpenseUnitCategory>;
-  expenseUnitCategoriesConnection: (args?: {
-    where?: ExpenseUnitCategoryWhereInput;
-    orderBy?: ExpenseUnitCategoryOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => ExpenseUnitCategoryConnectionPromise;
   inventory: (where: InventoryWhereUniqueInput) => InventoryNullablePromise;
   inventories: (args?: {
     where?: InventoryWhereInput;
@@ -127,25 +103,6 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => InventoryConnectionPromise;
-  item: (where: ItemWhereUniqueInput) => ItemNullablePromise;
-  items: (args?: {
-    where?: ItemWhereInput;
-    orderBy?: ItemOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => FragmentableArray<Item>;
-  itemsConnection: (args?: {
-    where?: ItemWhereInput;
-    orderBy?: ItemOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => ItemConnectionPromise;
   measurementUnit: (
     where: MeasurementUnitWhereUniqueInput
   ) => MeasurementUnitNullablePromise;
@@ -167,27 +124,6 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => MeasurementUnitConnectionPromise;
-  merchandise: (
-    where: MerchandiseWhereUniqueInput
-  ) => MerchandiseNullablePromise;
-  merchandises: (args?: {
-    where?: MerchandiseWhereInput;
-    orderBy?: MerchandiseOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => FragmentableArray<Merchandise>;
-  merchandisesConnection: (args?: {
-    where?: MerchandiseWhereInput;
-    orderBy?: MerchandiseOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => MerchandiseConnectionPromise;
   product: (where: ProductWhereUniqueInput) => ProductNullablePromise;
   products: (args?: {
     where?: ProductWhereInput;
@@ -207,6 +143,46 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => ProductConnectionPromise;
+  stockUnit: (where: StockUnitWhereUniqueInput) => StockUnitNullablePromise;
+  stockUnits: (args?: {
+    where?: StockUnitWhereInput;
+    orderBy?: StockUnitOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<StockUnit>;
+  stockUnitsConnection: (args?: {
+    where?: StockUnitWhereInput;
+    orderBy?: StockUnitOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => StockUnitConnectionPromise;
+  stockUnitCategory: (
+    where: StockUnitCategoryWhereUniqueInput
+  ) => StockUnitCategoryNullablePromise;
+  stockUnitCategories: (args?: {
+    where?: StockUnitCategoryWhereInput;
+    orderBy?: StockUnitCategoryOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<StockUnitCategory>;
+  stockUnitCategoriesConnection: (args?: {
+    where?: StockUnitCategoryWhereInput;
+    orderBy?: StockUnitCategoryOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => StockUnitCategoryConnectionPromise;
   node: (args: { id: ID_Output }) => Node;
 
   /**
@@ -247,28 +223,6 @@ export interface Prisma {
   deleteManyExpenseUnits: (
     where?: ExpenseUnitWhereInput
   ) => BatchPayloadPromise;
-  createExpenseUnitCategory: (
-    data: ExpenseUnitCategoryCreateInput
-  ) => ExpenseUnitCategoryPromise;
-  updateExpenseUnitCategory: (args: {
-    data: ExpenseUnitCategoryUpdateInput;
-    where: ExpenseUnitCategoryWhereUniqueInput;
-  }) => ExpenseUnitCategoryPromise;
-  updateManyExpenseUnitCategories: (args: {
-    data: ExpenseUnitCategoryUpdateManyMutationInput;
-    where?: ExpenseUnitCategoryWhereInput;
-  }) => BatchPayloadPromise;
-  upsertExpenseUnitCategory: (args: {
-    where: ExpenseUnitCategoryWhereUniqueInput;
-    create: ExpenseUnitCategoryCreateInput;
-    update: ExpenseUnitCategoryUpdateInput;
-  }) => ExpenseUnitCategoryPromise;
-  deleteExpenseUnitCategory: (
-    where: ExpenseUnitCategoryWhereUniqueInput
-  ) => ExpenseUnitCategoryPromise;
-  deleteManyExpenseUnitCategories: (
-    where?: ExpenseUnitCategoryWhereInput
-  ) => BatchPayloadPromise;
   createInventory: (data: InventoryCreateInput) => InventoryPromise;
   updateInventory: (args: {
     data: InventoryUpdateInput;
@@ -285,22 +239,6 @@ export interface Prisma {
   }) => InventoryPromise;
   deleteInventory: (where: InventoryWhereUniqueInput) => InventoryPromise;
   deleteManyInventories: (where?: InventoryWhereInput) => BatchPayloadPromise;
-  createItem: (data: ItemCreateInput) => ItemPromise;
-  updateItem: (args: {
-    data: ItemUpdateInput;
-    where: ItemWhereUniqueInput;
-  }) => ItemPromise;
-  updateManyItems: (args: {
-    data: ItemUpdateManyMutationInput;
-    where?: ItemWhereInput;
-  }) => BatchPayloadPromise;
-  upsertItem: (args: {
-    where: ItemWhereUniqueInput;
-    create: ItemCreateInput;
-    update: ItemUpdateInput;
-  }) => ItemPromise;
-  deleteItem: (where: ItemWhereUniqueInput) => ItemPromise;
-  deleteManyItems: (where?: ItemWhereInput) => BatchPayloadPromise;
   createMeasurementUnit: (
     data: MeasurementUnitCreateInput
   ) => MeasurementUnitPromise;
@@ -323,33 +261,11 @@ export interface Prisma {
   deleteManyMeasurementUnits: (
     where?: MeasurementUnitWhereInput
   ) => BatchPayloadPromise;
-  createMerchandise: (data: MerchandiseCreateInput) => MerchandisePromise;
-  updateMerchandise: (args: {
-    data: MerchandiseUpdateInput;
-    where: MerchandiseWhereUniqueInput;
-  }) => MerchandisePromise;
-  updateManyMerchandises: (args: {
-    data: MerchandiseUpdateManyMutationInput;
-    where?: MerchandiseWhereInput;
-  }) => BatchPayloadPromise;
-  upsertMerchandise: (args: {
-    where: MerchandiseWhereUniqueInput;
-    create: MerchandiseCreateInput;
-    update: MerchandiseUpdateInput;
-  }) => MerchandisePromise;
-  deleteMerchandise: (where: MerchandiseWhereUniqueInput) => MerchandisePromise;
-  deleteManyMerchandises: (
-    where?: MerchandiseWhereInput
-  ) => BatchPayloadPromise;
   createProduct: (data: ProductCreateInput) => ProductPromise;
   updateProduct: (args: {
     data: ProductUpdateInput;
     where: ProductWhereUniqueInput;
   }) => ProductPromise;
-  updateManyProducts: (args: {
-    data: ProductUpdateManyMutationInput;
-    where?: ProductWhereInput;
-  }) => BatchPayloadPromise;
   upsertProduct: (args: {
     where: ProductWhereUniqueInput;
     create: ProductCreateInput;
@@ -357,6 +273,44 @@ export interface Prisma {
   }) => ProductPromise;
   deleteProduct: (where: ProductWhereUniqueInput) => ProductPromise;
   deleteManyProducts: (where?: ProductWhereInput) => BatchPayloadPromise;
+  createStockUnit: (data: StockUnitCreateInput) => StockUnitPromise;
+  updateStockUnit: (args: {
+    data: StockUnitUpdateInput;
+    where: StockUnitWhereUniqueInput;
+  }) => StockUnitPromise;
+  updateManyStockUnits: (args: {
+    data: StockUnitUpdateManyMutationInput;
+    where?: StockUnitWhereInput;
+  }) => BatchPayloadPromise;
+  upsertStockUnit: (args: {
+    where: StockUnitWhereUniqueInput;
+    create: StockUnitCreateInput;
+    update: StockUnitUpdateInput;
+  }) => StockUnitPromise;
+  deleteStockUnit: (where: StockUnitWhereUniqueInput) => StockUnitPromise;
+  deleteManyStockUnits: (where?: StockUnitWhereInput) => BatchPayloadPromise;
+  createStockUnitCategory: (
+    data: StockUnitCategoryCreateInput
+  ) => StockUnitCategoryPromise;
+  updateStockUnitCategory: (args: {
+    data: StockUnitCategoryUpdateInput;
+    where: StockUnitCategoryWhereUniqueInput;
+  }) => StockUnitCategoryPromise;
+  updateManyStockUnitCategories: (args: {
+    data: StockUnitCategoryUpdateManyMutationInput;
+    where?: StockUnitCategoryWhereInput;
+  }) => BatchPayloadPromise;
+  upsertStockUnitCategory: (args: {
+    where: StockUnitCategoryWhereUniqueInput;
+    create: StockUnitCategoryCreateInput;
+    update: StockUnitCategoryUpdateInput;
+  }) => StockUnitCategoryPromise;
+  deleteStockUnitCategory: (
+    where: StockUnitCategoryWhereUniqueInput
+  ) => StockUnitCategoryPromise;
+  deleteManyStockUnitCategories: (
+    where?: StockUnitCategoryWhereInput
+  ) => BatchPayloadPromise;
 
   /**
    * Subscriptions
@@ -372,24 +326,21 @@ export interface Subscription {
   expenseUnit: (
     where?: ExpenseUnitSubscriptionWhereInput
   ) => ExpenseUnitSubscriptionPayloadSubscription;
-  expenseUnitCategory: (
-    where?: ExpenseUnitCategorySubscriptionWhereInput
-  ) => ExpenseUnitCategorySubscriptionPayloadSubscription;
   inventory: (
     where?: InventorySubscriptionWhereInput
   ) => InventorySubscriptionPayloadSubscription;
-  item: (
-    where?: ItemSubscriptionWhereInput
-  ) => ItemSubscriptionPayloadSubscription;
   measurementUnit: (
     where?: MeasurementUnitSubscriptionWhereInput
   ) => MeasurementUnitSubscriptionPayloadSubscription;
-  merchandise: (
-    where?: MerchandiseSubscriptionWhereInput
-  ) => MerchandiseSubscriptionPayloadSubscription;
   product: (
     where?: ProductSubscriptionWhereInput
   ) => ProductSubscriptionPayloadSubscription;
+  stockUnit: (
+    where?: StockUnitSubscriptionWhereInput
+  ) => StockUnitSubscriptionPayloadSubscription;
+  stockUnitCategory: (
+    where?: StockUnitCategorySubscriptionWhereInput
+  ) => StockUnitCategorySubscriptionPayloadSubscription;
 }
 
 export interface ClientConstructor<T> {
@@ -410,17 +361,7 @@ export type CurrencyOrderByInput =
   | "createdAt_ASC"
   | "createdAt_DESC";
 
-export type ItemOrderByInput = "id_ASC" | "id_DESC" | "name_ASC" | "name_DESC";
-
-export type ExpenseUnitOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "amount_ASC"
-  | "amount_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC";
-
-export type ExpenseUnitCategoryOrderByInput =
+export type StockUnitOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "name_ASC"
@@ -436,6 +377,14 @@ export type InventoryOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
+export type ExpenseUnitOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "amount_ASC"
+  | "amount_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC";
+
 export type MeasurementUnitOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -447,18 +396,16 @@ export type MeasurementUnitOrderByInput =
 export type ProductOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "name_ASC"
-  | "name_DESC";
-
-export type MerchandiseOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "quantity_ASC"
-  | "quantity_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
+
+export type StockUnitCategoryOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "name_ASC"
+  | "name_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
@@ -514,7 +461,7 @@ export type ExpenseUnitWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
 
-export interface ItemWhereInput {
+export interface StockUnitWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -543,99 +490,17 @@ export interface ItemWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
-  AND?: Maybe<ItemWhereInput[] | ItemWhereInput>;
-  OR?: Maybe<ItemWhereInput[] | ItemWhereInput>;
-  NOT?: Maybe<ItemWhereInput[] | ItemWhereInput>;
+  inventory_every?: Maybe<InventoryWhereInput>;
+  inventory_some?: Maybe<InventoryWhereInput>;
+  inventory_none?: Maybe<InventoryWhereInput>;
+  category?: Maybe<StockUnitCategoryWhereInput>;
+  expenseUnit_every?: Maybe<ExpenseUnitWhereInput>;
+  expenseUnit_some?: Maybe<ExpenseUnitWhereInput>;
+  expenseUnit_none?: Maybe<ExpenseUnitWhereInput>;
+  AND?: Maybe<StockUnitWhereInput[] | StockUnitWhereInput>;
+  OR?: Maybe<StockUnitWhereInput[] | StockUnitWhereInput>;
+  NOT?: Maybe<StockUnitWhereInput[] | StockUnitWhereInput>;
 }
-
-export interface ExpenseUnitWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  amount?: Maybe<String>;
-  amount_not?: Maybe<String>;
-  amount_in?: Maybe<String[] | String>;
-  amount_not_in?: Maybe<String[] | String>;
-  amount_lt?: Maybe<String>;
-  amount_lte?: Maybe<String>;
-  amount_gt?: Maybe<String>;
-  amount_gte?: Maybe<String>;
-  amount_contains?: Maybe<String>;
-  amount_not_contains?: Maybe<String>;
-  amount_starts_with?: Maybe<String>;
-  amount_not_starts_with?: Maybe<String>;
-  amount_ends_with?: Maybe<String>;
-  amount_not_ends_with?: Maybe<String>;
-  currency?: Maybe<CurrencyWhereInput>;
-  item_every?: Maybe<ItemWhereInput>;
-  item_some?: Maybe<ItemWhereInput>;
-  item_none?: Maybe<ItemWhereInput>;
-  createdAt?: Maybe<DateTimeInput>;
-  createdAt_not?: Maybe<DateTimeInput>;
-  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_lt?: Maybe<DateTimeInput>;
-  createdAt_lte?: Maybe<DateTimeInput>;
-  createdAt_gt?: Maybe<DateTimeInput>;
-  createdAt_gte?: Maybe<DateTimeInput>;
-  AND?: Maybe<ExpenseUnitWhereInput[] | ExpenseUnitWhereInput>;
-  OR?: Maybe<ExpenseUnitWhereInput[] | ExpenseUnitWhereInput>;
-  NOT?: Maybe<ExpenseUnitWhereInput[] | ExpenseUnitWhereInput>;
-}
-
-export type ExpenseUnitCategoryWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-  name?: Maybe<String>;
-}>;
-
-export interface ExpenseUnitCategoryWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
-  AND?: Maybe<ExpenseUnitCategoryWhereInput[] | ExpenseUnitCategoryWhereInput>;
-  OR?: Maybe<ExpenseUnitCategoryWhereInput[] | ExpenseUnitCategoryWhereInput>;
-  NOT?: Maybe<ExpenseUnitCategoryWhereInput[] | ExpenseUnitCategoryWhereInput>;
-}
-
-export type InventoryWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
 
 export interface InventoryWhereInput {
   id?: Maybe<ID_Input>;
@@ -667,9 +532,9 @@ export interface InventoryWhereInput {
   quantity_ends_with?: Maybe<String>;
   quantity_not_ends_with?: Maybe<String>;
   unit?: Maybe<MeasurementUnitWhereInput>;
-  item_every?: Maybe<ItemWhereInput>;
-  item_some?: Maybe<ItemWhereInput>;
-  item_none?: Maybe<ItemWhereInput>;
+  stockUnit_every?: Maybe<StockUnitWhereInput>;
+  stockUnit_some?: Maybe<StockUnitWhereInput>;
+  stockUnit_none?: Maybe<StockUnitWhereInput>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -739,19 +604,7 @@ export interface MeasurementUnitWhereInput {
   NOT?: Maybe<MeasurementUnitWhereInput[] | MeasurementUnitWhereInput>;
 }
 
-export type ItemWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
-export type MeasurementUnitWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
-export type MerchandiseWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
-export interface ProductWhereInput {
+export interface StockUnitCategoryWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -780,12 +633,312 @@ export interface ProductWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
+  AND?: Maybe<StockUnitCategoryWhereInput[] | StockUnitCategoryWhereInput>;
+  OR?: Maybe<StockUnitCategoryWhereInput[] | StockUnitCategoryWhereInput>;
+  NOT?: Maybe<StockUnitCategoryWhereInput[] | StockUnitCategoryWhereInput>;
+}
+
+export interface ExpenseUnitWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  amount?: Maybe<String>;
+  amount_not?: Maybe<String>;
+  amount_in?: Maybe<String[] | String>;
+  amount_not_in?: Maybe<String[] | String>;
+  amount_lt?: Maybe<String>;
+  amount_lte?: Maybe<String>;
+  amount_gt?: Maybe<String>;
+  amount_gte?: Maybe<String>;
+  amount_contains?: Maybe<String>;
+  amount_not_contains?: Maybe<String>;
+  amount_starts_with?: Maybe<String>;
+  amount_not_starts_with?: Maybe<String>;
+  amount_ends_with?: Maybe<String>;
+  amount_not_ends_with?: Maybe<String>;
+  currency?: Maybe<CurrencyWhereInput>;
+  stockUnit_every?: Maybe<StockUnitWhereInput>;
+  stockUnit_some?: Maybe<StockUnitWhereInput>;
+  stockUnit_none?: Maybe<StockUnitWhereInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<ExpenseUnitWhereInput[] | ExpenseUnitWhereInput>;
+  OR?: Maybe<ExpenseUnitWhereInput[] | ExpenseUnitWhereInput>;
+  NOT?: Maybe<ExpenseUnitWhereInput[] | ExpenseUnitWhereInput>;
+}
+
+export type InventoryWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export type MeasurementUnitWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export type ProductWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export interface ProductWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  item?: Maybe<StockUnitWhereInput>;
+  stockUnit_every?: Maybe<StockUnitWhereInput>;
+  stockUnit_some?: Maybe<StockUnitWhereInput>;
+  stockUnit_none?: Maybe<StockUnitWhereInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
   AND?: Maybe<ProductWhereInput[] | ProductWhereInput>;
   OR?: Maybe<ProductWhereInput[] | ProductWhereInput>;
   NOT?: Maybe<ProductWhereInput[] | ProductWhereInput>;
 }
 
-export interface MerchandiseWhereInput {
+export type StockUnitWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export type StockUnitCategoryWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  name?: Maybe<String>;
+}>;
+
+export interface CurrencyCreateInput {
+  id?: Maybe<ID_Input>;
+  symbol: String;
+  isDefault?: Maybe<Boolean>;
+}
+
+export interface CurrencyUpdateInput {
+  symbol?: Maybe<String>;
+  isDefault?: Maybe<Boolean>;
+}
+
+export interface CurrencyUpdateManyMutationInput {
+  symbol?: Maybe<String>;
+  isDefault?: Maybe<Boolean>;
+}
+
+export interface ExpenseUnitCreateInput {
+  id?: Maybe<ID_Input>;
+  amount?: Maybe<String>;
+  currency: CurrencyCreateOneInput;
+  stockUnit?: Maybe<StockUnitCreateManyWithoutExpenseUnitInput>;
+}
+
+export interface CurrencyCreateOneInput {
+  create?: Maybe<CurrencyCreateInput>;
+  connect?: Maybe<CurrencyWhereUniqueInput>;
+}
+
+export interface StockUnitCreateManyWithoutExpenseUnitInput {
+  create?: Maybe<
+    | StockUnitCreateWithoutExpenseUnitInput[]
+    | StockUnitCreateWithoutExpenseUnitInput
+  >;
+  connect?: Maybe<StockUnitWhereUniqueInput[] | StockUnitWhereUniqueInput>;
+}
+
+export interface StockUnitCreateWithoutExpenseUnitInput {
+  id?: Maybe<ID_Input>;
+  name?: Maybe<String>;
+  inventory?: Maybe<InventoryCreateManyWithoutStockUnitInput>;
+  category: StockUnitCategoryCreateOneInput;
+}
+
+export interface InventoryCreateManyWithoutStockUnitInput {
+  create?: Maybe<
+    | InventoryCreateWithoutStockUnitInput[]
+    | InventoryCreateWithoutStockUnitInput
+  >;
+  connect?: Maybe<InventoryWhereUniqueInput[] | InventoryWhereUniqueInput>;
+}
+
+export interface InventoryCreateWithoutStockUnitInput {
+  id?: Maybe<ID_Input>;
+  quantity?: Maybe<String>;
+  unit: MeasurementUnitCreateOneInput;
+}
+
+export interface MeasurementUnitCreateOneInput {
+  create?: Maybe<MeasurementUnitCreateInput>;
+  connect?: Maybe<MeasurementUnitWhereUniqueInput>;
+}
+
+export interface MeasurementUnitCreateInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  symbol: String;
+}
+
+export interface StockUnitCategoryCreateOneInput {
+  create?: Maybe<StockUnitCategoryCreateInput>;
+  connect?: Maybe<StockUnitCategoryWhereUniqueInput>;
+}
+
+export interface StockUnitCategoryCreateInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+}
+
+export interface ExpenseUnitUpdateInput {
+  amount?: Maybe<String>;
+  currency?: Maybe<CurrencyUpdateOneRequiredInput>;
+  stockUnit?: Maybe<StockUnitUpdateManyWithoutExpenseUnitInput>;
+}
+
+export interface CurrencyUpdateOneRequiredInput {
+  create?: Maybe<CurrencyCreateInput>;
+  update?: Maybe<CurrencyUpdateDataInput>;
+  upsert?: Maybe<CurrencyUpsertNestedInput>;
+  connect?: Maybe<CurrencyWhereUniqueInput>;
+}
+
+export interface CurrencyUpdateDataInput {
+  symbol?: Maybe<String>;
+  isDefault?: Maybe<Boolean>;
+}
+
+export interface CurrencyUpsertNestedInput {
+  update: CurrencyUpdateDataInput;
+  create: CurrencyCreateInput;
+}
+
+export interface StockUnitUpdateManyWithoutExpenseUnitInput {
+  create?: Maybe<
+    | StockUnitCreateWithoutExpenseUnitInput[]
+    | StockUnitCreateWithoutExpenseUnitInput
+  >;
+  delete?: Maybe<StockUnitWhereUniqueInput[] | StockUnitWhereUniqueInput>;
+  connect?: Maybe<StockUnitWhereUniqueInput[] | StockUnitWhereUniqueInput>;
+  set?: Maybe<StockUnitWhereUniqueInput[] | StockUnitWhereUniqueInput>;
+  disconnect?: Maybe<StockUnitWhereUniqueInput[] | StockUnitWhereUniqueInput>;
+  update?: Maybe<
+    | StockUnitUpdateWithWhereUniqueWithoutExpenseUnitInput[]
+    | StockUnitUpdateWithWhereUniqueWithoutExpenseUnitInput
+  >;
+  upsert?: Maybe<
+    | StockUnitUpsertWithWhereUniqueWithoutExpenseUnitInput[]
+    | StockUnitUpsertWithWhereUniqueWithoutExpenseUnitInput
+  >;
+  deleteMany?: Maybe<StockUnitScalarWhereInput[] | StockUnitScalarWhereInput>;
+  updateMany?: Maybe<
+    | StockUnitUpdateManyWithWhereNestedInput[]
+    | StockUnitUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface StockUnitUpdateWithWhereUniqueWithoutExpenseUnitInput {
+  where: StockUnitWhereUniqueInput;
+  data: StockUnitUpdateWithoutExpenseUnitDataInput;
+}
+
+export interface StockUnitUpdateWithoutExpenseUnitDataInput {
+  name?: Maybe<String>;
+  inventory?: Maybe<InventoryUpdateManyWithoutStockUnitInput>;
+  category?: Maybe<StockUnitCategoryUpdateOneRequiredInput>;
+}
+
+export interface InventoryUpdateManyWithoutStockUnitInput {
+  create?: Maybe<
+    | InventoryCreateWithoutStockUnitInput[]
+    | InventoryCreateWithoutStockUnitInput
+  >;
+  delete?: Maybe<InventoryWhereUniqueInput[] | InventoryWhereUniqueInput>;
+  connect?: Maybe<InventoryWhereUniqueInput[] | InventoryWhereUniqueInput>;
+  set?: Maybe<InventoryWhereUniqueInput[] | InventoryWhereUniqueInput>;
+  disconnect?: Maybe<InventoryWhereUniqueInput[] | InventoryWhereUniqueInput>;
+  update?: Maybe<
+    | InventoryUpdateWithWhereUniqueWithoutStockUnitInput[]
+    | InventoryUpdateWithWhereUniqueWithoutStockUnitInput
+  >;
+  upsert?: Maybe<
+    | InventoryUpsertWithWhereUniqueWithoutStockUnitInput[]
+    | InventoryUpsertWithWhereUniqueWithoutStockUnitInput
+  >;
+  deleteMany?: Maybe<InventoryScalarWhereInput[] | InventoryScalarWhereInput>;
+  updateMany?: Maybe<
+    | InventoryUpdateManyWithWhereNestedInput[]
+    | InventoryUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface InventoryUpdateWithWhereUniqueWithoutStockUnitInput {
+  where: InventoryWhereUniqueInput;
+  data: InventoryUpdateWithoutStockUnitDataInput;
+}
+
+export interface InventoryUpdateWithoutStockUnitDataInput {
+  quantity?: Maybe<String>;
+  unit?: Maybe<MeasurementUnitUpdateOneRequiredInput>;
+}
+
+export interface MeasurementUnitUpdateOneRequiredInput {
+  create?: Maybe<MeasurementUnitCreateInput>;
+  update?: Maybe<MeasurementUnitUpdateDataInput>;
+  upsert?: Maybe<MeasurementUnitUpsertNestedInput>;
+  connect?: Maybe<MeasurementUnitWhereUniqueInput>;
+}
+
+export interface MeasurementUnitUpdateDataInput {
+  name?: Maybe<String>;
+  symbol?: Maybe<String>;
+}
+
+export interface MeasurementUnitUpsertNestedInput {
+  update: MeasurementUnitUpdateDataInput;
+  create: MeasurementUnitCreateInput;
+}
+
+export interface InventoryUpsertWithWhereUniqueWithoutStockUnitInput {
+  where: InventoryWhereUniqueInput;
+  update: InventoryUpdateWithoutStockUnitDataInput;
+  create: InventoryCreateWithoutStockUnitInput;
+}
+
+export interface InventoryScalarWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -814,9 +967,6 @@ export interface MerchandiseWhereInput {
   quantity_not_starts_with?: Maybe<String>;
   quantity_ends_with?: Maybe<String>;
   quantity_not_ends_with?: Maybe<String>;
-  product_every?: Maybe<ProductWhereInput>;
-  product_some?: Maybe<ProductWhereInput>;
-  product_none?: Maybe<ProductWhereInput>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -833,112 +983,43 @@ export interface MerchandiseWhereInput {
   updatedAt_lte?: Maybe<DateTimeInput>;
   updatedAt_gt?: Maybe<DateTimeInput>;
   updatedAt_gte?: Maybe<DateTimeInput>;
-  AND?: Maybe<MerchandiseWhereInput[] | MerchandiseWhereInput>;
-  OR?: Maybe<MerchandiseWhereInput[] | MerchandiseWhereInput>;
-  NOT?: Maybe<MerchandiseWhereInput[] | MerchandiseWhereInput>;
+  AND?: Maybe<InventoryScalarWhereInput[] | InventoryScalarWhereInput>;
+  OR?: Maybe<InventoryScalarWhereInput[] | InventoryScalarWhereInput>;
+  NOT?: Maybe<InventoryScalarWhereInput[] | InventoryScalarWhereInput>;
 }
 
-export type ProductWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
-export interface CurrencyCreateInput {
-  id?: Maybe<ID_Input>;
-  symbol: String;
-  isDefault?: Maybe<Boolean>;
+export interface InventoryUpdateManyWithWhereNestedInput {
+  where: InventoryScalarWhereInput;
+  data: InventoryUpdateManyDataInput;
 }
 
-export interface CurrencyUpdateInput {
-  symbol?: Maybe<String>;
-  isDefault?: Maybe<Boolean>;
+export interface InventoryUpdateManyDataInput {
+  quantity?: Maybe<String>;
 }
 
-export interface CurrencyUpdateManyMutationInput {
-  symbol?: Maybe<String>;
-  isDefault?: Maybe<Boolean>;
+export interface StockUnitCategoryUpdateOneRequiredInput {
+  create?: Maybe<StockUnitCategoryCreateInput>;
+  update?: Maybe<StockUnitCategoryUpdateDataInput>;
+  upsert?: Maybe<StockUnitCategoryUpsertNestedInput>;
+  connect?: Maybe<StockUnitCategoryWhereUniqueInput>;
 }
 
-export interface ExpenseUnitCreateInput {
-  id?: Maybe<ID_Input>;
-  amount?: Maybe<String>;
-  currency: CurrencyCreateOneInput;
-  item?: Maybe<ItemCreateManyInput>;
-}
-
-export interface CurrencyCreateOneInput {
-  create?: Maybe<CurrencyCreateInput>;
-  connect?: Maybe<CurrencyWhereUniqueInput>;
-}
-
-export interface ItemCreateManyInput {
-  create?: Maybe<ItemCreateInput[] | ItemCreateInput>;
-  connect?: Maybe<ItemWhereUniqueInput[] | ItemWhereUniqueInput>;
-}
-
-export interface ItemCreateInput {
-  id?: Maybe<ID_Input>;
+export interface StockUnitCategoryUpdateDataInput {
   name?: Maybe<String>;
 }
 
-export interface ExpenseUnitUpdateInput {
-  amount?: Maybe<String>;
-  currency?: Maybe<CurrencyUpdateOneRequiredInput>;
-  item?: Maybe<ItemUpdateManyInput>;
+export interface StockUnitCategoryUpsertNestedInput {
+  update: StockUnitCategoryUpdateDataInput;
+  create: StockUnitCategoryCreateInput;
 }
 
-export interface CurrencyUpdateOneRequiredInput {
-  create?: Maybe<CurrencyCreateInput>;
-  update?: Maybe<CurrencyUpdateDataInput>;
-  upsert?: Maybe<CurrencyUpsertNestedInput>;
-  connect?: Maybe<CurrencyWhereUniqueInput>;
+export interface StockUnitUpsertWithWhereUniqueWithoutExpenseUnitInput {
+  where: StockUnitWhereUniqueInput;
+  update: StockUnitUpdateWithoutExpenseUnitDataInput;
+  create: StockUnitCreateWithoutExpenseUnitInput;
 }
 
-export interface CurrencyUpdateDataInput {
-  symbol?: Maybe<String>;
-  isDefault?: Maybe<Boolean>;
-}
-
-export interface CurrencyUpsertNestedInput {
-  update: CurrencyUpdateDataInput;
-  create: CurrencyCreateInput;
-}
-
-export interface ItemUpdateManyInput {
-  create?: Maybe<ItemCreateInput[] | ItemCreateInput>;
-  update?: Maybe<
-    | ItemUpdateWithWhereUniqueNestedInput[]
-    | ItemUpdateWithWhereUniqueNestedInput
-  >;
-  upsert?: Maybe<
-    | ItemUpsertWithWhereUniqueNestedInput[]
-    | ItemUpsertWithWhereUniqueNestedInput
-  >;
-  delete?: Maybe<ItemWhereUniqueInput[] | ItemWhereUniqueInput>;
-  connect?: Maybe<ItemWhereUniqueInput[] | ItemWhereUniqueInput>;
-  set?: Maybe<ItemWhereUniqueInput[] | ItemWhereUniqueInput>;
-  disconnect?: Maybe<ItemWhereUniqueInput[] | ItemWhereUniqueInput>;
-  deleteMany?: Maybe<ItemScalarWhereInput[] | ItemScalarWhereInput>;
-  updateMany?: Maybe<
-    ItemUpdateManyWithWhereNestedInput[] | ItemUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface ItemUpdateWithWhereUniqueNestedInput {
-  where: ItemWhereUniqueInput;
-  data: ItemUpdateDataInput;
-}
-
-export interface ItemUpdateDataInput {
-  name?: Maybe<String>;
-}
-
-export interface ItemUpsertWithWhereUniqueNestedInput {
-  where: ItemWhereUniqueInput;
-  update: ItemUpdateDataInput;
-  create: ItemCreateInput;
-}
-
-export interface ItemScalarWhereInput {
+export interface StockUnitScalarWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -967,17 +1048,17 @@ export interface ItemScalarWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
-  AND?: Maybe<ItemScalarWhereInput[] | ItemScalarWhereInput>;
-  OR?: Maybe<ItemScalarWhereInput[] | ItemScalarWhereInput>;
-  NOT?: Maybe<ItemScalarWhereInput[] | ItemScalarWhereInput>;
+  AND?: Maybe<StockUnitScalarWhereInput[] | StockUnitScalarWhereInput>;
+  OR?: Maybe<StockUnitScalarWhereInput[] | StockUnitScalarWhereInput>;
+  NOT?: Maybe<StockUnitScalarWhereInput[] | StockUnitScalarWhereInput>;
 }
 
-export interface ItemUpdateManyWithWhereNestedInput {
-  where: ItemScalarWhereInput;
-  data: ItemUpdateManyDataInput;
+export interface StockUnitUpdateManyWithWhereNestedInput {
+  where: StockUnitScalarWhereInput;
+  data: StockUnitUpdateManyDataInput;
 }
 
-export interface ItemUpdateManyDataInput {
+export interface StockUnitUpdateManyDataInput {
   name?: Maybe<String>;
 }
 
@@ -985,70 +1066,186 @@ export interface ExpenseUnitUpdateManyMutationInput {
   amount?: Maybe<String>;
 }
 
-export interface ExpenseUnitCategoryCreateInput {
-  id?: Maybe<ID_Input>;
-  name: String;
-}
-
-export interface ExpenseUnitCategoryUpdateInput {
-  name?: Maybe<String>;
-}
-
-export interface ExpenseUnitCategoryUpdateManyMutationInput {
-  name?: Maybe<String>;
-}
-
 export interface InventoryCreateInput {
   id?: Maybe<ID_Input>;
   quantity?: Maybe<String>;
   unit: MeasurementUnitCreateOneInput;
-  item?: Maybe<ItemCreateManyInput>;
+  stockUnit?: Maybe<StockUnitCreateManyWithoutInventoryInput>;
 }
 
-export interface MeasurementUnitCreateOneInput {
-  create?: Maybe<MeasurementUnitCreateInput>;
-  connect?: Maybe<MeasurementUnitWhereUniqueInput>;
+export interface StockUnitCreateManyWithoutInventoryInput {
+  create?: Maybe<
+    | StockUnitCreateWithoutInventoryInput[]
+    | StockUnitCreateWithoutInventoryInput
+  >;
+  connect?: Maybe<StockUnitWhereUniqueInput[] | StockUnitWhereUniqueInput>;
 }
 
-export interface MeasurementUnitCreateInput {
+export interface StockUnitCreateWithoutInventoryInput {
   id?: Maybe<ID_Input>;
-  name: String;
-  symbol: String;
+  name?: Maybe<String>;
+  category: StockUnitCategoryCreateOneInput;
+  expenseUnit?: Maybe<ExpenseUnitCreateManyWithoutStockUnitInput>;
+}
+
+export interface ExpenseUnitCreateManyWithoutStockUnitInput {
+  create?: Maybe<
+    | ExpenseUnitCreateWithoutStockUnitInput[]
+    | ExpenseUnitCreateWithoutStockUnitInput
+  >;
+  connect?: Maybe<ExpenseUnitWhereUniqueInput[] | ExpenseUnitWhereUniqueInput>;
+}
+
+export interface ExpenseUnitCreateWithoutStockUnitInput {
+  id?: Maybe<ID_Input>;
+  amount?: Maybe<String>;
+  currency: CurrencyCreateOneInput;
 }
 
 export interface InventoryUpdateInput {
   quantity?: Maybe<String>;
   unit?: Maybe<MeasurementUnitUpdateOneRequiredInput>;
-  item?: Maybe<ItemUpdateManyInput>;
+  stockUnit?: Maybe<StockUnitUpdateManyWithoutInventoryInput>;
 }
 
-export interface MeasurementUnitUpdateOneRequiredInput {
-  create?: Maybe<MeasurementUnitCreateInput>;
-  update?: Maybe<MeasurementUnitUpdateDataInput>;
-  upsert?: Maybe<MeasurementUnitUpsertNestedInput>;
-  connect?: Maybe<MeasurementUnitWhereUniqueInput>;
+export interface StockUnitUpdateManyWithoutInventoryInput {
+  create?: Maybe<
+    | StockUnitCreateWithoutInventoryInput[]
+    | StockUnitCreateWithoutInventoryInput
+  >;
+  delete?: Maybe<StockUnitWhereUniqueInput[] | StockUnitWhereUniqueInput>;
+  connect?: Maybe<StockUnitWhereUniqueInput[] | StockUnitWhereUniqueInput>;
+  set?: Maybe<StockUnitWhereUniqueInput[] | StockUnitWhereUniqueInput>;
+  disconnect?: Maybe<StockUnitWhereUniqueInput[] | StockUnitWhereUniqueInput>;
+  update?: Maybe<
+    | StockUnitUpdateWithWhereUniqueWithoutInventoryInput[]
+    | StockUnitUpdateWithWhereUniqueWithoutInventoryInput
+  >;
+  upsert?: Maybe<
+    | StockUnitUpsertWithWhereUniqueWithoutInventoryInput[]
+    | StockUnitUpsertWithWhereUniqueWithoutInventoryInput
+  >;
+  deleteMany?: Maybe<StockUnitScalarWhereInput[] | StockUnitScalarWhereInput>;
+  updateMany?: Maybe<
+    | StockUnitUpdateManyWithWhereNestedInput[]
+    | StockUnitUpdateManyWithWhereNestedInput
+  >;
 }
 
-export interface MeasurementUnitUpdateDataInput {
+export interface StockUnitUpdateWithWhereUniqueWithoutInventoryInput {
+  where: StockUnitWhereUniqueInput;
+  data: StockUnitUpdateWithoutInventoryDataInput;
+}
+
+export interface StockUnitUpdateWithoutInventoryDataInput {
   name?: Maybe<String>;
-  symbol?: Maybe<String>;
+  category?: Maybe<StockUnitCategoryUpdateOneRequiredInput>;
+  expenseUnit?: Maybe<ExpenseUnitUpdateManyWithoutStockUnitInput>;
 }
 
-export interface MeasurementUnitUpsertNestedInput {
-  update: MeasurementUnitUpdateDataInput;
-  create: MeasurementUnitCreateInput;
+export interface ExpenseUnitUpdateManyWithoutStockUnitInput {
+  create?: Maybe<
+    | ExpenseUnitCreateWithoutStockUnitInput[]
+    | ExpenseUnitCreateWithoutStockUnitInput
+  >;
+  delete?: Maybe<ExpenseUnitWhereUniqueInput[] | ExpenseUnitWhereUniqueInput>;
+  connect?: Maybe<ExpenseUnitWhereUniqueInput[] | ExpenseUnitWhereUniqueInput>;
+  set?: Maybe<ExpenseUnitWhereUniqueInput[] | ExpenseUnitWhereUniqueInput>;
+  disconnect?: Maybe<
+    ExpenseUnitWhereUniqueInput[] | ExpenseUnitWhereUniqueInput
+  >;
+  update?: Maybe<
+    | ExpenseUnitUpdateWithWhereUniqueWithoutStockUnitInput[]
+    | ExpenseUnitUpdateWithWhereUniqueWithoutStockUnitInput
+  >;
+  upsert?: Maybe<
+    | ExpenseUnitUpsertWithWhereUniqueWithoutStockUnitInput[]
+    | ExpenseUnitUpsertWithWhereUniqueWithoutStockUnitInput
+  >;
+  deleteMany?: Maybe<
+    ExpenseUnitScalarWhereInput[] | ExpenseUnitScalarWhereInput
+  >;
+  updateMany?: Maybe<
+    | ExpenseUnitUpdateManyWithWhereNestedInput[]
+    | ExpenseUnitUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface ExpenseUnitUpdateWithWhereUniqueWithoutStockUnitInput {
+  where: ExpenseUnitWhereUniqueInput;
+  data: ExpenseUnitUpdateWithoutStockUnitDataInput;
+}
+
+export interface ExpenseUnitUpdateWithoutStockUnitDataInput {
+  amount?: Maybe<String>;
+  currency?: Maybe<CurrencyUpdateOneRequiredInput>;
+}
+
+export interface ExpenseUnitUpsertWithWhereUniqueWithoutStockUnitInput {
+  where: ExpenseUnitWhereUniqueInput;
+  update: ExpenseUnitUpdateWithoutStockUnitDataInput;
+  create: ExpenseUnitCreateWithoutStockUnitInput;
+}
+
+export interface ExpenseUnitScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  amount?: Maybe<String>;
+  amount_not?: Maybe<String>;
+  amount_in?: Maybe<String[] | String>;
+  amount_not_in?: Maybe<String[] | String>;
+  amount_lt?: Maybe<String>;
+  amount_lte?: Maybe<String>;
+  amount_gt?: Maybe<String>;
+  amount_gte?: Maybe<String>;
+  amount_contains?: Maybe<String>;
+  amount_not_contains?: Maybe<String>;
+  amount_starts_with?: Maybe<String>;
+  amount_not_starts_with?: Maybe<String>;
+  amount_ends_with?: Maybe<String>;
+  amount_not_ends_with?: Maybe<String>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<ExpenseUnitScalarWhereInput[] | ExpenseUnitScalarWhereInput>;
+  OR?: Maybe<ExpenseUnitScalarWhereInput[] | ExpenseUnitScalarWhereInput>;
+  NOT?: Maybe<ExpenseUnitScalarWhereInput[] | ExpenseUnitScalarWhereInput>;
+}
+
+export interface ExpenseUnitUpdateManyWithWhereNestedInput {
+  where: ExpenseUnitScalarWhereInput;
+  data: ExpenseUnitUpdateManyDataInput;
+}
+
+export interface ExpenseUnitUpdateManyDataInput {
+  amount?: Maybe<String>;
+}
+
+export interface StockUnitUpsertWithWhereUniqueWithoutInventoryInput {
+  where: StockUnitWhereUniqueInput;
+  update: StockUnitUpdateWithoutInventoryDataInput;
+  create: StockUnitCreateWithoutInventoryInput;
 }
 
 export interface InventoryUpdateManyMutationInput {
   quantity?: Maybe<String>;
-}
-
-export interface ItemUpdateInput {
-  name?: Maybe<String>;
-}
-
-export interface ItemUpdateManyMutationInput {
-  name?: Maybe<String>;
 }
 
 export interface MeasurementUnitUpdateInput {
@@ -1061,115 +1258,102 @@ export interface MeasurementUnitUpdateManyMutationInput {
   symbol?: Maybe<String>;
 }
 
-export interface MerchandiseCreateInput {
-  id?: Maybe<ID_Input>;
-  quantity?: Maybe<String>;
-  product?: Maybe<ProductCreateManyInput>;
-}
-
-export interface ProductCreateManyInput {
-  create?: Maybe<ProductCreateInput[] | ProductCreateInput>;
-  connect?: Maybe<ProductWhereUniqueInput[] | ProductWhereUniqueInput>;
-}
-
 export interface ProductCreateInput {
   id?: Maybe<ID_Input>;
-  name?: Maybe<String>;
+  item: StockUnitCreateOneInput;
+  stockUnit?: Maybe<StockUnitCreateManyInput>;
 }
 
-export interface MerchandiseUpdateInput {
-  quantity?: Maybe<String>;
-  product?: Maybe<ProductUpdateManyInput>;
+export interface StockUnitCreateOneInput {
+  create?: Maybe<StockUnitCreateInput>;
+  connect?: Maybe<StockUnitWhereUniqueInput>;
 }
 
-export interface ProductUpdateManyInput {
-  create?: Maybe<ProductCreateInput[] | ProductCreateInput>;
-  update?: Maybe<
-    | ProductUpdateWithWhereUniqueNestedInput[]
-    | ProductUpdateWithWhereUniqueNestedInput
-  >;
-  upsert?: Maybe<
-    | ProductUpsertWithWhereUniqueNestedInput[]
-    | ProductUpsertWithWhereUniqueNestedInput
-  >;
-  delete?: Maybe<ProductWhereUniqueInput[] | ProductWhereUniqueInput>;
-  connect?: Maybe<ProductWhereUniqueInput[] | ProductWhereUniqueInput>;
-  set?: Maybe<ProductWhereUniqueInput[] | ProductWhereUniqueInput>;
-  disconnect?: Maybe<ProductWhereUniqueInput[] | ProductWhereUniqueInput>;
-  deleteMany?: Maybe<ProductScalarWhereInput[] | ProductScalarWhereInput>;
-  updateMany?: Maybe<
-    | ProductUpdateManyWithWhereNestedInput[]
-    | ProductUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface ProductUpdateWithWhereUniqueNestedInput {
-  where: ProductWhereUniqueInput;
-  data: ProductUpdateDataInput;
-}
-
-export interface ProductUpdateDataInput {
-  name?: Maybe<String>;
-}
-
-export interface ProductUpsertWithWhereUniqueNestedInput {
-  where: ProductWhereUniqueInput;
-  update: ProductUpdateDataInput;
-  create: ProductCreateInput;
-}
-
-export interface ProductScalarWhereInput {
+export interface StockUnitCreateInput {
   id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
   name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
-  AND?: Maybe<ProductScalarWhereInput[] | ProductScalarWhereInput>;
-  OR?: Maybe<ProductScalarWhereInput[] | ProductScalarWhereInput>;
-  NOT?: Maybe<ProductScalarWhereInput[] | ProductScalarWhereInput>;
+  inventory?: Maybe<InventoryCreateManyWithoutStockUnitInput>;
+  category: StockUnitCategoryCreateOneInput;
+  expenseUnit?: Maybe<ExpenseUnitCreateManyWithoutStockUnitInput>;
 }
 
-export interface ProductUpdateManyWithWhereNestedInput {
-  where: ProductScalarWhereInput;
-  data: ProductUpdateManyDataInput;
-}
-
-export interface ProductUpdateManyDataInput {
-  name?: Maybe<String>;
-}
-
-export interface MerchandiseUpdateManyMutationInput {
-  quantity?: Maybe<String>;
+export interface StockUnitCreateManyInput {
+  create?: Maybe<StockUnitCreateInput[] | StockUnitCreateInput>;
+  connect?: Maybe<StockUnitWhereUniqueInput[] | StockUnitWhereUniqueInput>;
 }
 
 export interface ProductUpdateInput {
+  item?: Maybe<StockUnitUpdateOneRequiredInput>;
+  stockUnit?: Maybe<StockUnitUpdateManyInput>;
+}
+
+export interface StockUnitUpdateOneRequiredInput {
+  create?: Maybe<StockUnitCreateInput>;
+  update?: Maybe<StockUnitUpdateDataInput>;
+  upsert?: Maybe<StockUnitUpsertNestedInput>;
+  connect?: Maybe<StockUnitWhereUniqueInput>;
+}
+
+export interface StockUnitUpdateDataInput {
+  name?: Maybe<String>;
+  inventory?: Maybe<InventoryUpdateManyWithoutStockUnitInput>;
+  category?: Maybe<StockUnitCategoryUpdateOneRequiredInput>;
+  expenseUnit?: Maybe<ExpenseUnitUpdateManyWithoutStockUnitInput>;
+}
+
+export interface StockUnitUpsertNestedInput {
+  update: StockUnitUpdateDataInput;
+  create: StockUnitCreateInput;
+}
+
+export interface StockUnitUpdateManyInput {
+  create?: Maybe<StockUnitCreateInput[] | StockUnitCreateInput>;
+  update?: Maybe<
+    | StockUnitUpdateWithWhereUniqueNestedInput[]
+    | StockUnitUpdateWithWhereUniqueNestedInput
+  >;
+  upsert?: Maybe<
+    | StockUnitUpsertWithWhereUniqueNestedInput[]
+    | StockUnitUpsertWithWhereUniqueNestedInput
+  >;
+  delete?: Maybe<StockUnitWhereUniqueInput[] | StockUnitWhereUniqueInput>;
+  connect?: Maybe<StockUnitWhereUniqueInput[] | StockUnitWhereUniqueInput>;
+  set?: Maybe<StockUnitWhereUniqueInput[] | StockUnitWhereUniqueInput>;
+  disconnect?: Maybe<StockUnitWhereUniqueInput[] | StockUnitWhereUniqueInput>;
+  deleteMany?: Maybe<StockUnitScalarWhereInput[] | StockUnitScalarWhereInput>;
+  updateMany?: Maybe<
+    | StockUnitUpdateManyWithWhereNestedInput[]
+    | StockUnitUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface StockUnitUpdateWithWhereUniqueNestedInput {
+  where: StockUnitWhereUniqueInput;
+  data: StockUnitUpdateDataInput;
+}
+
+export interface StockUnitUpsertWithWhereUniqueNestedInput {
+  where: StockUnitWhereUniqueInput;
+  update: StockUnitUpdateDataInput;
+  create: StockUnitCreateInput;
+}
+
+export interface StockUnitUpdateInput {
+  name?: Maybe<String>;
+  inventory?: Maybe<InventoryUpdateManyWithoutStockUnitInput>;
+  category?: Maybe<StockUnitCategoryUpdateOneRequiredInput>;
+  expenseUnit?: Maybe<ExpenseUnitUpdateManyWithoutStockUnitInput>;
+}
+
+export interface StockUnitUpdateManyMutationInput {
   name?: Maybe<String>;
 }
 
-export interface ProductUpdateManyMutationInput {
+export interface StockUnitCategoryUpdateInput {
+  name?: Maybe<String>;
+}
+
+export interface StockUnitCategoryUpdateManyMutationInput {
   name?: Maybe<String>;
 }
 
@@ -1205,26 +1389,6 @@ export interface ExpenseUnitSubscriptionWhereInput {
   >;
 }
 
-export interface ExpenseUnitCategorySubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<ExpenseUnitCategoryWhereInput>;
-  AND?: Maybe<
-    | ExpenseUnitCategorySubscriptionWhereInput[]
-    | ExpenseUnitCategorySubscriptionWhereInput
-  >;
-  OR?: Maybe<
-    | ExpenseUnitCategorySubscriptionWhereInput[]
-    | ExpenseUnitCategorySubscriptionWhereInput
-  >;
-  NOT?: Maybe<
-    | ExpenseUnitCategorySubscriptionWhereInput[]
-    | ExpenseUnitCategorySubscriptionWhereInput
-  >;
-}
-
 export interface InventorySubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
@@ -1240,17 +1404,6 @@ export interface InventorySubscriptionWhereInput {
   NOT?: Maybe<
     InventorySubscriptionWhereInput[] | InventorySubscriptionWhereInput
   >;
-}
-
-export interface ItemSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<ItemWhereInput>;
-  AND?: Maybe<ItemSubscriptionWhereInput[] | ItemSubscriptionWhereInput>;
-  OR?: Maybe<ItemSubscriptionWhereInput[] | ItemSubscriptionWhereInput>;
-  NOT?: Maybe<ItemSubscriptionWhereInput[] | ItemSubscriptionWhereInput>;
 }
 
 export interface MeasurementUnitSubscriptionWhereInput {
@@ -1273,23 +1426,6 @@ export interface MeasurementUnitSubscriptionWhereInput {
   >;
 }
 
-export interface MerchandiseSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<MerchandiseWhereInput>;
-  AND?: Maybe<
-    MerchandiseSubscriptionWhereInput[] | MerchandiseSubscriptionWhereInput
-  >;
-  OR?: Maybe<
-    MerchandiseSubscriptionWhereInput[] | MerchandiseSubscriptionWhereInput
-  >;
-  NOT?: Maybe<
-    MerchandiseSubscriptionWhereInput[] | MerchandiseSubscriptionWhereInput
-  >;
-}
-
 export interface ProductSubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
@@ -1299,6 +1435,43 @@ export interface ProductSubscriptionWhereInput {
   AND?: Maybe<ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput>;
   OR?: Maybe<ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput>;
   NOT?: Maybe<ProductSubscriptionWhereInput[] | ProductSubscriptionWhereInput>;
+}
+
+export interface StockUnitSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<StockUnitWhereInput>;
+  AND?: Maybe<
+    StockUnitSubscriptionWhereInput[] | StockUnitSubscriptionWhereInput
+  >;
+  OR?: Maybe<
+    StockUnitSubscriptionWhereInput[] | StockUnitSubscriptionWhereInput
+  >;
+  NOT?: Maybe<
+    StockUnitSubscriptionWhereInput[] | StockUnitSubscriptionWhereInput
+  >;
+}
+
+export interface StockUnitCategorySubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<StockUnitCategoryWhereInput>;
+  AND?: Maybe<
+    | StockUnitCategorySubscriptionWhereInput[]
+    | StockUnitCategorySubscriptionWhereInput
+  >;
+  OR?: Maybe<
+    | StockUnitCategorySubscriptionWhereInput[]
+    | StockUnitCategorySubscriptionWhereInput
+  >;
+  NOT?: Maybe<
+    | StockUnitCategorySubscriptionWhereInput[]
+    | StockUnitCategorySubscriptionWhereInput
+  >;
 }
 
 export interface NodeNode {
@@ -1426,9 +1599,9 @@ export interface ExpenseUnitPromise extends Promise<ExpenseUnit>, Fragmentable {
   id: () => Promise<ID_Output>;
   amount: () => Promise<String>;
   currency: <T = CurrencyPromise>() => T;
-  item: <T = FragmentableArray<Item>>(args?: {
-    where?: ItemWhereInput;
-    orderBy?: ItemOrderByInput;
+  stockUnit: <T = FragmentableArray<StockUnit>>(args?: {
+    where?: StockUnitWhereInput;
+    orderBy?: StockUnitOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
@@ -1444,9 +1617,9 @@ export interface ExpenseUnitSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   amount: () => Promise<AsyncIterator<String>>;
   currency: <T = CurrencySubscription>() => T;
-  item: <T = Promise<AsyncIterator<ItemSubscription>>>(args?: {
-    where?: ItemWhereInput;
-    orderBy?: ItemOrderByInput;
+  stockUnit: <T = Promise<AsyncIterator<StockUnitSubscription>>>(args?: {
+    where?: StockUnitWhereInput;
+    orderBy?: StockUnitOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
@@ -1462,9 +1635,9 @@ export interface ExpenseUnitNullablePromise
   id: () => Promise<ID_Output>;
   amount: () => Promise<String>;
   currency: <T = CurrencyPromise>() => T;
-  item: <T = FragmentableArray<Item>>(args?: {
-    where?: ItemWhereInput;
-    orderBy?: ItemOrderByInput;
+  stockUnit: <T = FragmentableArray<StockUnit>>(args?: {
+    where?: StockUnitWhereInput;
+    orderBy?: StockUnitOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
@@ -1474,25 +1647,200 @@ export interface ExpenseUnitNullablePromise
   createdAt: () => Promise<DateTimeOutput>;
 }
 
-export interface Item {
+export interface StockUnit {
   id: ID_Output;
   name?: String;
 }
 
-export interface ItemPromise extends Promise<Item>, Fragmentable {
+export interface StockUnitPromise extends Promise<StockUnit>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  inventory: <T = FragmentableArray<Inventory>>(args?: {
+    where?: InventoryWhereInput;
+    orderBy?: InventoryOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  category: <T = StockUnitCategoryPromise>() => T;
+  expenseUnit: <T = FragmentableArray<ExpenseUnit>>(args?: {
+    where?: ExpenseUnitWhereInput;
+    orderBy?: ExpenseUnitOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface StockUnitSubscription
+  extends Promise<AsyncIterator<StockUnit>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  inventory: <T = Promise<AsyncIterator<InventorySubscription>>>(args?: {
+    where?: InventoryWhereInput;
+    orderBy?: InventoryOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  category: <T = StockUnitCategorySubscription>() => T;
+  expenseUnit: <T = Promise<AsyncIterator<ExpenseUnitSubscription>>>(args?: {
+    where?: ExpenseUnitWhereInput;
+    orderBy?: ExpenseUnitOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface StockUnitNullablePromise
+  extends Promise<StockUnit | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  inventory: <T = FragmentableArray<Inventory>>(args?: {
+    where?: InventoryWhereInput;
+    orderBy?: InventoryOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  category: <T = StockUnitCategoryPromise>() => T;
+  expenseUnit: <T = FragmentableArray<ExpenseUnit>>(args?: {
+    where?: ExpenseUnitWhereInput;
+    orderBy?: ExpenseUnitOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface Inventory {
+  id: ID_Output;
+  quantity: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface InventoryPromise extends Promise<Inventory>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  quantity: () => Promise<String>;
+  unit: <T = MeasurementUnitPromise>() => T;
+  stockUnit: <T = FragmentableArray<StockUnit>>(args?: {
+    where?: StockUnitWhereInput;
+    orderBy?: StockUnitOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface InventorySubscription
+  extends Promise<AsyncIterator<Inventory>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  quantity: () => Promise<AsyncIterator<String>>;
+  unit: <T = MeasurementUnitSubscription>() => T;
+  stockUnit: <T = Promise<AsyncIterator<StockUnitSubscription>>>(args?: {
+    where?: StockUnitWhereInput;
+    orderBy?: StockUnitOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface InventoryNullablePromise
+  extends Promise<Inventory | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  quantity: () => Promise<String>;
+  unit: <T = MeasurementUnitPromise>() => T;
+  stockUnit: <T = FragmentableArray<StockUnit>>(args?: {
+    where?: StockUnitWhereInput;
+    orderBy?: StockUnitOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface MeasurementUnit {
+  id: ID_Output;
+  name: String;
+  symbol: String;
+}
+
+export interface MeasurementUnitPromise
+  extends Promise<MeasurementUnit>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  symbol: () => Promise<String>;
+}
+
+export interface MeasurementUnitSubscription
+  extends Promise<AsyncIterator<MeasurementUnit>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  symbol: () => Promise<AsyncIterator<String>>;
+}
+
+export interface MeasurementUnitNullablePromise
+  extends Promise<MeasurementUnit | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  symbol: () => Promise<String>;
+}
+
+export interface StockUnitCategory {
+  id: ID_Output;
+  name: String;
+}
+
+export interface StockUnitCategoryPromise
+  extends Promise<StockUnitCategory>,
+    Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
 }
 
-export interface ItemSubscription
-  extends Promise<AsyncIterator<Item>>,
+export interface StockUnitCategorySubscription
+  extends Promise<AsyncIterator<StockUnitCategory>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
 }
 
-export interface ItemNullablePromise
-  extends Promise<Item | null>,
+export interface StockUnitCategoryNullablePromise
+  extends Promise<StockUnitCategory | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
@@ -1554,182 +1902,6 @@ export interface AggregateExpenseUnitSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface ExpenseUnitCategory {
-  id: ID_Output;
-  name: String;
-}
-
-export interface ExpenseUnitCategoryPromise
-  extends Promise<ExpenseUnitCategory>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-}
-
-export interface ExpenseUnitCategorySubscription
-  extends Promise<AsyncIterator<ExpenseUnitCategory>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface ExpenseUnitCategoryNullablePromise
-  extends Promise<ExpenseUnitCategory | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-}
-
-export interface ExpenseUnitCategoryConnection {
-  pageInfo: PageInfo;
-  edges: ExpenseUnitCategoryEdge[];
-}
-
-export interface ExpenseUnitCategoryConnectionPromise
-  extends Promise<ExpenseUnitCategoryConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<ExpenseUnitCategoryEdge>>() => T;
-  aggregate: <T = AggregateExpenseUnitCategoryPromise>() => T;
-}
-
-export interface ExpenseUnitCategoryConnectionSubscription
-  extends Promise<AsyncIterator<ExpenseUnitCategoryConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <
-    T = Promise<AsyncIterator<ExpenseUnitCategoryEdgeSubscription>>
-  >() => T;
-  aggregate: <T = AggregateExpenseUnitCategorySubscription>() => T;
-}
-
-export interface ExpenseUnitCategoryEdge {
-  node: ExpenseUnitCategory;
-  cursor: String;
-}
-
-export interface ExpenseUnitCategoryEdgePromise
-  extends Promise<ExpenseUnitCategoryEdge>,
-    Fragmentable {
-  node: <T = ExpenseUnitCategoryPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface ExpenseUnitCategoryEdgeSubscription
-  extends Promise<AsyncIterator<ExpenseUnitCategoryEdge>>,
-    Fragmentable {
-  node: <T = ExpenseUnitCategorySubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateExpenseUnitCategory {
-  count: Int;
-}
-
-export interface AggregateExpenseUnitCategoryPromise
-  extends Promise<AggregateExpenseUnitCategory>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateExpenseUnitCategorySubscription
-  extends Promise<AsyncIterator<AggregateExpenseUnitCategory>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface Inventory {
-  id: ID_Output;
-  quantity: String;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface InventoryPromise extends Promise<Inventory>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  quantity: () => Promise<String>;
-  unit: <T = MeasurementUnitPromise>() => T;
-  item: <T = FragmentableArray<Item>>(args?: {
-    where?: ItemWhereInput;
-    orderBy?: ItemOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface InventorySubscription
-  extends Promise<AsyncIterator<Inventory>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  quantity: () => Promise<AsyncIterator<String>>;
-  unit: <T = MeasurementUnitSubscription>() => T;
-  item: <T = Promise<AsyncIterator<ItemSubscription>>>(args?: {
-    where?: ItemWhereInput;
-    orderBy?: ItemOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface InventoryNullablePromise
-  extends Promise<Inventory | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  quantity: () => Promise<String>;
-  unit: <T = MeasurementUnitPromise>() => T;
-  item: <T = FragmentableArray<Item>>(args?: {
-    where?: ItemWhereInput;
-    orderBy?: ItemOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface MeasurementUnit {
-  id: ID_Output;
-  name: String;
-  symbol: String;
-}
-
-export interface MeasurementUnitPromise
-  extends Promise<MeasurementUnit>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  symbol: () => Promise<String>;
-}
-
-export interface MeasurementUnitSubscription
-  extends Promise<AsyncIterator<MeasurementUnit>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  symbol: () => Promise<AsyncIterator<String>>;
-}
-
-export interface MeasurementUnitNullablePromise
-  extends Promise<MeasurementUnit | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  symbol: () => Promise<String>;
-}
-
 export interface InventoryConnection {
   pageInfo: PageInfo;
   edges: InventoryEdge[];
@@ -1782,60 +1954,6 @@ export interface AggregateInventoryPromise
 
 export interface AggregateInventorySubscription
   extends Promise<AsyncIterator<AggregateInventory>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface ItemConnection {
-  pageInfo: PageInfo;
-  edges: ItemEdge[];
-}
-
-export interface ItemConnectionPromise
-  extends Promise<ItemConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<ItemEdge>>() => T;
-  aggregate: <T = AggregateItemPromise>() => T;
-}
-
-export interface ItemConnectionSubscription
-  extends Promise<AsyncIterator<ItemConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<ItemEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateItemSubscription>() => T;
-}
-
-export interface ItemEdge {
-  node: Item;
-  cursor: String;
-}
-
-export interface ItemEdgePromise extends Promise<ItemEdge>, Fragmentable {
-  node: <T = ItemPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface ItemEdgeSubscription
-  extends Promise<AsyncIterator<ItemEdge>>,
-    Fragmentable {
-  node: <T = ItemSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateItem {
-  count: Int;
-}
-
-export interface AggregateItemPromise
-  extends Promise<AggregateItem>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateItemSubscription
-  extends Promise<AsyncIterator<AggregateItem>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -1896,19 +2014,18 @@ export interface AggregateMeasurementUnitSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface Merchandise {
+export interface Product {
   id: ID_Output;
-  quantity: String;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
 
-export interface MerchandisePromise extends Promise<Merchandise>, Fragmentable {
+export interface ProductPromise extends Promise<Product>, Fragmentable {
   id: () => Promise<ID_Output>;
-  quantity: () => Promise<String>;
-  product: <T = FragmentableArray<Product>>(args?: {
-    where?: ProductWhereInput;
-    orderBy?: ProductOrderByInput;
+  item: <T = StockUnitPromise>() => T;
+  stockUnit: <T = FragmentableArray<StockUnit>>(args?: {
+    where?: StockUnitWhereInput;
+    orderBy?: StockUnitOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
@@ -1919,14 +2036,14 @@ export interface MerchandisePromise extends Promise<Merchandise>, Fragmentable {
   updatedAt: () => Promise<DateTimeOutput>;
 }
 
-export interface MerchandiseSubscription
-  extends Promise<AsyncIterator<Merchandise>>,
+export interface ProductSubscription
+  extends Promise<AsyncIterator<Product>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  quantity: () => Promise<AsyncIterator<String>>;
-  product: <T = Promise<AsyncIterator<ProductSubscription>>>(args?: {
-    where?: ProductWhereInput;
-    orderBy?: ProductOrderByInput;
+  item: <T = StockUnitSubscription>() => T;
+  stockUnit: <T = Promise<AsyncIterator<StockUnitSubscription>>>(args?: {
+    where?: StockUnitWhereInput;
+    orderBy?: StockUnitOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
@@ -1937,14 +2054,14 @@ export interface MerchandiseSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface MerchandiseNullablePromise
-  extends Promise<Merchandise | null>,
+export interface ProductNullablePromise
+  extends Promise<Product | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  quantity: () => Promise<String>;
-  product: <T = FragmentableArray<Product>>(args?: {
-    where?: ProductWhereInput;
-    orderBy?: ProductOrderByInput;
+  item: <T = StockUnitPromise>() => T;
+  stockUnit: <T = FragmentableArray<StockUnit>>(args?: {
+    where?: StockUnitWhereInput;
+    orderBy?: StockUnitOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
@@ -1953,86 +2070,6 @@ export interface MerchandiseNullablePromise
   }) => T;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface Product {
-  id: ID_Output;
-  name?: String;
-}
-
-export interface ProductPromise extends Promise<Product>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-}
-
-export interface ProductSubscription
-  extends Promise<AsyncIterator<Product>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface ProductNullablePromise
-  extends Promise<Product | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-}
-
-export interface MerchandiseConnection {
-  pageInfo: PageInfo;
-  edges: MerchandiseEdge[];
-}
-
-export interface MerchandiseConnectionPromise
-  extends Promise<MerchandiseConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<MerchandiseEdge>>() => T;
-  aggregate: <T = AggregateMerchandisePromise>() => T;
-}
-
-export interface MerchandiseConnectionSubscription
-  extends Promise<AsyncIterator<MerchandiseConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<MerchandiseEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateMerchandiseSubscription>() => T;
-}
-
-export interface MerchandiseEdge {
-  node: Merchandise;
-  cursor: String;
-}
-
-export interface MerchandiseEdgePromise
-  extends Promise<MerchandiseEdge>,
-    Fragmentable {
-  node: <T = MerchandisePromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface MerchandiseEdgeSubscription
-  extends Promise<AsyncIterator<MerchandiseEdge>>,
-    Fragmentable {
-  node: <T = MerchandiseSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateMerchandise {
-  count: Int;
-}
-
-export interface AggregateMerchandisePromise
-  extends Promise<AggregateMerchandise>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateMerchandiseSubscription
-  extends Promise<AsyncIterator<AggregateMerchandise>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface ProductConnection {
@@ -2085,6 +2122,118 @@ export interface AggregateProductPromise
 
 export interface AggregateProductSubscription
   extends Promise<AsyncIterator<AggregateProduct>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface StockUnitConnection {
+  pageInfo: PageInfo;
+  edges: StockUnitEdge[];
+}
+
+export interface StockUnitConnectionPromise
+  extends Promise<StockUnitConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<StockUnitEdge>>() => T;
+  aggregate: <T = AggregateStockUnitPromise>() => T;
+}
+
+export interface StockUnitConnectionSubscription
+  extends Promise<AsyncIterator<StockUnitConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<StockUnitEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateStockUnitSubscription>() => T;
+}
+
+export interface StockUnitEdge {
+  node: StockUnit;
+  cursor: String;
+}
+
+export interface StockUnitEdgePromise
+  extends Promise<StockUnitEdge>,
+    Fragmentable {
+  node: <T = StockUnitPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface StockUnitEdgeSubscription
+  extends Promise<AsyncIterator<StockUnitEdge>>,
+    Fragmentable {
+  node: <T = StockUnitSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateStockUnit {
+  count: Int;
+}
+
+export interface AggregateStockUnitPromise
+  extends Promise<AggregateStockUnit>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateStockUnitSubscription
+  extends Promise<AsyncIterator<AggregateStockUnit>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface StockUnitCategoryConnection {
+  pageInfo: PageInfo;
+  edges: StockUnitCategoryEdge[];
+}
+
+export interface StockUnitCategoryConnectionPromise
+  extends Promise<StockUnitCategoryConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<StockUnitCategoryEdge>>() => T;
+  aggregate: <T = AggregateStockUnitCategoryPromise>() => T;
+}
+
+export interface StockUnitCategoryConnectionSubscription
+  extends Promise<AsyncIterator<StockUnitCategoryConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<StockUnitCategoryEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateStockUnitCategorySubscription>() => T;
+}
+
+export interface StockUnitCategoryEdge {
+  node: StockUnitCategory;
+  cursor: String;
+}
+
+export interface StockUnitCategoryEdgePromise
+  extends Promise<StockUnitCategoryEdge>,
+    Fragmentable {
+  node: <T = StockUnitCategoryPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface StockUnitCategoryEdgeSubscription
+  extends Promise<AsyncIterator<StockUnitCategoryEdge>>,
+    Fragmentable {
+  node: <T = StockUnitCategorySubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateStockUnitCategory {
+  count: Int;
+}
+
+export interface AggregateStockUnitCategoryPromise
+  extends Promise<AggregateStockUnitCategory>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateStockUnitCategorySubscription
+  extends Promise<AsyncIterator<AggregateStockUnitCategory>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -2202,50 +2351,6 @@ export interface ExpenseUnitPreviousValuesSubscription
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface ExpenseUnitCategorySubscriptionPayload {
-  mutation: MutationType;
-  node: ExpenseUnitCategory;
-  updatedFields: String[];
-  previousValues: ExpenseUnitCategoryPreviousValues;
-}
-
-export interface ExpenseUnitCategorySubscriptionPayloadPromise
-  extends Promise<ExpenseUnitCategorySubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = ExpenseUnitCategoryPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = ExpenseUnitCategoryPreviousValuesPromise>() => T;
-}
-
-export interface ExpenseUnitCategorySubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<ExpenseUnitCategorySubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = ExpenseUnitCategorySubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = ExpenseUnitCategoryPreviousValuesSubscription>() => T;
-}
-
-export interface ExpenseUnitCategoryPreviousValues {
-  id: ID_Output;
-  name: String;
-}
-
-export interface ExpenseUnitCategoryPreviousValuesPromise
-  extends Promise<ExpenseUnitCategoryPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-}
-
-export interface ExpenseUnitCategoryPreviousValuesSubscription
-  extends Promise<AsyncIterator<ExpenseUnitCategoryPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
 export interface InventorySubscriptionPayload {
   mutation: MutationType;
   node: Inventory;
@@ -2296,50 +2401,6 @@ export interface InventoryPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
-export interface ItemSubscriptionPayload {
-  mutation: MutationType;
-  node: Item;
-  updatedFields: String[];
-  previousValues: ItemPreviousValues;
-}
-
-export interface ItemSubscriptionPayloadPromise
-  extends Promise<ItemSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = ItemPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = ItemPreviousValuesPromise>() => T;
-}
-
-export interface ItemSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<ItemSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = ItemSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = ItemPreviousValuesSubscription>() => T;
-}
-
-export interface ItemPreviousValues {
-  id: ID_Output;
-  name?: String;
-}
-
-export interface ItemPreviousValuesPromise
-  extends Promise<ItemPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-}
-
-export interface ItemPreviousValuesSubscription
-  extends Promise<AsyncIterator<ItemPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
 export interface MeasurementUnitSubscriptionPayload {
   mutation: MutationType;
   node: MeasurementUnit;
@@ -2387,56 +2448,6 @@ export interface MeasurementUnitPreviousValuesSubscription
   symbol: () => Promise<AsyncIterator<String>>;
 }
 
-export interface MerchandiseSubscriptionPayload {
-  mutation: MutationType;
-  node: Merchandise;
-  updatedFields: String[];
-  previousValues: MerchandisePreviousValues;
-}
-
-export interface MerchandiseSubscriptionPayloadPromise
-  extends Promise<MerchandiseSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = MerchandisePromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = MerchandisePreviousValuesPromise>() => T;
-}
-
-export interface MerchandiseSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<MerchandiseSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = MerchandiseSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = MerchandisePreviousValuesSubscription>() => T;
-}
-
-export interface MerchandisePreviousValues {
-  id: ID_Output;
-  quantity: String;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface MerchandisePreviousValuesPromise
-  extends Promise<MerchandisePreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  quantity: () => Promise<String>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface MerchandisePreviousValuesSubscription
-  extends Promise<AsyncIterator<MerchandisePreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  quantity: () => Promise<AsyncIterator<String>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
 export interface ProductSubscriptionPayload {
   mutation: MutationType;
   node: Product;
@@ -2464,18 +2475,109 @@ export interface ProductSubscriptionPayloadSubscription
 
 export interface ProductPreviousValues {
   id: ID_Output;
-  name?: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
 }
 
 export interface ProductPreviousValuesPromise
   extends Promise<ProductPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
 }
 
 export interface ProductPreviousValuesSubscription
   extends Promise<AsyncIterator<ProductPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface StockUnitSubscriptionPayload {
+  mutation: MutationType;
+  node: StockUnit;
+  updatedFields: String[];
+  previousValues: StockUnitPreviousValues;
+}
+
+export interface StockUnitSubscriptionPayloadPromise
+  extends Promise<StockUnitSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = StockUnitPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = StockUnitPreviousValuesPromise>() => T;
+}
+
+export interface StockUnitSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<StockUnitSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = StockUnitSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = StockUnitPreviousValuesSubscription>() => T;
+}
+
+export interface StockUnitPreviousValues {
+  id: ID_Output;
+  name?: String;
+}
+
+export interface StockUnitPreviousValuesPromise
+  extends Promise<StockUnitPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface StockUnitPreviousValuesSubscription
+  extends Promise<AsyncIterator<StockUnitPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface StockUnitCategorySubscriptionPayload {
+  mutation: MutationType;
+  node: StockUnitCategory;
+  updatedFields: String[];
+  previousValues: StockUnitCategoryPreviousValues;
+}
+
+export interface StockUnitCategorySubscriptionPayloadPromise
+  extends Promise<StockUnitCategorySubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = StockUnitCategoryPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = StockUnitCategoryPreviousValuesPromise>() => T;
+}
+
+export interface StockUnitCategorySubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<StockUnitCategorySubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = StockUnitCategorySubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = StockUnitCategoryPreviousValuesSubscription>() => T;
+}
+
+export interface StockUnitCategoryPreviousValues {
+  id: ID_Output;
+  name: String;
+}
+
+export interface StockUnitCategoryPreviousValuesPromise
+  extends Promise<StockUnitCategoryPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface StockUnitCategoryPreviousValuesSubscription
+  extends Promise<AsyncIterator<StockUnitCategoryPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
@@ -2524,7 +2626,7 @@ export const models: Model[] = [
     embedded: false
   },
   {
-    name: "ExpenseUnitCategory",
+    name: "StockUnitCategory",
     embedded: false
   },
   {
@@ -2532,15 +2634,11 @@ export const models: Model[] = [
     embedded: false
   },
   {
-    name: "Merchandise",
-    embedded: false
-  },
-  {
     name: "MeasurementUnit",
     embedded: false
   },
   {
-    name: "Item",
+    name: "StockUnit",
     embedded: false
   },
   {
@@ -2560,6 +2658,6 @@ export const models: Model[] = [
 export const Prisma = makePrismaClientClass<ClientConstructor<Prisma>>({
   typeDefs,
   models,
-  endpoint: `http://localhost:4466`
+  endpoint: `http://116.203.108.46:4466`
 });
 export const prisma = new Prisma();

@@ -1,9 +1,5 @@
 import { prisma } from "./generated/prisma-client";
-import {
-  CreateStockUnit,
-  CreateStockUnitCategory,
-  CreateSupplier
-} from "./mutations";
+import { CreateCurrency, CreateMeasurementUnit, CreateStockUnit, CreateStockUnitCategory, CreateSupplier } from "./mutations";
 
 const supplier1 = "Cacaos San Juan la Laguna";
 const supplier2 = "Especies Jony";
@@ -32,25 +28,52 @@ async function createSuppliers() {
 
 async function createStockUnitCategories() {
   await prisma.$graphql(CreateStockUnitCategory, {
-    name: "ingredient"
+    name: "sin categoría"
   });
   await prisma.$graphql(CreateStockUnitCategory, {
-    name: "fuel"
+    name: "ingrediente"
   });
   await prisma.$graphql(CreateStockUnitCategory, {
-    name: "furniture"
+    name: "combustible"
   });
   await prisma.$graphql(CreateStockUnitCategory, {
-    name: "cutlery"
+    name: "muebles"
   });
   await prisma.$graphql(CreateStockUnitCategory, {
-    name: "tableware"
+    name: "cubiertos"
   });
   await prisma.$graphql(CreateStockUnitCategory, {
-    name: "kitchenware"
+    name: "vajilla"
   });
   await prisma.$graphql(CreateStockUnitCategory, {
-    name: "raw material"
+    name: "cocina"
+  });
+  await prisma.$graphql(CreateStockUnitCategory, {
+    name: "menú"
+  });
+  await prisma.$graphql(CreateStockUnitCategory, {
+    name: "producto"
+  });
+}
+
+async function createMeasurementUnits() {
+  await prisma.$graphql(CreateMeasurementUnit, {
+    name: "Libra",
+    symbol: "LB"
+  });
+  await prisma.$graphql(CreateMeasurementUnit, {
+    name: "Unidad",
+    symbol: "U"
+  });
+}
+
+async function createCurrencies() {
+  await prisma.$graphql(CreateCurrency, {
+    symbol: "GTQ",
+    isDefault: true
+  });
+  await prisma.$graphql(CreateCurrency, {
+    symbol: "USD",
   });
 }
 
@@ -64,6 +87,8 @@ async function createStockUnit() {
   try {
     // await createSuppliers();
     await createStockUnitCategories();
+    await createMeasurementUnits();
+    await createCurrencies();
     // await createStockUnit();
   } catch (error) {
     console.error(error);

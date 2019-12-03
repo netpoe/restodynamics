@@ -18,7 +18,6 @@ import moment from "moment";
 import React from "react";
 import { Link } from "react-router-dom";
 import { CombinedError, useMutation, useQuery } from "urql";
-import { QueryInventories } from "../../api/queries";
 import {
   Breadcrumbs,
   Card,
@@ -26,6 +25,7 @@ import {
   DashboardNavigationDrawer,
   ToolbarPadding,
 } from "../../components";
+import { QueryStockUnits } from "../../graphql/queries";
 import { routes } from "../routes";
 
 export const InventoryIndex = withStyles((theme: Theme) => ({
@@ -44,8 +44,8 @@ export const InventoryIndex = withStyles((theme: Theme) => ({
     [theme.breakpoints.down("sm")]: {},
   },
 }))(({ classes, history }: { classes: any; history: History }) => {
-  const [inventoriesQuery] = useQuery({
-    query: QueryInventories,
+  const [queryStockUnits] = useQuery({
+    query: QueryStockUnits,
   });
 
   return (
@@ -53,9 +53,9 @@ export const InventoryIndex = withStyles((theme: Theme) => ({
       <DashboardNavigationDrawer history={history} />
       <Box minHeight="100vh" bgcolor="default" className={classes.content}>
         <ToolbarPadding />
-        {inventoriesQuery.fetching ? (
+        {queryStockUnits.fetching ? (
           <Typography>Cargando</Typography>
-        ) : inventoriesQuery.error || inventoriesQuery.data == null ? (
+        ) : queryStockUnits.error || queryStockUnits.data == null ? (
           <Typography>Error</Typography>
         ) : (
           <Container maxWidth="xl">
@@ -72,7 +72,7 @@ export const InventoryIndex = withStyles((theme: Theme) => ({
                     <Grid item>
                       <CreateInventoryButton
                         disabled={
-                          moment(inventoriesQuery.data.inventories[0].createdAt).format(
+                          moment(queryStockUnits.data.stockUnits[0].createdAt).format(
                             "YYYYMMDD",
                           ) === moment().format("YYYYMMDD")
                         }
@@ -86,7 +86,7 @@ export const InventoryIndex = withStyles((theme: Theme) => ({
               </Toolbar>
             </AppBar>
             <Grid container spacing={2}>
-              {inventoriesQuery.data.inventories.map((row: any, i: number) => (
+              {queryStockUnits.data.stockUnits.map((row: any, i: number) => (
                 <Grid item lg={4} key={i}>
                   <Card onClick={() => history.push(`${routes.inventory.overview}/${row.id}`)}>
                     <CardTitle>Fecha</CardTitle>

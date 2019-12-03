@@ -6,7 +6,7 @@ import { routes } from "./views/routes";
 import { StockUnitIndex, StockUnitOverview } from "./views/stock";
 
 const client = createClient({
-  url: "http://localhost:4466/",
+  url: "http://116.203.108.46:4466/",
 });
 
 const App: React.FC = () => (
