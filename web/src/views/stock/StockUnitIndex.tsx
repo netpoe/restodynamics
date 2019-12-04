@@ -1,28 +1,11 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  Grid,
-  TableCell,
-  Theme,
-  Toolbar,
-  Typography,
-  withStyles,
-} from "@material-ui/core";
+import { AppBar, Box, Button, Container, Grid, TableCell, Theme, Toolbar, Typography, withStyles } from "@material-ui/core";
 import { History } from "history";
 import { first, get } from "lodash";
 import { DateTime as LuxonDateTime } from "luxon";
 import React from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "urql";
-import {
-  Breadcrumbs,
-  Card,
-  CardTitle,
-  DashboardNavigationDrawer,
-  ToolbarPadding,
-} from "../../components";
+import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding } from "../../components";
 import { QueryStockUnits } from "../../graphql/queries";
 import { datetime } from "../../utils";
 import { routes } from "../routes";
@@ -71,6 +54,13 @@ export const StockUnitIndex = withStyles((theme: Theme) => ({
                   <Box>
                     <Grid container spacing={2}>
                       <Grid item>
+                        <Link to={routes.stock.bulkImport}>
+                          <Button size="large" variant="outlined" color="default">
+                            Importar en grupo
+                          </Button>
+                        </Link>
+                      </Grid>
+                      <Grid item>
                         <Button size="large" variant="outlined" color="default">
                           Nuevo inventario
                         </Button>
@@ -91,19 +81,21 @@ export const StockUnitIndex = withStyles((theme: Theme) => ({
                   <Grid item lg={4} key={i}>
                     <Card onClick={(e: any) => handleOnTableRowClick(e, stockUnit.id)}>
                       <CardTitle>{get(stockUnit, "category.name", null)}</CardTitle>
-                      <Typography variant="h5" color="inherit">
+                      <Typography variant="h5" color="inherit" style={{ textTransform: "capitalize" }}>
                         {stockUnit.name}
                       </Typography>
-                      <Typography variant="body1" color="inherit">
-                        {get(first(stockUnit.inventory), "quantity", null)}
-                        {get(first(stockUnit.inventory), "unit.symbol", null)}.
-                        <Typography variant="body2" component="span">
-                          {" el "}
-                          {datetime
-                            .locale(get(first(stockUnit.inventory), "createdAt", ""))
-                            .toLocaleString(LuxonDateTime.DATE_HUGE)}
+                      {(get(first(stockUnit.inventory), "quantity", null) && get(first(stockUnit.inventory), "unit.symbol", null) && get(first(stockUnit.inventory), "createdAt", "")) &&
+                        <Typography variant="body1" color="inherit">
+                          {get(first(stockUnit.inventory), "quantity", null)}
+                          {get(first(stockUnit.inventory), "unit.symbol", null)}.
+                          <Typography variant="body2" component="span">
+                            {" el "}
+                            {datetime
+                              .locale(get(first(stockUnit.inventory), "createdAt", ""))
+                              .toLocaleString(LuxonDateTime.DATE_HUGE)}
+                          </Typography>
                         </Typography>
-                      </Typography>
+                      }
                     </Card>
                   </Grid>
                 ))}

@@ -28,10 +28,10 @@ type MeasurementUnit {
 
 type StockUnit {
   id: ID! @id @unique
-  name: String
-  inventory: [Inventory]!
-  category: StockUnitCategory!
-  expenseUnit: [ExpenseUnit]!
+  name: String @unique
+  inventory: [Inventory]
+  category: StockUnitCategory
+  expenseUnit: [ExpenseUnit]
 }
 
 type Product {

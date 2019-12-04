@@ -6,6 +6,7 @@ export const routes = {
   },
   stock: {
     index: "/stock/index",
+    bulkImport: "/stock/bulk-import",
     overview: "/stock/overview",
     details: "/stock/details",
     inventory: "/stock/inventory",

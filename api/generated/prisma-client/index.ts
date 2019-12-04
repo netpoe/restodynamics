@@ -738,6 +738,7 @@ export interface ProductWhereInput {
 
 export type StockUnitWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
+  name?: Maybe<String>;
 }>;
 
 export type StockUnitCategoryWhereUniqueInput = AtLeastOne<{
@@ -785,7 +786,7 @@ export interface StockUnitCreateWithoutExpenseUnitInput {
   id?: Maybe<ID_Input>;
   name?: Maybe<String>;
   inventory?: Maybe<InventoryCreateManyWithoutStockUnitInput>;
-  category: StockUnitCategoryCreateOneInput;
+  category?: Maybe<StockUnitCategoryCreateOneInput>;
 }
 
 export interface InventoryCreateManyWithoutStockUnitInput {
@@ -878,7 +879,7 @@ export interface StockUnitUpdateWithWhereUniqueWithoutExpenseUnitInput {
 export interface StockUnitUpdateWithoutExpenseUnitDataInput {
   name?: Maybe<String>;
   inventory?: Maybe<InventoryUpdateManyWithoutStockUnitInput>;
-  category?: Maybe<StockUnitCategoryUpdateOneRequiredInput>;
+  category?: Maybe<StockUnitCategoryUpdateOneInput>;
 }
 
 export interface InventoryUpdateManyWithoutStockUnitInput {
@@ -997,10 +998,12 @@ export interface InventoryUpdateManyDataInput {
   quantity?: Maybe<String>;
 }
 
-export interface StockUnitCategoryUpdateOneRequiredInput {
+export interface StockUnitCategoryUpdateOneInput {
   create?: Maybe<StockUnitCategoryCreateInput>;
   update?: Maybe<StockUnitCategoryUpdateDataInput>;
   upsert?: Maybe<StockUnitCategoryUpsertNestedInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
   connect?: Maybe<StockUnitCategoryWhereUniqueInput>;
 }
 
@@ -1084,7 +1087,7 @@ export interface StockUnitCreateManyWithoutInventoryInput {
 export interface StockUnitCreateWithoutInventoryInput {
   id?: Maybe<ID_Input>;
   name?: Maybe<String>;
-  category: StockUnitCategoryCreateOneInput;
+  category?: Maybe<StockUnitCategoryCreateOneInput>;
   expenseUnit?: Maybe<ExpenseUnitCreateManyWithoutStockUnitInput>;
 }
 
@@ -1139,7 +1142,7 @@ export interface StockUnitUpdateWithWhereUniqueWithoutInventoryInput {
 
 export interface StockUnitUpdateWithoutInventoryDataInput {
   name?: Maybe<String>;
-  category?: Maybe<StockUnitCategoryUpdateOneRequiredInput>;
+  category?: Maybe<StockUnitCategoryUpdateOneInput>;
   expenseUnit?: Maybe<ExpenseUnitUpdateManyWithoutStockUnitInput>;
 }
 
@@ -1273,7 +1276,7 @@ export interface StockUnitCreateInput {
   id?: Maybe<ID_Input>;
   name?: Maybe<String>;
   inventory?: Maybe<InventoryCreateManyWithoutStockUnitInput>;
-  category: StockUnitCategoryCreateOneInput;
+  category?: Maybe<StockUnitCategoryCreateOneInput>;
   expenseUnit?: Maybe<ExpenseUnitCreateManyWithoutStockUnitInput>;
 }
 
@@ -1297,7 +1300,7 @@ export interface StockUnitUpdateOneRequiredInput {
 export interface StockUnitUpdateDataInput {
   name?: Maybe<String>;
   inventory?: Maybe<InventoryUpdateManyWithoutStockUnitInput>;
-  category?: Maybe<StockUnitCategoryUpdateOneRequiredInput>;
+  category?: Maybe<StockUnitCategoryUpdateOneInput>;
   expenseUnit?: Maybe<ExpenseUnitUpdateManyWithoutStockUnitInput>;
 }
 
@@ -1341,7 +1344,7 @@ export interface StockUnitUpsertWithWhereUniqueNestedInput {
 export interface StockUnitUpdateInput {
   name?: Maybe<String>;
   inventory?: Maybe<InventoryUpdateManyWithoutStockUnitInput>;
-  category?: Maybe<StockUnitCategoryUpdateOneRequiredInput>;
+  category?: Maybe<StockUnitCategoryUpdateOneInput>;
   expenseUnit?: Maybe<ExpenseUnitUpdateManyWithoutStockUnitInput>;
 }
 

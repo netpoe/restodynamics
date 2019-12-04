@@ -953,7 +953,7 @@ type StockUnit {
   id: ID!
   name: String
   inventory(where: InventoryWhereInput, orderBy: InventoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Inventory!]
-  category: StockUnitCategory!
+  category: StockUnitCategory
   expenseUnit(where: ExpenseUnitWhereInput, orderBy: ExpenseUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExpenseUnit!]
 }
 
@@ -1025,10 +1025,12 @@ input StockUnitCategoryUpdateManyMutationInput {
   name: String
 }
 
-input StockUnitCategoryUpdateOneRequiredInput {
+input StockUnitCategoryUpdateOneInput {
   create: StockUnitCategoryCreateInput
   update: StockUnitCategoryUpdateDataInput
   upsert: StockUnitCategoryUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
   connect: StockUnitCategoryWhereUniqueInput
 }
 
@@ -1086,7 +1088,7 @@ input StockUnitCreateInput {
   id: ID
   name: String
   inventory: InventoryCreateManyWithoutStockUnitInput
-  category: StockUnitCategoryCreateOneInput!
+  category: StockUnitCategoryCreateOneInput
   expenseUnit: ExpenseUnitCreateManyWithoutStockUnitInput
 }
 
@@ -1114,13 +1116,13 @@ input StockUnitCreateWithoutExpenseUnitInput {
   id: ID
   name: String
   inventory: InventoryCreateManyWithoutStockUnitInput
-  category: StockUnitCategoryCreateOneInput!
+  category: StockUnitCategoryCreateOneInput
 }
 
 input StockUnitCreateWithoutInventoryInput {
   id: ID
   name: String
-  category: StockUnitCategoryCreateOneInput!
+  category: StockUnitCategoryCreateOneInput
   expenseUnit: ExpenseUnitCreateManyWithoutStockUnitInput
 }
 
@@ -1196,14 +1198,14 @@ input StockUnitSubscriptionWhereInput {
 input StockUnitUpdateDataInput {
   name: String
   inventory: InventoryUpdateManyWithoutStockUnitInput
-  category: StockUnitCategoryUpdateOneRequiredInput
+  category: StockUnitCategoryUpdateOneInput
   expenseUnit: ExpenseUnitUpdateManyWithoutStockUnitInput
 }
 
 input StockUnitUpdateInput {
   name: String
   inventory: InventoryUpdateManyWithoutStockUnitInput
-  category: StockUnitCategoryUpdateOneRequiredInput
+  category: StockUnitCategoryUpdateOneInput
   expenseUnit: ExpenseUnitUpdateManyWithoutStockUnitInput
 }
 
@@ -1266,12 +1268,12 @@ input StockUnitUpdateOneRequiredInput {
 input StockUnitUpdateWithoutExpenseUnitDataInput {
   name: String
   inventory: InventoryUpdateManyWithoutStockUnitInput
-  category: StockUnitCategoryUpdateOneRequiredInput
+  category: StockUnitCategoryUpdateOneInput
 }
 
 input StockUnitUpdateWithoutInventoryDataInput {
   name: String
-  category: StockUnitCategoryUpdateOneRequiredInput
+  category: StockUnitCategoryUpdateOneInput
   expenseUnit: ExpenseUnitUpdateManyWithoutStockUnitInput
 }
 
@@ -1356,6 +1358,7 @@ input StockUnitWhereInput {
 
 input StockUnitWhereUniqueInput {
   id: ID
+  name: String
 }
 
 type Subscription {
