@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["es2016", "esnext.asynciterable", "dom"]
-  }
+    "lib": ["es2016", "esnext.asynciterable", "dom"],
+    "declaration": true,
+    "esModuleInterop": true,
+    "outDir": "lib"
+  },
+  "include": ["generated"],
+  "exclude": ["node_modules", "./**.ts", "./**.js", "./lib"]
 }

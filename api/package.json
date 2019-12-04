@@ -1,12 +1,19 @@
 {
-  "name": "restodynamics-api",
+  "name": "@netpoe/restodynamics-api",
   "version": "1.0.0",
   "description": "RestoDynamics",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "author": "netpoe",
   "license": "MIT",
+  "files": [
+    "lib/**/*"
+  ],
   "scripts": {
-    "seed": "ts-node seed.ts"
+    "seed": "ts-node seed.ts",
+    "clean": "rimraf ./lib",
+    "compile": "tsc -d",
+    "build": "npm run clean && npm run compile"
   },
   "dependencies": {
     "prisma-client-lib": "^1.30.4"

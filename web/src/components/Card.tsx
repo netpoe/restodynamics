@@ -24,10 +24,11 @@ export const Card = withStyles((theme: Theme) => ({
       color: theme.palette.text.secondary,
     },
   },
+  cardContent: {},
 }))(({ classes, children, actions, variant, ...rest }: ICardProps) => (
   <MUICard className={`${classes.card} ${variant}`} {...rest}>
-    <CardContent>{children}</CardContent>
-    <CardActions>{actions}</CardActions>
+    <CardContent className={classes.cardContent}>{children}</CardContent>
+    {actions && <CardActions>{actions}</CardActions>}
   </MUICard>
 ));
 
