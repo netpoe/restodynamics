@@ -1,15 +1,33 @@
-import { Box, Container, Grid, Paper, TextField, Theme, Typography, withStyles } from "@material-ui/core";
-import { Inventory } from "@netpoe/restodynamics-api";
+import {
+  Box,
+  Container,
+  Grid,
+  Menu,
+  MenuItem,
+  Paper,
+  TextField,
+  Theme,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
+import { Inventory, MeasurementUnit } from "@netpoe/restodynamics-api";
 import { History } from "history";
+import { get } from "lodash";
 import { DateTime } from "luxon";
 import * as math from "mathjs";
 import React from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "urql";
-import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding } from "../../components";
+import {
+  Breadcrumbs,
+  Card,
+  CardTitle,
+  DashboardNavigationDrawer,
+  ToolbarPadding,
+} from "../../components";
 import { UpdateInventoryUnit } from "../../graphql/mutations";
-import { QueryInventory } from "../../graphql/queries";
+import { QueryInventory, QueryStockUnitRelationships } from "../../graphql/queries";
 import { datetime } from "../../utils";
 import { routes } from "../routes";
 
@@ -33,6 +51,11 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
     query: QueryInventory,
     variables: { where: { id: match.params.id || "" } },
   });
+  const [stockUnitRelationshipsQuery] = useQuery({
+    query: QueryStockUnitRelationships,
+  });
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+  const [currentInventoryUnitID, setCurrentInventoryUnitID] = React.useState<string | null>(null);
 
   const [updateInventoryUnitMutation, executeUpdateInventoryUnitMutation] = useMutation(
     UpdateInventoryUnit,
@@ -90,13 +113,39 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
     }
   };
 
+  const updateInventoryUnitMeasurementUnitSymbol = async (
+    e: React.MouseEvent<HTMLLIElement, MouseEvent>,
+  ) => {
+    try {
+      const symbol = e.currentTarget.innerText;
+      await executeUpdateInventoryUnitMutation({
+        where: {
+          id: currentInventoryUnitID,
+        },
+        data: {
+          unit: {
+            connect: {
+              symbol,
+            },
+          },
+        },
+      });
+      setAnchorEl(null);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const getTotalCosts = (inventoryUnits: any[]) =>
     inventoryUnits
       .reduce(
         (chain: math.MathJsChain, next: any) => chain.add(next.expenseUnit.amount),
         math.chain("0.00"),
       )
-      .done().toFixed(2);
+      .done()
+      .toFixed(2);
+
+  const measurementUnits = get(stockUnitRelationshipsQuery.data, "measurementUnits", []);
 
   return (
     <Box display="flex">
@@ -217,9 +266,37 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                                     flexDirection="column"
                                     justifyContent="center"
                                   >
-                                    <Typography variant="h5">
+                                    <Typography
+                                      variant="h5"
+                                      onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+                                        setAnchorEl(e.currentTarget);
+                                        setCurrentInventoryUnitID(inventoryUnit.id);
+                                      }}
+                                    >
                                       {inventoryUnit.unit.symbol}
                                     </Typography>
+                                    <Menu
+                                      id={`inventory-unit-measurement-symbol-${inventoryUnit.id}`}
+                                      anchorEl={anchorEl}
+                                      keepMounted
+                                      open={Boolean(anchorEl)}
+                                      onClose={() => {
+                                        setAnchorEl(null);
+                                      }}
+                                    >
+                                      {measurementUnits.map((unit: MeasurementUnit, i: number) => (
+                                        <MenuItem
+                                          key={i}
+                                          onClick={(
+                                            e: React.MouseEvent<HTMLLIElement, MouseEvent>,
+                                          ) => {
+                                            updateInventoryUnitMeasurementUnitSymbol(e);
+                                          }}
+                                        >
+                                          {unit.symbol}
+                                        </MenuItem>
+                                      ))}
+                                    </Menu>
                                   </Box>
                                 </Grid>
                                 <Grid item lg={2}>
