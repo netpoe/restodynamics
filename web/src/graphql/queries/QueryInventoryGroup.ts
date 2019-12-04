@@ -6,6 +6,7 @@ export const QueryInventory = gql`
       id
       createdAt
       inventoryUnit {
+        id
         expenseUnit {
           amount
           currency {

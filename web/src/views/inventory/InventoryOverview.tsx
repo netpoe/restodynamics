@@ -1,27 +1,14 @@
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Paper,
-  Theme,
-  Typography,
-  withStyles,
-} from "@material-ui/core";
+import { Box, Container, Grid, Paper, TextField, Theme, Typography, withStyles } from "@material-ui/core";
 import { Inventory } from "@netpoe/restodynamics-api";
 import { History } from "history";
 import { DateTime } from "luxon";
+import * as math from "mathjs";
 import React from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
-import { useQuery } from "urql";
-import {
-  Breadcrumbs,
-  Card,
-  CardTitle,
-  DashboardNavigationDrawer,
-  ToolbarPadding,
-} from "../../components";
+import { useMutation, useQuery } from "urql";
+import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding } from "../../components";
+import { UpdateInventoryUnit } from "../../graphql/mutations";
 import { QueryInventory } from "../../graphql/queries";
 import { datetime } from "../../utils";
 import { routes } from "../routes";
@@ -35,11 +22,81 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
   content: {
     flexGrow: 1,
   },
+  stockUnitInput: {
+    fontSize: theme.typography.h5.fontSize,
+    "& input::placeholder": {
+      opacity: 1,
+    },
+  },
 }))(({ classes, match, history }: IInventoryOverviewProps) => {
   const [inventoryQuery] = useQuery({
     query: QueryInventory,
     variables: { where: { id: match.params.id || "" } },
   });
+
+  const [updateInventoryUnitMutation, executeUpdateInventoryUnitMutation] = useMutation(
+    UpdateInventoryUnit,
+  );
+
+  const updateInventoryUnitQuantity = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    id: string,
+  ) => {
+    if (!Boolean(e.target.value)) {
+      return;
+    }
+    try {
+      const quantity = Number(e.target.value)
+        .toFixed(2)
+        .toString();
+      await executeUpdateInventoryUnitMutation({
+        where: {
+          id,
+        },
+        data: {
+          quantity,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updateInventoryUnitExpenseUnitAmount = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    id: string,
+  ) => {
+    if (!Boolean(e.target.value)) {
+      return;
+    }
+    try {
+      const amount = Number(e.target.value)
+        .toFixed(2)
+        .toString();
+      await executeUpdateInventoryUnitMutation({
+        where: {
+          id,
+        },
+        data: {
+          expenseUnit: {
+            update: {
+              amount,
+            },
+          },
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getTotalCosts = (inventoryUnits: any[]) =>
+    inventoryUnits
+      .reduce(
+        (chain: math.MathJsChain, next: any) => chain.add(next.expenseUnit.amount),
+        math.chain("0.00"),
+      )
+      .done().toFixed(2);
 
   return (
     <Box display="flex">
@@ -68,8 +125,8 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
               </Box>
               <Box>
                 <Grid container spacing={2}>
-                  <Grid item lg={4}>
-                    <Card actions={<Button size="small">Editar</Button>}>
+                  <Grid item lg={3}>
+                    <Card>
                       <CardTitle>Fecha</CardTitle>
                       <Typography
                         variant="h5"
@@ -86,15 +143,23 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                       </Typography>
                     </Card>
                   </Grid>
-                  <Grid item lg={4}>
-                    <Card actions={<Button size="small">Ver Stock</Button>}>
+                  <Grid item lg={3}>
+                    <Card>
                       <CardTitle>Stock</CardTitle>
                       <Typography variant="h5" color="inherit">
-                        {inventoryQuery.data.inventory.inventoryUnit.length} unidades de inventario
+                        {inventoryQuery.data.inventory.inventoryUnit.length} unidades
                       </Typography>
                     </Card>
                   </Grid>
-                  <Grid item lg={4}>
+                  <Grid item lg={3}>
+                    <Card>
+                      <CardTitle>Costo Total</CardTitle>
+                      <Typography variant="h5" color="inherit">
+                        {getTotalCosts(inventoryQuery.data.inventory.inventoryUnit)} GTQ
+                      </Typography>
+                    </Card>
+                  </Grid>
+                  <Grid item lg={3}>
                     <Card variant="urgent">
                       <CardTitle>Expiración</CardTitle>
                       <Typography variant="h5" color="inherit">
@@ -126,7 +191,7 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                           <Grid item lg={7}>
                             <Box>
                               <Grid container>
-                                <Grid item>
+                                <Grid item lg={2}>
                                   <Box
                                     px={2}
                                     minHeight={56}
@@ -134,10 +199,17 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                                     flexDirection="column"
                                     justifyContent="center"
                                   >
-                                    <Typography variant="h5">{inventoryUnit.quantity}</Typography>
+                                    <TextField
+                                      InputProps={{ className: classes.stockUnitInput }}
+                                      fullWidth
+                                      onBlur={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                        updateInventoryUnitQuantity(e, inventoryUnit.id);
+                                      }}
+                                      placeholder={inventoryUnit.quantity || "0.00"}
+                                    />
                                   </Box>
                                 </Grid>
-                                <Grid item>
+                                <Grid item lg={2}>
                                   <Box
                                     px={2}
                                     minHeight={56}
@@ -150,7 +222,7 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                                     </Typography>
                                   </Box>
                                 </Grid>
-                                <Grid item>
+                                <Grid item lg={2}>
                                   <Box
                                     px={2}
                                     minHeight={56}
@@ -158,12 +230,17 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                                     flexDirection="column"
                                     justifyContent="center"
                                   >
-                                    <Typography variant="h5">
-                                      {inventoryUnit.expenseUnit.amount}
-                                    </Typography>
+                                    <TextField
+                                      InputProps={{ className: classes.stockUnitInput }}
+                                      fullWidth
+                                      onBlur={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                        updateInventoryUnitExpenseUnitAmount(e, inventoryUnit.id);
+                                      }}
+                                      placeholder={inventoryUnit.expenseUnit.amount || "0.00"}
+                                    />
                                   </Box>
                                 </Grid>
-                                <Grid item>
+                                <Grid item lg={2}>
                                   <Box
                                     px={2}
                                     minHeight={56}
