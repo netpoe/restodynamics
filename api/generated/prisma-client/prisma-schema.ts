@@ -14,7 +14,7 @@ type AggregateInventory {
   count: Int!
 }
 
-type AggregateInventoryGroup {
+type AggregateInventoryUnit {
   count: Int!
 }
 
@@ -185,7 +185,7 @@ type ExpenseUnit {
   id: ID!
   amount: String!
   currency: Currency!
-  stockUnit(where: StockUnitWhereInput, orderBy: StockUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [StockUnit!]
+  stockUnit: StockUnit!
   createdAt: DateTime!
 }
 
@@ -199,7 +199,7 @@ input ExpenseUnitCreateInput {
   id: ID
   amount: String
   currency: CurrencyCreateOneInput!
-  stockUnit: StockUnitCreateManyWithoutExpenseUnitInput
+  stockUnit: StockUnitCreateOneWithoutExpenseUnitInput!
 }
 
 input ExpenseUnitCreateManyWithoutStockUnitInput {
@@ -301,13 +301,13 @@ input ExpenseUnitSubscriptionWhereInput {
 input ExpenseUnitUpdateDataInput {
   amount: String
   currency: CurrencyUpdateOneRequiredInput
-  stockUnit: StockUnitUpdateManyWithoutExpenseUnitInput
+  stockUnit: StockUnitUpdateOneRequiredWithoutExpenseUnitInput
 }
 
 input ExpenseUnitUpdateInput {
   amount: String
   currency: CurrencyUpdateOneRequiredInput
-  stockUnit: StockUnitUpdateManyWithoutExpenseUnitInput
+  stockUnit: StockUnitUpdateOneRequiredWithoutExpenseUnitInput
 }
 
 input ExpenseUnitUpdateManyDataInput {
@@ -395,9 +395,7 @@ input ExpenseUnitWhereInput {
   amount_ends_with: String
   amount_not_ends_with: String
   currency: CurrencyWhereInput
-  stockUnit_every: StockUnitWhereInput
-  stockUnit_some: StockUnitWhereInput
-  stockUnit_none: StockUnitWhereInput
+  stockUnit: StockUnitWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -417,13 +415,8 @@ input ExpenseUnitWhereUniqueInput {
 
 type Inventory {
   id: ID!
-  inventoryGroup: InventoryGroup!
-  quantity: String!
-  unit: MeasurementUnit!
-  expenseUnit: ExpenseUnit
-  stockUnit: StockUnit!
   createdAt: DateTime!
-  updatedAt: DateTime!
+  inventoryUnit(where: InventoryUnitWhereInput, orderBy: InventoryUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InventoryUnit!]
 }
 
 type InventoryConnection {
@@ -434,37 +427,16 @@ type InventoryConnection {
 
 input InventoryCreateInput {
   id: ID
-  inventoryGroup: InventoryGroupCreateOneWithoutInventoryInput!
-  quantity: String
-  unit: MeasurementUnitCreateOneInput!
-  expenseUnit: ExpenseUnitCreateOneInput
-  stockUnit: StockUnitCreateOneWithoutInventoryInput!
+  inventoryUnit: InventoryUnitCreateManyWithoutInventoryInput
 }
 
-input InventoryCreateManyWithoutInventoryGroupInput {
-  create: [InventoryCreateWithoutInventoryGroupInput!]
-  connect: [InventoryWhereUniqueInput!]
+input InventoryCreateOneWithoutInventoryUnitInput {
+  create: InventoryCreateWithoutInventoryUnitInput
+  connect: InventoryWhereUniqueInput
 }
 
-input InventoryCreateManyWithoutStockUnitInput {
-  create: [InventoryCreateWithoutStockUnitInput!]
-  connect: [InventoryWhereUniqueInput!]
-}
-
-input InventoryCreateWithoutInventoryGroupInput {
+input InventoryCreateWithoutInventoryUnitInput {
   id: ID
-  quantity: String
-  unit: MeasurementUnitCreateOneInput!
-  expenseUnit: ExpenseUnitCreateOneInput
-  stockUnit: StockUnitCreateOneWithoutInventoryInput!
-}
-
-input InventoryCreateWithoutStockUnitInput {
-  id: ID
-  inventoryGroup: InventoryGroupCreateOneWithoutInventoryInput!
-  quantity: String
-  unit: MeasurementUnitCreateOneInput!
-  expenseUnit: ExpenseUnitCreateOneInput
 }
 
 type InventoryEdge {
@@ -472,112 +444,94 @@ type InventoryEdge {
   cursor: String!
 }
 
-type InventoryGroup {
-  id: ID!
-  createdAt: DateTime!
-  inventory(where: InventoryWhereInput, orderBy: InventoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Inventory!]
-}
-
-type InventoryGroupConnection {
-  pageInfo: PageInfo!
-  edges: [InventoryGroupEdge]!
-  aggregate: AggregateInventoryGroup!
-}
-
-input InventoryGroupCreateInput {
-  id: ID
-  inventory: InventoryCreateManyWithoutInventoryGroupInput
-}
-
-input InventoryGroupCreateOneWithoutInventoryInput {
-  create: InventoryGroupCreateWithoutInventoryInput
-  connect: InventoryGroupWhereUniqueInput
-}
-
-input InventoryGroupCreateWithoutInventoryInput {
-  id: ID
-}
-
-type InventoryGroupEdge {
-  node: InventoryGroup!
-  cursor: String!
-}
-
-enum InventoryGroupOrderByInput {
+enum InventoryOrderByInput {
   id_ASC
   id_DESC
   createdAt_ASC
   createdAt_DESC
 }
 
-type InventoryGroupPreviousValues {
+type InventoryPreviousValues {
   id: ID!
   createdAt: DateTime!
 }
 
-type InventoryGroupSubscriptionPayload {
+type InventorySubscriptionPayload {
   mutation: MutationType!
-  node: InventoryGroup
+  node: Inventory
   updatedFields: [String!]
-  previousValues: InventoryGroupPreviousValues
+  previousValues: InventoryPreviousValues
 }
 
-input InventoryGroupSubscriptionWhereInput {
+input InventorySubscriptionWhereInput {
   mutation_in: [MutationType!]
   updatedFields_contains: String
   updatedFields_contains_every: [String!]
   updatedFields_contains_some: [String!]
-  node: InventoryGroupWhereInput
-  AND: [InventoryGroupSubscriptionWhereInput!]
-  OR: [InventoryGroupSubscriptionWhereInput!]
-  NOT: [InventoryGroupSubscriptionWhereInput!]
+  node: InventoryWhereInput
+  AND: [InventorySubscriptionWhereInput!]
+  OR: [InventorySubscriptionWhereInput!]
+  NOT: [InventorySubscriptionWhereInput!]
 }
 
-input InventoryGroupUpdateInput {
-  inventory: InventoryUpdateManyWithoutInventoryGroupInput
+type InventoryUnit {
+  id: ID!
+  inventory: Inventory!
+  quantity: String!
+  unit: MeasurementUnit!
+  expenseUnit: ExpenseUnit
+  stockUnit: StockUnit!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
-input InventoryGroupUpdateOneRequiredWithoutInventoryInput {
-  create: InventoryGroupCreateWithoutInventoryInput
-  connect: InventoryGroupWhereUniqueInput
+type InventoryUnitConnection {
+  pageInfo: PageInfo!
+  edges: [InventoryUnitEdge]!
+  aggregate: AggregateInventoryUnit!
 }
 
-input InventoryGroupWhereInput {
+input InventoryUnitCreateInput {
   id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  inventory_every: InventoryWhereInput
-  inventory_some: InventoryWhereInput
-  inventory_none: InventoryWhereInput
-  AND: [InventoryGroupWhereInput!]
-  OR: [InventoryGroupWhereInput!]
-  NOT: [InventoryGroupWhereInput!]
+  inventory: InventoryCreateOneWithoutInventoryUnitInput!
+  quantity: String
+  unit: MeasurementUnitCreateOneInput!
+  expenseUnit: ExpenseUnitCreateOneInput
+  stockUnit: StockUnitCreateOneWithoutInventoryUnitInput!
 }
 
-input InventoryGroupWhereUniqueInput {
+input InventoryUnitCreateManyWithoutInventoryInput {
+  create: [InventoryUnitCreateWithoutInventoryInput!]
+  connect: [InventoryUnitWhereUniqueInput!]
+}
+
+input InventoryUnitCreateManyWithoutStockUnitInput {
+  create: [InventoryUnitCreateWithoutStockUnitInput!]
+  connect: [InventoryUnitWhereUniqueInput!]
+}
+
+input InventoryUnitCreateWithoutInventoryInput {
   id: ID
+  quantity: String
+  unit: MeasurementUnitCreateOneInput!
+  expenseUnit: ExpenseUnitCreateOneInput
+  stockUnit: StockUnitCreateOneWithoutInventoryUnitInput!
 }
 
-enum InventoryOrderByInput {
+input InventoryUnitCreateWithoutStockUnitInput {
+  id: ID
+  inventory: InventoryCreateOneWithoutInventoryUnitInput!
+  quantity: String
+  unit: MeasurementUnitCreateOneInput!
+  expenseUnit: ExpenseUnitCreateOneInput
+}
+
+type InventoryUnitEdge {
+  node: InventoryUnit!
+  cursor: String!
+}
+
+enum InventoryUnitOrderByInput {
   id_ASC
   id_DESC
   quantity_ASC
@@ -588,14 +542,14 @@ enum InventoryOrderByInput {
   updatedAt_DESC
 }
 
-type InventoryPreviousValues {
+type InventoryUnitPreviousValues {
   id: ID!
   quantity: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
-input InventoryScalarWhereInput {
+input InventoryUnitScalarWhereInput {
   id: ID
   id_not: ID
   id_in: [ID!]
@@ -640,111 +594,111 @@ input InventoryScalarWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
-  AND: [InventoryScalarWhereInput!]
-  OR: [InventoryScalarWhereInput!]
-  NOT: [InventoryScalarWhereInput!]
+  AND: [InventoryUnitScalarWhereInput!]
+  OR: [InventoryUnitScalarWhereInput!]
+  NOT: [InventoryUnitScalarWhereInput!]
 }
 
-type InventorySubscriptionPayload {
+type InventoryUnitSubscriptionPayload {
   mutation: MutationType!
-  node: Inventory
+  node: InventoryUnit
   updatedFields: [String!]
-  previousValues: InventoryPreviousValues
+  previousValues: InventoryUnitPreviousValues
 }
 
-input InventorySubscriptionWhereInput {
+input InventoryUnitSubscriptionWhereInput {
   mutation_in: [MutationType!]
   updatedFields_contains: String
   updatedFields_contains_every: [String!]
   updatedFields_contains_some: [String!]
-  node: InventoryWhereInput
-  AND: [InventorySubscriptionWhereInput!]
-  OR: [InventorySubscriptionWhereInput!]
-  NOT: [InventorySubscriptionWhereInput!]
+  node: InventoryUnitWhereInput
+  AND: [InventoryUnitSubscriptionWhereInput!]
+  OR: [InventoryUnitSubscriptionWhereInput!]
+  NOT: [InventoryUnitSubscriptionWhereInput!]
 }
 
-input InventoryUpdateInput {
-  inventoryGroup: InventoryGroupUpdateOneRequiredWithoutInventoryInput
+input InventoryUnitUpdateInput {
+  inventory: InventoryUpdateOneRequiredWithoutInventoryUnitInput
   quantity: String
   unit: MeasurementUnitUpdateOneRequiredInput
   expenseUnit: ExpenseUnitUpdateOneInput
-  stockUnit: StockUnitUpdateOneRequiredWithoutInventoryInput
+  stockUnit: StockUnitUpdateOneRequiredWithoutInventoryUnitInput
 }
 
-input InventoryUpdateManyDataInput {
+input InventoryUnitUpdateManyDataInput {
   quantity: String
 }
 
-input InventoryUpdateManyMutationInput {
+input InventoryUnitUpdateManyMutationInput {
   quantity: String
 }
 
-input InventoryUpdateManyWithoutInventoryGroupInput {
-  create: [InventoryCreateWithoutInventoryGroupInput!]
-  delete: [InventoryWhereUniqueInput!]
-  connect: [InventoryWhereUniqueInput!]
-  set: [InventoryWhereUniqueInput!]
-  disconnect: [InventoryWhereUniqueInput!]
-  update: [InventoryUpdateWithWhereUniqueWithoutInventoryGroupInput!]
-  upsert: [InventoryUpsertWithWhereUniqueWithoutInventoryGroupInput!]
-  deleteMany: [InventoryScalarWhereInput!]
-  updateMany: [InventoryUpdateManyWithWhereNestedInput!]
+input InventoryUnitUpdateManyWithoutInventoryInput {
+  create: [InventoryUnitCreateWithoutInventoryInput!]
+  delete: [InventoryUnitWhereUniqueInput!]
+  connect: [InventoryUnitWhereUniqueInput!]
+  set: [InventoryUnitWhereUniqueInput!]
+  disconnect: [InventoryUnitWhereUniqueInput!]
+  update: [InventoryUnitUpdateWithWhereUniqueWithoutInventoryInput!]
+  upsert: [InventoryUnitUpsertWithWhereUniqueWithoutInventoryInput!]
+  deleteMany: [InventoryUnitScalarWhereInput!]
+  updateMany: [InventoryUnitUpdateManyWithWhereNestedInput!]
 }
 
-input InventoryUpdateManyWithoutStockUnitInput {
-  create: [InventoryCreateWithoutStockUnitInput!]
-  delete: [InventoryWhereUniqueInput!]
-  connect: [InventoryWhereUniqueInput!]
-  set: [InventoryWhereUniqueInput!]
-  disconnect: [InventoryWhereUniqueInput!]
-  update: [InventoryUpdateWithWhereUniqueWithoutStockUnitInput!]
-  upsert: [InventoryUpsertWithWhereUniqueWithoutStockUnitInput!]
-  deleteMany: [InventoryScalarWhereInput!]
-  updateMany: [InventoryUpdateManyWithWhereNestedInput!]
+input InventoryUnitUpdateManyWithoutStockUnitInput {
+  create: [InventoryUnitCreateWithoutStockUnitInput!]
+  delete: [InventoryUnitWhereUniqueInput!]
+  connect: [InventoryUnitWhereUniqueInput!]
+  set: [InventoryUnitWhereUniqueInput!]
+  disconnect: [InventoryUnitWhereUniqueInput!]
+  update: [InventoryUnitUpdateWithWhereUniqueWithoutStockUnitInput!]
+  upsert: [InventoryUnitUpsertWithWhereUniqueWithoutStockUnitInput!]
+  deleteMany: [InventoryUnitScalarWhereInput!]
+  updateMany: [InventoryUnitUpdateManyWithWhereNestedInput!]
 }
 
-input InventoryUpdateManyWithWhereNestedInput {
-  where: InventoryScalarWhereInput!
-  data: InventoryUpdateManyDataInput!
+input InventoryUnitUpdateManyWithWhereNestedInput {
+  where: InventoryUnitScalarWhereInput!
+  data: InventoryUnitUpdateManyDataInput!
 }
 
-input InventoryUpdateWithoutInventoryGroupDataInput {
-  quantity: String
-  unit: MeasurementUnitUpdateOneRequiredInput
-  expenseUnit: ExpenseUnitUpdateOneInput
-  stockUnit: StockUnitUpdateOneRequiredWithoutInventoryInput
-}
-
-input InventoryUpdateWithoutStockUnitDataInput {
-  inventoryGroup: InventoryGroupUpdateOneRequiredWithoutInventoryInput
+input InventoryUnitUpdateWithoutInventoryDataInput {
   quantity: String
   unit: MeasurementUnitUpdateOneRequiredInput
   expenseUnit: ExpenseUnitUpdateOneInput
+  stockUnit: StockUnitUpdateOneRequiredWithoutInventoryUnitInput
 }
 
-input InventoryUpdateWithWhereUniqueWithoutInventoryGroupInput {
-  where: InventoryWhereUniqueInput!
-  data: InventoryUpdateWithoutInventoryGroupDataInput!
+input InventoryUnitUpdateWithoutStockUnitDataInput {
+  inventory: InventoryUpdateOneRequiredWithoutInventoryUnitInput
+  quantity: String
+  unit: MeasurementUnitUpdateOneRequiredInput
+  expenseUnit: ExpenseUnitUpdateOneInput
 }
 
-input InventoryUpdateWithWhereUniqueWithoutStockUnitInput {
-  where: InventoryWhereUniqueInput!
-  data: InventoryUpdateWithoutStockUnitDataInput!
+input InventoryUnitUpdateWithWhereUniqueWithoutInventoryInput {
+  where: InventoryUnitWhereUniqueInput!
+  data: InventoryUnitUpdateWithoutInventoryDataInput!
 }
 
-input InventoryUpsertWithWhereUniqueWithoutInventoryGroupInput {
-  where: InventoryWhereUniqueInput!
-  update: InventoryUpdateWithoutInventoryGroupDataInput!
-  create: InventoryCreateWithoutInventoryGroupInput!
+input InventoryUnitUpdateWithWhereUniqueWithoutStockUnitInput {
+  where: InventoryUnitWhereUniqueInput!
+  data: InventoryUnitUpdateWithoutStockUnitDataInput!
 }
 
-input InventoryUpsertWithWhereUniqueWithoutStockUnitInput {
-  where: InventoryWhereUniqueInput!
-  update: InventoryUpdateWithoutStockUnitDataInput!
-  create: InventoryCreateWithoutStockUnitInput!
+input InventoryUnitUpsertWithWhereUniqueWithoutInventoryInput {
+  where: InventoryUnitWhereUniqueInput!
+  update: InventoryUnitUpdateWithoutInventoryDataInput!
+  create: InventoryUnitCreateWithoutInventoryInput!
 }
 
-input InventoryWhereInput {
+input InventoryUnitUpsertWithWhereUniqueWithoutStockUnitInput {
+  where: InventoryUnitWhereUniqueInput!
+  update: InventoryUnitUpdateWithoutStockUnitDataInput!
+  create: InventoryUnitCreateWithoutStockUnitInput!
+}
+
+input InventoryUnitWhereInput {
   id: ID
   id_not: ID
   id_in: [ID!]
@@ -759,7 +713,7 @@ input InventoryWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  inventoryGroup: InventoryGroupWhereInput
+  inventory: InventoryWhereInput
   quantity: String
   quantity_not: String
   quantity_in: [String!]
@@ -793,6 +747,50 @@ input InventoryWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
+  AND: [InventoryUnitWhereInput!]
+  OR: [InventoryUnitWhereInput!]
+  NOT: [InventoryUnitWhereInput!]
+}
+
+input InventoryUnitWhereUniqueInput {
+  id: ID
+}
+
+input InventoryUpdateInput {
+  inventoryUnit: InventoryUnitUpdateManyWithoutInventoryInput
+}
+
+input InventoryUpdateOneRequiredWithoutInventoryUnitInput {
+  create: InventoryCreateWithoutInventoryUnitInput
+  connect: InventoryWhereUniqueInput
+}
+
+input InventoryWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  inventoryUnit_every: InventoryUnitWhereInput
+  inventoryUnit_some: InventoryUnitWhereInput
+  inventoryUnit_none: InventoryUnitWhereInput
   AND: [InventoryWhereInput!]
   OR: [InventoryWhereInput!]
   NOT: [InventoryWhereInput!]
@@ -961,15 +959,15 @@ type Mutation {
   deleteManyExpenseUnits(where: ExpenseUnitWhereInput): BatchPayload!
   createInventory(data: InventoryCreateInput!): Inventory!
   updateInventory(data: InventoryUpdateInput!, where: InventoryWhereUniqueInput!): Inventory
-  updateManyInventories(data: InventoryUpdateManyMutationInput!, where: InventoryWhereInput): BatchPayload!
   upsertInventory(where: InventoryWhereUniqueInput!, create: InventoryCreateInput!, update: InventoryUpdateInput!): Inventory!
   deleteInventory(where: InventoryWhereUniqueInput!): Inventory
   deleteManyInventories(where: InventoryWhereInput): BatchPayload!
-  createInventoryGroup(data: InventoryGroupCreateInput!): InventoryGroup!
-  updateInventoryGroup(data: InventoryGroupUpdateInput!, where: InventoryGroupWhereUniqueInput!): InventoryGroup
-  upsertInventoryGroup(where: InventoryGroupWhereUniqueInput!, create: InventoryGroupCreateInput!, update: InventoryGroupUpdateInput!): InventoryGroup!
-  deleteInventoryGroup(where: InventoryGroupWhereUniqueInput!): InventoryGroup
-  deleteManyInventoryGroups(where: InventoryGroupWhereInput): BatchPayload!
+  createInventoryUnit(data: InventoryUnitCreateInput!): InventoryUnit!
+  updateInventoryUnit(data: InventoryUnitUpdateInput!, where: InventoryUnitWhereUniqueInput!): InventoryUnit
+  updateManyInventoryUnits(data: InventoryUnitUpdateManyMutationInput!, where: InventoryUnitWhereInput): BatchPayload!
+  upsertInventoryUnit(where: InventoryUnitWhereUniqueInput!, create: InventoryUnitCreateInput!, update: InventoryUnitUpdateInput!): InventoryUnit!
+  deleteInventoryUnit(where: InventoryUnitWhereUniqueInput!): InventoryUnit
+  deleteManyInventoryUnits(where: InventoryUnitWhereInput): BatchPayload!
   createMeasurementUnit(data: MeasurementUnitCreateInput!): MeasurementUnit!
   updateMeasurementUnit(data: MeasurementUnitUpdateInput!, where: MeasurementUnitWhereUniqueInput!): MeasurementUnit
   updateManyMeasurementUnits(data: MeasurementUnitUpdateManyMutationInput!, where: MeasurementUnitWhereInput): BatchPayload!
@@ -1129,9 +1127,9 @@ type Query {
   inventory(where: InventoryWhereUniqueInput!): Inventory
   inventories(where: InventoryWhereInput, orderBy: InventoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Inventory]!
   inventoriesConnection(where: InventoryWhereInput, orderBy: InventoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InventoryConnection!
-  inventoryGroup(where: InventoryGroupWhereUniqueInput!): InventoryGroup
-  inventoryGroups(where: InventoryGroupWhereInput, orderBy: InventoryGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InventoryGroup]!
-  inventoryGroupsConnection(where: InventoryGroupWhereInput, orderBy: InventoryGroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InventoryGroupConnection!
+  inventoryUnit(where: InventoryUnitWhereUniqueInput!): InventoryUnit
+  inventoryUnits(where: InventoryUnitWhereInput, orderBy: InventoryUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InventoryUnit]!
+  inventoryUnitsConnection(where: InventoryUnitWhereInput, orderBy: InventoryUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): InventoryUnitConnection!
   measurementUnit(where: MeasurementUnitWhereUniqueInput!): MeasurementUnit
   measurementUnits(where: MeasurementUnitWhereInput, orderBy: MeasurementUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MeasurementUnit]!
   measurementUnitsConnection(where: MeasurementUnitWhereInput, orderBy: MeasurementUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MeasurementUnitConnection!
@@ -1150,7 +1148,7 @@ type Query {
 type StockUnit {
   id: ID!
   name: String
-  inventory(where: InventoryWhereInput, orderBy: InventoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Inventory!]
+  inventoryUnit(where: InventoryUnitWhereInput, orderBy: InventoryUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InventoryUnit!]
   category: StockUnitCategory
   expenseUnit(where: ExpenseUnitWhereInput, orderBy: ExpenseUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExpenseUnit!]
 }
@@ -1285,7 +1283,7 @@ type StockUnitConnection {
 input StockUnitCreateInput {
   id: ID
   name: String
-  inventory: InventoryCreateManyWithoutStockUnitInput
+  inventoryUnit: InventoryUnitCreateManyWithoutStockUnitInput
   category: StockUnitCategoryCreateOneInput
   expenseUnit: ExpenseUnitCreateManyWithoutStockUnitInput
 }
@@ -1295,29 +1293,29 @@ input StockUnitCreateManyInput {
   connect: [StockUnitWhereUniqueInput!]
 }
 
-input StockUnitCreateManyWithoutExpenseUnitInput {
-  create: [StockUnitCreateWithoutExpenseUnitInput!]
-  connect: [StockUnitWhereUniqueInput!]
-}
-
 input StockUnitCreateOneInput {
   create: StockUnitCreateInput
   connect: StockUnitWhereUniqueInput
 }
 
-input StockUnitCreateOneWithoutInventoryInput {
-  create: StockUnitCreateWithoutInventoryInput
+input StockUnitCreateOneWithoutExpenseUnitInput {
+  create: StockUnitCreateWithoutExpenseUnitInput
+  connect: StockUnitWhereUniqueInput
+}
+
+input StockUnitCreateOneWithoutInventoryUnitInput {
+  create: StockUnitCreateWithoutInventoryUnitInput
   connect: StockUnitWhereUniqueInput
 }
 
 input StockUnitCreateWithoutExpenseUnitInput {
   id: ID
   name: String
-  inventory: InventoryCreateManyWithoutStockUnitInput
+  inventoryUnit: InventoryUnitCreateManyWithoutStockUnitInput
   category: StockUnitCategoryCreateOneInput
 }
 
-input StockUnitCreateWithoutInventoryInput {
+input StockUnitCreateWithoutInventoryUnitInput {
   id: ID
   name: String
   category: StockUnitCategoryCreateOneInput
@@ -1395,14 +1393,14 @@ input StockUnitSubscriptionWhereInput {
 
 input StockUnitUpdateDataInput {
   name: String
-  inventory: InventoryUpdateManyWithoutStockUnitInput
+  inventoryUnit: InventoryUnitUpdateManyWithoutStockUnitInput
   category: StockUnitCategoryUpdateOneInput
   expenseUnit: ExpenseUnitUpdateManyWithoutStockUnitInput
 }
 
 input StockUnitUpdateInput {
   name: String
-  inventory: InventoryUpdateManyWithoutStockUnitInput
+  inventoryUnit: InventoryUnitUpdateManyWithoutStockUnitInput
   category: StockUnitCategoryUpdateOneInput
   expenseUnit: ExpenseUnitUpdateManyWithoutStockUnitInput
 }
@@ -1427,18 +1425,6 @@ input StockUnitUpdateManyMutationInput {
   name: String
 }
 
-input StockUnitUpdateManyWithoutExpenseUnitInput {
-  create: [StockUnitCreateWithoutExpenseUnitInput!]
-  delete: [StockUnitWhereUniqueInput!]
-  connect: [StockUnitWhereUniqueInput!]
-  set: [StockUnitWhereUniqueInput!]
-  disconnect: [StockUnitWhereUniqueInput!]
-  update: [StockUnitUpdateWithWhereUniqueWithoutExpenseUnitInput!]
-  upsert: [StockUnitUpsertWithWhereUniqueWithoutExpenseUnitInput!]
-  deleteMany: [StockUnitScalarWhereInput!]
-  updateMany: [StockUnitUpdateManyWithWhereNestedInput!]
-}
-
 input StockUnitUpdateManyWithWhereNestedInput {
   where: StockUnitScalarWhereInput!
   data: StockUnitUpdateManyDataInput!
@@ -1451,20 +1437,27 @@ input StockUnitUpdateOneRequiredInput {
   connect: StockUnitWhereUniqueInput
 }
 
-input StockUnitUpdateOneRequiredWithoutInventoryInput {
-  create: StockUnitCreateWithoutInventoryInput
-  update: StockUnitUpdateWithoutInventoryDataInput
-  upsert: StockUnitUpsertWithoutInventoryInput
+input StockUnitUpdateOneRequiredWithoutExpenseUnitInput {
+  create: StockUnitCreateWithoutExpenseUnitInput
+  update: StockUnitUpdateWithoutExpenseUnitDataInput
+  upsert: StockUnitUpsertWithoutExpenseUnitInput
+  connect: StockUnitWhereUniqueInput
+}
+
+input StockUnitUpdateOneRequiredWithoutInventoryUnitInput {
+  create: StockUnitCreateWithoutInventoryUnitInput
+  update: StockUnitUpdateWithoutInventoryUnitDataInput
+  upsert: StockUnitUpsertWithoutInventoryUnitInput
   connect: StockUnitWhereUniqueInput
 }
 
 input StockUnitUpdateWithoutExpenseUnitDataInput {
   name: String
-  inventory: InventoryUpdateManyWithoutStockUnitInput
+  inventoryUnit: InventoryUnitUpdateManyWithoutStockUnitInput
   category: StockUnitCategoryUpdateOneInput
 }
 
-input StockUnitUpdateWithoutInventoryDataInput {
+input StockUnitUpdateWithoutInventoryUnitDataInput {
   name: String
   category: StockUnitCategoryUpdateOneInput
   expenseUnit: ExpenseUnitUpdateManyWithoutStockUnitInput
@@ -1475,31 +1468,25 @@ input StockUnitUpdateWithWhereUniqueNestedInput {
   data: StockUnitUpdateDataInput!
 }
 
-input StockUnitUpdateWithWhereUniqueWithoutExpenseUnitInput {
-  where: StockUnitWhereUniqueInput!
-  data: StockUnitUpdateWithoutExpenseUnitDataInput!
-}
-
 input StockUnitUpsertNestedInput {
   update: StockUnitUpdateDataInput!
   create: StockUnitCreateInput!
 }
 
-input StockUnitUpsertWithoutInventoryInput {
-  update: StockUnitUpdateWithoutInventoryDataInput!
-  create: StockUnitCreateWithoutInventoryInput!
+input StockUnitUpsertWithoutExpenseUnitInput {
+  update: StockUnitUpdateWithoutExpenseUnitDataInput!
+  create: StockUnitCreateWithoutExpenseUnitInput!
+}
+
+input StockUnitUpsertWithoutInventoryUnitInput {
+  update: StockUnitUpdateWithoutInventoryUnitDataInput!
+  create: StockUnitCreateWithoutInventoryUnitInput!
 }
 
 input StockUnitUpsertWithWhereUniqueNestedInput {
   where: StockUnitWhereUniqueInput!
   update: StockUnitUpdateDataInput!
   create: StockUnitCreateInput!
-}
-
-input StockUnitUpsertWithWhereUniqueWithoutExpenseUnitInput {
-  where: StockUnitWhereUniqueInput!
-  update: StockUnitUpdateWithoutExpenseUnitDataInput!
-  create: StockUnitCreateWithoutExpenseUnitInput!
 }
 
 input StockUnitWhereInput {
@@ -1531,9 +1518,9 @@ input StockUnitWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
-  inventory_every: InventoryWhereInput
-  inventory_some: InventoryWhereInput
-  inventory_none: InventoryWhereInput
+  inventoryUnit_every: InventoryUnitWhereInput
+  inventoryUnit_some: InventoryUnitWhereInput
+  inventoryUnit_none: InventoryUnitWhereInput
   category: StockUnitCategoryWhereInput
   expenseUnit_every: ExpenseUnitWhereInput
   expenseUnit_some: ExpenseUnitWhereInput
@@ -1552,7 +1539,7 @@ type Subscription {
   currency(where: CurrencySubscriptionWhereInput): CurrencySubscriptionPayload
   expenseUnit(where: ExpenseUnitSubscriptionWhereInput): ExpenseUnitSubscriptionPayload
   inventory(where: InventorySubscriptionWhereInput): InventorySubscriptionPayload
-  inventoryGroup(where: InventoryGroupSubscriptionWhereInput): InventoryGroupSubscriptionPayload
+  inventoryUnit(where: InventoryUnitSubscriptionWhereInput): InventoryUnitSubscriptionPayload
   measurementUnit(where: MeasurementUnitSubscriptionWhereInput): MeasurementUnitSubscriptionPayload
   product(where: ProductSubscriptionWhereInput): ProductSubscriptionPayload
   stockUnit(where: StockUnitSubscriptionWhereInput): StockUnitSubscriptionPayload

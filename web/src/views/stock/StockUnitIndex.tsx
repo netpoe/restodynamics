@@ -22,9 +22,10 @@ import {
   Card,
   CardTitle,
   DashboardNavigationDrawer,
+  drawerWidth,
   ToolbarPadding,
 } from "../../components";
-import { CreateInventory, CreateInventoryGroup } from "../../graphql/mutations";
+import { CreateInventory, CreateInventoryUnit } from "../../graphql/mutations";
 import { QueryStockUnits } from "../../graphql/queries";
 import { datetime } from "../../utils";
 import { routes } from "../routes";
@@ -45,10 +46,11 @@ export const StockUnitIndex = withStyles((theme: Theme) => ({
   newInventoryCollection: {
     backgroundColor: theme.palette.primary.main,
     width: "100%",
-    position: "absolute",
+    position: "fixed",
     bottom: 0,
     left: 0,
     right: 0,
+    paddingLeft: drawerWidth,
   },
   selectedStockUnit: {
     border: `2px solid ${theme.palette.primary.main}`,
@@ -62,10 +64,10 @@ export const StockUnitIndex = withStyles((theme: Theme) => ({
   const [stockUnitsQuery] = useQuery({
     query: QueryStockUnits,
   });
-  const [createInventoryMutation, executeCreateInventoryMutation] = useMutation(CreateInventory);
-  const [createInventoryGroupMutation, executeCreateInventoryGroupMutation] = useMutation(
-    CreateInventoryGroup,
+  const [createInventoryUnitMutation, executeCreateInventoryUnitMutation] = useMutation(
+    CreateInventoryUnit,
   );
+  const [createInventoryMutation, executeCreateInventoryMutation] = useMutation(CreateInventory);
 
   const handleOnTableRowClick = (e: any, id: string) => {
     if (isNewInventory) {
@@ -81,18 +83,18 @@ export const StockUnitIndex = withStyles((theme: Theme) => ({
   };
 
   const onCreateInventory = async () => {
-    const { data, error } = await executeCreateInventoryGroupMutation();
+    const { data, error } = await executeCreateInventoryMutation();
     console.log(data, error);
     const {
-      createInventoryGroup: { id: inventoryGroupID },
+      createInventory: { id: inventoryID },
     } = data;
     const mutation = (id: string) =>
       new Promise(async (resolve, reject) => {
-        const { data, error } = await executeCreateInventoryMutation({
+        const { data, error } = await executeCreateInventoryUnitMutation({
           data: {
-            inventoryGroup: {
+            inventory: {
               connect: {
-                id: inventoryGroupID,
+                id: inventoryID,
               },
             },
             unit: {
@@ -105,6 +107,11 @@ export const StockUnitIndex = withStyles((theme: Theme) => ({
                 currency: {
                   connect: {
                     symbol: "GTQ",
+                  },
+                },
+                stockUnit: {
+                  connect: {
+                    id,
                   },
                 },
               },
@@ -122,7 +129,7 @@ export const StockUnitIndex = withStyles((theme: Theme) => ({
 
     try {
       await Promise.all(selectedStockUnitsIds.map((id: string) => mutation(id)));
-      history.push(`${routes.inventory.overview}/${inventoryGroupID}`);
+      history.push(`${routes.inventory.overview}/${inventoryID}`);
     } catch (error) {
       console.error(error);
     }
@@ -131,7 +138,7 @@ export const StockUnitIndex = withStyles((theme: Theme) => ({
   return (
     <Box display="flex">
       <DashboardNavigationDrawer history={history} />
-      <Box minHeight="100vh" bgcolor="default" className={classes.content}>
+      <Box minHeight="200vh" bgcolor="default" className={classes.content}>
         <ToolbarPadding />
         <Container maxWidth="xl">
           {stockUnitsQuery.fetching ? (

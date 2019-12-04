@@ -1,11 +1,11 @@
 import gql from "graphql-tag";
 
-export const QueryInventoryGroup = gql`
-  query InventoryGroup($where: InventoryGroupWhereUniqueInput!) {
-    inventoryGroup(where: $where) {
+export const QueryInventory = gql`
+  query Inventory($where: InventoryWhereUniqueInput!) {
+    inventory(where: $where) {
       id
       createdAt
-      inventory {
+      inventoryUnit {
         expenseUnit {
           amount
           currency {

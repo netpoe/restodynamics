@@ -11,15 +11,15 @@ type StockUnitCategory {
   name: String! @unique
 }
 
-type InventoryGroup {
-  id: ID! @id @unique
-  createdAt: DateTime! @createdAt
-  inventory: [Inventory]
-}
-
 type Inventory {
   id: ID! @id @unique
-  inventoryGroup: InventoryGroup!
+  createdAt: DateTime! @createdAt
+  inventoryUnit: [InventoryUnit]
+}
+
+type InventoryUnit {
+  id: ID! @id @unique
+  inventory: Inventory!
   quantity: String! @default(value: "0.00")
   unit: MeasurementUnit!
   expenseUnit: ExpenseUnit
@@ -37,7 +37,7 @@ type MeasurementUnit {
 type StockUnit {
   id: ID! @id @unique
   name: String @unique
-  inventory: [Inventory]
+  inventoryUnit: [InventoryUnit]
   category: StockUnitCategory
   expenseUnit: [ExpenseUnit]
 }

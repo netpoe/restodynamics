@@ -8,7 +8,7 @@ import {
   Typography,
   withStyles,
 } from "@material-ui/core";
-import { InventoryGroup } from "@netpoe/restodynamics-api";
+import { Inventory } from "@netpoe/restodynamics-api";
 import { History } from "history";
 import { DateTime } from "luxon";
 import React from "react";
@@ -22,7 +22,7 @@ import {
   DashboardNavigationDrawer,
   ToolbarPadding,
 } from "../../components";
-import { QueryInventoryGroup } from "../../graphql/queries";
+import { QueryInventory } from "../../graphql/queries";
 import { datetime } from "../../utils";
 import { routes } from "../routes";
 
@@ -36,8 +36,8 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
     flexGrow: 1,
   },
 }))(({ classes, match, history }: IInventoryOverviewProps) => {
-  const [inventoryGroupQuery] = useQuery({
-    query: QueryInventoryGroup,
+  const [inventoryQuery] = useQuery({
+    query: QueryInventory,
     variables: { where: { id: match.params.id || "" } },
   });
 
@@ -47,9 +47,9 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
       <Box minHeight="100vh" bgcolor="default" className={classes.content}>
         <ToolbarPadding />
         <Container maxWidth="xl">
-          {inventoryGroupQuery.fetching ? (
+          {inventoryQuery.fetching ? (
             <Typography>Cargando</Typography>
-          ) : inventoryGroupQuery.error || inventoryGroupQuery.data == null ? (
+          ) : inventoryQuery.error || inventoryQuery.data == null ? (
             <Typography>Error</Typography>
           ) : (
             <Box>
@@ -61,7 +61,7 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                   <Typography color="textPrimary">Vista General</Typography>
                   <Typography color="textPrimary">
                     {datetime
-                      .locale((inventoryGroupQuery.data.inventoryGroup as InventoryGroup).createdAt)
+                      .locale((inventoryQuery.data.inventory as Inventory).createdAt)
                       .toLocaleString(DateTime.DATE_FULL)}
                   </Typography>
                 </Breadcrumbs>
@@ -77,14 +77,11 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                         style={{ textTransform: "capitalize" }}
                       >
                         {
-                          datetime.locale(
-                            (inventoryGroupQuery.data.inventoryGroup as InventoryGroup).createdAt,
-                          ).weekdayShort
+                          datetime.locale((inventoryQuery.data.inventory as Inventory).createdAt)
+                            .weekdayShort
                         }{" "}
                         {datetime
-                          .locale(
-                            (inventoryGroupQuery.data.inventoryGroup as InventoryGroup).createdAt,
-                          )
+                          .locale((inventoryQuery.data.inventory as Inventory).createdAt)
                           .toLocaleString(DateTime.DATETIME_MED)}
                       </Typography>
                     </Card>
@@ -93,8 +90,7 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                     <Card actions={<Button size="small">Ver Stock</Button>}>
                       <CardTitle>Stock</CardTitle>
                       <Typography variant="h5" color="inherit">
-                        {inventoryGroupQuery.data.inventoryGroup.inventory.length} unidades de
-                        inventario
+                        {inventoryQuery.data.inventory.inventoryUnit.length} unidades de inventario
                       </Typography>
                     </Card>
                   </Grid>
@@ -109,10 +105,10 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                 </Grid>
               </Box>
               <Box pt={6}>
-                {inventoryGroupQuery.data.inventoryGroup.inventory.map(
+                {inventoryQuery.data.inventory.inventoryUnit.map(
                   (inventoryUnit: any, i: number) => (
-                    <Box mb={2}>
-                      <Paper key={i}>
+                    <Box mb={2} key={i}>
+                      <Paper>
                         <Grid container spacing={2}>
                           <Grid item lg={5}>
                             <Box

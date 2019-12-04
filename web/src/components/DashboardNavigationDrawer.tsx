@@ -17,7 +17,7 @@ import React from "react";
 import { routes } from "../views/routes";
 import { ToolbarPadding } from "./ToolbarPadding";
 
-const drawerWidth = 59;
+export const drawerWidth = 59;
 
 export const DashboardNavigationDrawer = withStyles((theme: Theme) => ({
   drawer: {
