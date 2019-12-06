@@ -5,12 +5,6 @@ export const QueryComponents = gql`
   components (where: $where) {
     id
     quantity
-    expenseUnit {
-      amount
-      currency {
-        symbol
-      }
-    }
     unit {
       symbol
     }

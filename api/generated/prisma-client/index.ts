@@ -824,7 +824,6 @@ export interface ComponentWhereInput {
   quantity_ends_with?: Maybe<String>;
   quantity_not_ends_with?: Maybe<String>;
   unit?: Maybe<MeasurementUnitWhereInput>;
-  expenseUnit?: Maybe<ExpenseUnitWhereInput>;
   expiresAt?: Maybe<DateTimeInput>;
   expiresAt_not?: Maybe<DateTimeInput>;
   expiresAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -893,7 +892,6 @@ export interface ComponentCreateInput {
   stockUnit: StockUnitCreateOneWithoutComponentsInput;
   quantity?: Maybe<String>;
   unit: MeasurementUnitCreateOneInput;
-  expenseUnit?: Maybe<ExpenseUnitCreateOneInput>;
   expiresAt?: Maybe<DateTimeInput>;
 }
 
@@ -1008,7 +1006,6 @@ export interface ComponentCreateWithoutStockUnitInput {
   stockUnitID: ID_Input;
   quantity?: Maybe<String>;
   unit: MeasurementUnitCreateOneInput;
-  expenseUnit?: Maybe<ExpenseUnitCreateOneInput>;
   expiresAt?: Maybe<DateTimeInput>;
 }
 
@@ -1031,7 +1028,6 @@ export interface ComponentUpdateInput {
   stockUnit?: Maybe<StockUnitUpdateOneRequiredWithoutComponentsInput>;
   quantity?: Maybe<String>;
   unit?: Maybe<MeasurementUnitUpdateOneRequiredInput>;
-  expenseUnit?: Maybe<ExpenseUnitUpdateOneInput>;
   expiresAt?: Maybe<DateTimeInput>;
 }
 
@@ -1215,7 +1211,6 @@ export interface ComponentUpdateWithoutStockUnitDataInput {
   stockUnitID?: Maybe<ID_Input>;
   quantity?: Maybe<String>;
   unit?: Maybe<MeasurementUnitUpdateOneRequiredInput>;
-  expenseUnit?: Maybe<ExpenseUnitUpdateOneInput>;
   expiresAt?: Maybe<DateTimeInput>;
 }
 
@@ -1853,7 +1848,6 @@ export interface ComponentPromise extends Promise<Component>, Fragmentable {
   stockUnit: <T = StockUnitPromise>() => T;
   quantity: () => Promise<String>;
   unit: <T = MeasurementUnitPromise>() => T;
-  expenseUnit: <T = ExpenseUnitPromise>() => T;
   expiresAt: () => Promise<DateTimeOutput>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
@@ -1867,7 +1861,6 @@ export interface ComponentSubscription
   stockUnit: <T = StockUnitSubscription>() => T;
   quantity: () => Promise<AsyncIterator<String>>;
   unit: <T = MeasurementUnitSubscription>() => T;
-  expenseUnit: <T = ExpenseUnitSubscription>() => T;
   expiresAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
@@ -1881,7 +1874,6 @@ export interface ComponentNullablePromise
   stockUnit: <T = StockUnitPromise>() => T;
   quantity: () => Promise<String>;
   unit: <T = MeasurementUnitPromise>() => T;
-  expenseUnit: <T = ExpenseUnitPromise>() => T;
   expiresAt: () => Promise<DateTimeOutput>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;

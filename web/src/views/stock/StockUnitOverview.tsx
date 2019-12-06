@@ -295,14 +295,6 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({
                   symbol: "U",
                 },
               },
-              expenseUnit: {
-                amount: "0.00",
-                currency: {
-                  connect: {
-                    symbol: "GTQ",
-                  },
-                },
-              },
               stockUnitID: match.params.id,
               stockUnit: {
                 connect: {
@@ -311,7 +303,7 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({
               },
             },
           });
-          resolve(data.createComponent);
+          resolve();
         });
       await Promise.all(componentsIDs.map((id: string) => mutation(id)));
     } catch (error) {

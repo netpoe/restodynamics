@@ -44,7 +44,6 @@ type Component {
   stockUnit: StockUnit!
   quantity: String!
   unit: MeasurementUnit!
-  expenseUnit: ExpenseUnit
   expiresAt: DateTime
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -62,7 +61,6 @@ input ComponentCreateInput {
   stockUnit: StockUnitCreateOneWithoutComponentsInput!
   quantity: String
   unit: MeasurementUnitCreateOneInput!
-  expenseUnit: ExpenseUnitCreateOneInput
   expiresAt: DateTime
 }
 
@@ -76,7 +74,6 @@ input ComponentCreateWithoutStockUnitInput {
   stockUnitID: ID!
   quantity: String
   unit: MeasurementUnitCreateOneInput!
-  expenseUnit: ExpenseUnitCreateOneInput
   expiresAt: DateTime
 }
 
@@ -204,7 +201,6 @@ input ComponentUpdateInput {
   stockUnit: StockUnitUpdateOneRequiredWithoutComponentsInput
   quantity: String
   unit: MeasurementUnitUpdateOneRequiredInput
-  expenseUnit: ExpenseUnitUpdateOneInput
   expiresAt: DateTime
 }
 
@@ -241,7 +237,6 @@ input ComponentUpdateWithoutStockUnitDataInput {
   stockUnitID: ID
   quantity: String
   unit: MeasurementUnitUpdateOneRequiredInput
-  expenseUnit: ExpenseUnitUpdateOneInput
   expiresAt: DateTime
 }
 
@@ -301,7 +296,6 @@ input ComponentWhereInput {
   quantity_ends_with: String
   quantity_not_ends_with: String
   unit: MeasurementUnitWhereInput
-  expenseUnit: ExpenseUnitWhereInput
   expiresAt: DateTime
   expiresAt_not: DateTime
   expiresAt_in: [DateTime!]
