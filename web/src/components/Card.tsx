@@ -1,4 +1,4 @@
-import { Card as MUICard, CardActions, CardContent, Theme, Typography } from "@material-ui/core";
+import { Card as MUICard, CardActions, CardContent, Grid, Theme, Typography } from "@material-ui/core";
 import { CardProps } from "@material-ui/core/Card";
 import { withStyles } from "@material-ui/styles";
 import React from "react";
@@ -33,9 +33,18 @@ export const Card = withStyles((theme: Theme) => ({
 ));
 
 export const CardTitle = withStyles((theme: Theme) => ({}))(
-  ({ classes, children }: { classes: any; children: any }) => (
-    <Typography variant="overline" color="inherit" gutterBottom className={`card-title`}>
-      {children}
-    </Typography>
+  ({ classes, children, actions }: { classes: any; children: any; actions?: any; }) => (
+    <Grid container spacing={1} justify="space-between">
+      <Grid item>
+        <Typography variant="overline" color="inherit" gutterBottom className={`card-title`}>
+          {children}
+        </Typography>
+      </Grid>
+      {actions &&
+        <Grid item>
+          {actions}
+        </Grid>
+      }
+    </Grid>
   ),
 );

@@ -1,15 +1,4 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  Grid,
-  TableCell,
-  Theme,
-  Toolbar,
-  Typography,
-  withStyles,
-} from "@material-ui/core";
+import { AppBar, Box, Button, Chip, Container, Grid, TableCell, Theme, Toolbar, Typography, withStyles } from "@material-ui/core";
 import { StockUnit } from "@netpoe/restodynamics-api";
 import { History } from "history";
 import { first, get } from "lodash";
@@ -17,14 +6,7 @@ import { DateTime as LuxonDateTime } from "luxon";
 import React from "react";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "urql";
-import {
-  Breadcrumbs,
-  Card,
-  CardTitle,
-  DashboardNavigationDrawer,
-  drawerWidth,
-  ToolbarPadding,
-} from "../../components";
+import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, drawerWidth, ToolbarPadding } from "../../components";
 import { CreateInventory, CreateInventoryUnit } from "../../graphql/mutations";
 import { QueryStockUnits } from "../../graphql/queries";
 import { datetime } from "../../utils";
@@ -240,23 +222,13 @@ export const StockUnitIndex = withStyles((theme: Theme) => ({
                     </Typography>
                   </Box>
                   <Box pb={2}>
-                    <Grid container spacing={2}>
                       {selectedStockUnitsIds.map((id, i: number) => (
-                        <Grid item lg={2} key={i}>
-                          <Card className={classes.selectedStockUnitCard}>
-                            <Typography style={{ textTransform: "capitalize" }}>
-                              {
-                                (first(
-                                  stockUnitsQuery.data.stockUnits.filter(
-                                    (stockUnit: StockUnit) => stockUnit.id === id,
-                                  ) as StockUnit[],
-                                ) as StockUnit).name
-                              }
-                            </Typography>
-                          </Card>
-                        </Grid>
+                        <Chip key={i} label={(first(
+                          stockUnitsQuery.data.stockUnits.filter(
+                            (stockUnit: StockUnit) => stockUnit.id === id,
+                          ) as StockUnit[],
+                        ) as StockUnit).name} style={{ textTransform: "capitalize" }} />
                       ))}
-                    </Grid>
                   </Box>
                 </Grid>
                 <Grid item lg={3}>

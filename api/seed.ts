@@ -1,5 +1,11 @@
 import { prisma } from "./generated/prisma-client";
-import { CreateCurrency, CreateMeasurementUnit, CreateStockUnit, CreateStockUnitCategory, CreateSupplier } from "./mutations";
+import {
+  CreateCurrency,
+  CreateMeasurementUnit,
+  CreateStockUnit,
+  CreateStockUnitCategory,
+  CreateSupplier,
+} from "./mutations";
 
 const supplier1 = "Cacaos San Juan la Laguna";
 const supplier2 = "Especies Jony";
@@ -12,7 +18,7 @@ async function createSuppliers() {
     region: "San Juan La Laguna, Sololá",
     country: "Guatemala",
     firstName: "María",
-    lastName: "Pérez"
+    lastName: "Pérez",
   });
 
   await prisma.$graphql(CreateSupplier, {
@@ -22,64 +28,96 @@ async function createSuppliers() {
     region: "Antigua Guatemala, Sacatepequez",
     country: "Guatemala",
     firstName: "Jony",
-    lastName: "Rubio"
+    lastName: "Rubio",
   });
 }
 
 async function createStockUnitCategories() {
   await prisma.$graphql(CreateStockUnitCategory, {
-    name: "sin categoría"
+    name: "sin categoría",
   });
-  await prisma.$graphql(CreateStockUnitCategory, {
-    name: "ingrediente"
-  });
-  await prisma.$graphql(CreateStockUnitCategory, {
-    name: "combustible"
-  });
-  await prisma.$graphql(CreateStockUnitCategory, {
-    name: "muebles"
-  });
-  await prisma.$graphql(CreateStockUnitCategory, {
-    name: "cubiertos"
-  });
-  await prisma.$graphql(CreateStockUnitCategory, {
-    name: "vajilla"
-  });
-  await prisma.$graphql(CreateStockUnitCategory, {
-    name: "cocina"
-  });
-  await prisma.$graphql(CreateStockUnitCategory, {
-    name: "menú"
-  });
-  await prisma.$graphql(CreateStockUnitCategory, {
-    name: "producto"
-  });
+  await prisma.$graphql(CreateStockUnitCategory, { name: "limpieza" });
+  await prisma.$graphql(CreateStockUnitCategory, { name: "carnes" });
+  await prisma.$graphql(CreateStockUnitCategory, { name: "alimentos" });
+  await prisma.$graphql(CreateStockUnitCategory, { name: "bebidas" });
+  await prisma.$graphql(CreateStockUnitCategory, { name: "gas" });
+  await prisma.$graphql(CreateStockUnitCategory, { name: "decoración" });
+  await prisma.$graphql(CreateStockUnitCategory, { name: "transporte" });
+  await prisma.$graphql(CreateStockUnitCategory, { name: "administración" });
+  await prisma.$graphql(CreateStockUnitCategory, { name: "mobiliario y equipo" });
+  await prisma.$graphql(CreateStockUnitCategory, { name: "maíz" });
+  await prisma.$graphql(CreateStockUnitCategory, { name: "producto" });
+  await prisma.$graphql(CreateStockUnitCategory, { name: "empaque" });
+  await prisma.$graphql(CreateStockUnitCategory, { name: "menú" });
 }
 
 async function createMeasurementUnits() {
   await prisma.$graphql(CreateMeasurementUnit, {
     name: "Libra",
-    symbol: "LB"
+    symbol: "LB",
   });
   await prisma.$graphql(CreateMeasurementUnit, {
     name: "Unidad",
-    symbol: "U"
+    symbol: "U",
+  });
+  await prisma.$graphql(CreateMeasurementUnit, {
+    name: "Mano",
+    symbol: "MAN",
+  });
+  await prisma.$graphql(CreateMeasurementUnit, {
+    name: "Manojo",
+    symbol: "MANJ",
+  });
+  await prisma.$graphql(CreateMeasurementUnit, {
+    name: "Onzas",
+    symbol: "OZ",
+  });
+  await prisma.$graphql(CreateMeasurementUnit, {
+    name: "Kilogramos",
+    symbol: "KG",
+  });
+  await prisma.$graphql(CreateMeasurementUnit, {
+    name: "Gramos",
+    symbol: "G",
+  });
+  await prisma.$graphql(CreateMeasurementUnit, {
+    name: "Litros",
+    symbol: "L",
+  });
+  await prisma.$graphql(CreateMeasurementUnit, {
+    name: "Mililitros",
+    symbol: "ML",
   });
 }
 
 async function createCurrencies() {
   await prisma.$graphql(CreateCurrency, {
     symbol: "GTQ",
-    isDefault: true
+    isDefault: true,
   });
   await prisma.$graphql(CreateCurrency, {
     symbol: "USD",
+  });
+  await prisma.$graphql(CreateCurrency, {
+    symbol: "MXN",
+  });
+  await prisma.$graphql(CreateCurrency, {
+    symbol: "EUR",
+  });
+  await prisma.$graphql(CreateCurrency, {
+    symbol: "BTC",
+  });
+  await prisma.$graphql(CreateCurrency, {
+    symbol: "BCH",
+  });
+  await prisma.$graphql(CreateCurrency, {
+    symbol: "ETH",
   });
 }
 
 async function createStockUnit() {
   await prisma.$graphql(CreateStockUnit, {
-    name: "Cacao 100%"
+    name: "Cacao 100%",
   });
 }
 

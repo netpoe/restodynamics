@@ -19,11 +19,24 @@ type Inventory {
 
 type InventoryUnit {
   id: ID! @id @unique
-  inventory: Inventory!
+  inventory: Inventory
   quantity: String! @default(value: "0.00")
   unit: MeasurementUnit!
   expenseUnit: ExpenseUnit
+  stockUnit: StockUnit
+  expiresAt: DateTime
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Component {
+  id: ID! @id @unique
+  stockUnitID: ID!
   stockUnit: StockUnit!
+  quantity: String! @default(value: "0.00")
+  unit: MeasurementUnit!
+  expenseUnit: ExpenseUnit
+  expiresAt: DateTime
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
@@ -37,17 +50,10 @@ type MeasurementUnit {
 type StockUnit {
   id: ID! @id @unique
   name: String @unique
-  inventoryUnit: [InventoryUnit]
   category: StockUnitCategory
+  inventoryUnit: [InventoryUnit]
   expenseUnit: [ExpenseUnit]
-}
-
-type Product {
-  id: ID! @id @unique
-  item: StockUnit! @relation(name: "ProductToStockUnit")
-  stockUnit: [StockUnit] @relation(name: "ProductToStockUnits")
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
+  components: [Component]
 }
 
 type Currency {

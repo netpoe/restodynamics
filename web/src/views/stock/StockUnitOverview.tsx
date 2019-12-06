@@ -1,34 +1,17 @@
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  List,
-  ListItem,
-  ListItemText,
-  Paper,
-  TextField,
-  Theme,
-  Typography,
-  withStyles,
-} from "@material-ui/core";
+import { Backdrop, Box, Button, Chip, Container, Fade, Grid, List, ListItem, ListItemText, Modal, Paper, TextField, Theme, Typography, withStyles } from "@material-ui/core";
 import CachedOutlinedIcon from "@material-ui/icons/CachedOutlined";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import { Component, StockUnit } from "@netpoe/restodynamics-api";
 import { History } from "history";
 import { get } from "lodash";
 import React from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { CombinedError, useMutation, useQuery } from "urql";
-import { QueryStockUnit } from "../../api/queries";
-import {
-  Breadcrumbs,
-  Card,
-  CardTitle,
-  DashboardNavigationDrawer,
-  ToolbarPadding,
-} from "../../components";
+import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding } from "../../components";
+import { ConnectComponentsToStockUnit, CreateComponent } from "../../graphql/mutations";
+import { QueryComponents, QueryStockUnit, QueryStockUnits } from "../../graphql/queries";
 import { routes } from "../routes";
 import { StockUnitDetailsDrawer } from "./components";
 
@@ -36,113 +19,6 @@ interface IStockUnitDetailsProps extends RouteComponentProps<{ id: string }> {
   classes: any;
   history: History;
 }
-
-export const StockUnitOverview = withStyles((theme: Theme) => ({
-  root: {
-    display: "flex",
-  },
-  content: {
-    flexGrow: 1,
-  },
-}))(({ classes, match, history }: IStockUnitDetailsProps) => {
-  const [stockUnitDetailsQuery] = useQuery({
-    query: QueryStockUnit,
-    variables: { where: { id: match.params.id || "" } },
-  });
-
-  return (
-    <div className={classes.root}>
-      <DashboardNavigationDrawer history={history} />
-      <StockUnitDetailsDrawer history={history} />
-      <Box minHeight="100vh" bgcolor="default" className={classes.content}>
-        <ToolbarPadding />
-        {stockUnitDetailsQuery.fetching ? (
-          <Typography>Cargando</Typography>
-        ) : stockUnitDetailsQuery.error || stockUnitDetailsQuery.data == null ? (
-          <Typography>Error</Typography>
-        ) : (
-          <>
-            <Box mb={3}>
-              <Container maxWidth="xl">
-                <Breadcrumbs>
-                  <Link color="inherit" to={routes.stock.index}>
-                    Stock
-                  </Link>
-                  <Typography color="textPrimary">Vista General</Typography>
-                  <Typography color="textPrimary">
-                    {match.params.id
-                      ? `${stockUnitDetailsQuery.data.stockUnit.name}`
-                      : "Nueva Unidad de Inventario"}
-                  </Typography>
-                </Breadcrumbs>
-              </Container>
-            </Box>
-            <Container maxWidth="xl">
-              <Box mb={3}>
-                <StockUnitNameField
-                  id={get(stockUnitDetailsQuery.data.stockUnit, ["id"], "")}
-                  value={get(stockUnitDetailsQuery.data.stockUnit, ["name"], "")}
-                />
-              </Box>
-              <Grid container spacing={2}>
-                <Grid item lg={4}>
-                  <Card actions={<Button size="small">Editar</Button>}>
-                    <CardTitle>Categoría</CardTitle>
-                    <Typography variant="h5" color="inherit">
-                      Ingrediente
-                    </Typography>
-                  </Card>
-                </Grid>
-                <Grid item lg={4}>
-                  <Card
-                    actions={
-                      <Button size="small" color="inherit">
-                        Inventario
-                      </Button>
-                    }
-                  >
-                    <CardTitle>Cantidad disponible</CardTitle>
-                    <Typography variant="h5" color="inherit">
-                      3 libras
-                    </Typography>
-                  </Card>
-                </Grid>
-                <Grid item lg={4}>
-                  <Card
-                    variant="urgent"
-                    actions={
-                      <Button size="small" color="inherit">
-                        Inventario
-                      </Button>
-                    }
-                  >
-                    <CardTitle>Expira en</CardTitle>
-                    <Typography variant="h5" color="inherit">
-                      5 días
-                    </Typography>
-                  </Card>
-                </Grid>
-              </Grid>
-              <Box mt={3}>
-                <Card>
-                  <CardTitle>Se utiliza en estos productos</CardTitle>
-                  <List>
-                    <ListItem button>
-                      <ListItemText primary="Cazuela de Pepián" />
-                    </ListItem>
-                    <ListItem button>
-                      <ListItemText primary="Cazuela de Hilachas" />
-                    </ListItem>
-                  </List>
-                </Card>
-              </Box>
-            </Container>
-          </>
-        )}
-      </Box>
-    </div>
-  );
-});
 
 const StockUnitNameField = withStyles((theme: Theme) => ({
   paper: {
@@ -153,6 +29,7 @@ const StockUnitNameField = withStyles((theme: Theme) => ({
     "& input": {
       ...theme.typography.h5,
       fontWeight: 500,
+      textTransform: "capitalize",
     },
   },
   iconBox: {
@@ -242,5 +119,339 @@ const StockUnitNameField = withStyles((theme: Theme) => ({
         onBlur={upsert}
       />
     </Paper>
+  );
+});
+
+const LinkStockUnitsModal = withStyles((theme: Theme) => ({
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  stockUnitsList: {
+    backgroundColor: theme.palette.background.default,
+    minHeight: 140,
+    paddingRight: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+  },
+  chip: {
+    marginTop: theme.spacing(1),
+    marginLeft: theme.spacing(1),
+  },
+}))(
+  ({
+    classes,
+    onClose,
+    id,
+    onConnect,
+  }: {
+    classes: any;
+    onClose: () => void;
+    id: string;
+    onConnect: (componentsIDs: string[]) => Promise<void>;
+  }) => {
+    const [open, setOpen] = React.useState(true);
+    const [selectedComponentsIDs, setSelectedComponentsIDs] = React.useState<string[]>([]);
+    const [stockUnitsQuery] = useQuery({
+      query: QueryStockUnits,
+      variables: { where: { id_not: id } },
+    });
+
+    const onSelectStockUnit = (id: string) => {
+      if (selectedComponentsIDs.includes(id)) {
+        selectedComponentsIDs.splice(selectedComponentsIDs.indexOf(id), 1);
+        setSelectedComponentsIDs([...selectedComponentsIDs]);
+      } else {
+        setSelectedComponentsIDs([...selectedComponentsIDs, id]);
+      }
+    };
+
+    const onConnectStockUnitsIDs = async () => {
+      try {
+        await onConnect(selectedComponentsIDs);
+        onClose();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    return (
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={open}
+        onClose={onClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <Box maxWidth="50vh">
+            <Card
+              actions={
+                <>
+                  <Button onClick={onClose}>Cancelar</Button>
+                  <Button onClick={onConnectStockUnitsIDs} color="primary">
+                    Vincular
+                  </Button>
+                </>
+              }
+            >
+              <CardTitle>Vincular otras unidades de inventario</CardTitle>
+              <Box className={classes.stockUnitsList}>
+                {stockUnitsQuery.fetching ? (
+                  <Typography>Cargando</Typography>
+                ) : stockUnitsQuery.error || stockUnitsQuery.data == null ? (
+                  <Typography>Error</Typography>
+                ) : (
+                  <>
+                    {stockUnitsQuery.data.stockUnits.map((stockUnit: StockUnit, i: number) => (
+                      <Chip
+                        key={i}
+                        label={stockUnit.name}
+                        className={classes.chip}
+                        onClick={() => {
+                          onSelectStockUnit(stockUnit.id);
+                        }}
+                        variant={
+                          selectedComponentsIDs.includes(stockUnit.id) ? "outlined" : "default"
+                        }
+                        color={selectedComponentsIDs.includes(stockUnit.id) ? "primary" : "default"}
+                      />
+                    ))}
+                  </>
+                )}
+              </Box>
+            </Card>
+          </Box>
+        </Fade>
+      </Modal>
+    );
+  },
+);
+
+export const StockUnitComponents = withStyles((theme: Theme) => ({
+  root: {
+    display: "flex",
+  },
+  content: {
+    flexGrow: 1,
+  },
+}))(({ classes, stockUnitID }: { classes: any; stockUnitID: string }) => {
+  const [stockUnitComponentsQuery] = useQuery({
+    query: QueryComponents,
+    variables: { where: { stockUnitID } },
+  });
+
+  return (
+    <>
+      {stockUnitComponentsQuery.fetching ? (
+        <Typography>Cargando</Typography>
+      ) : stockUnitComponentsQuery.error || stockUnitComponentsQuery.data == null ? (
+        <Typography>Error</Typography>
+      ) : (
+        <List>
+          {stockUnitComponentsQuery.data.components.map((component: any, i: number) => (
+            <ListItem button key={i}>
+              <ListItemText primary={component.stockUnit.name} />
+            </ListItem>
+          ))}
+        </List>
+      )}
+    </>
+  );
+});
+
+export const StockUnitOverview = withStyles((theme: Theme) => ({
+  root: {
+    display: "flex",
+  },
+  content: {
+    flexGrow: 1,
+  },
+}))(({ classes, match, history }: IStockUnitDetailsProps) => {
+  const [stockUnitDetailsQuery] = useQuery({
+    query: QueryStockUnit,
+    variables: { where: { id: match.params.id || "" } },
+  });
+
+  const [createComponentMutation, executeCreateComponentMutation] = useMutation(CreateComponent);
+  const [
+    connectComponentsToStockUnitMutation,
+    executeConnectComponentsToStockUnitMutation,
+  ] = useMutation(ConnectComponentsToStockUnit);
+
+  const connectStockUnits = async (componentsIDs: string[]) => {
+    try {
+      const mutation = (id: string): Promise<Component> =>
+        new Promise(async (resolve, reject) => {
+          const { data, error } = await executeCreateComponentMutation({
+            data: {
+              unit: {
+                connect: {
+                  symbol: "U",
+                },
+              },
+              expenseUnit: {
+                amount: "0.00",
+                currency: {
+                  connect: {
+                    symbol: "GTQ",
+                  },
+                },
+              },
+              stockUnitID: match.params.id,
+              stockUnit: {
+                connect: {
+                  id,
+                },
+              },
+            },
+          });
+          resolve(data.createComponent);
+        });
+      await Promise.all(componentsIDs.map((id: string) => mutation(id)));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const [displayLinkStockUnitsModal, setDisplayStockUnitsModal] = React.useState(false);
+
+  return (
+    <div className={classes.root}>
+      <DashboardNavigationDrawer history={history} />
+      <StockUnitDetailsDrawer history={history} />
+      <Box minHeight="100vh" bgcolor="default" className={classes.content}>
+        <ToolbarPadding />
+        {displayLinkStockUnitsModal && (
+          <LinkStockUnitsModal
+            onConnect={connectStockUnits}
+            onClose={() => {
+              setDisplayStockUnitsModal(false);
+            }}
+            id={match.params.id}
+          />
+        )}
+        <Container maxWidth="xl">
+          {stockUnitDetailsQuery.fetching ? (
+            <Typography>Cargando</Typography>
+          ) : stockUnitDetailsQuery.error || stockUnitDetailsQuery.data == null ? (
+            <Typography>Error</Typography>
+          ) : (
+            <Box>
+              <Box mb={3}>
+                <Breadcrumbs>
+                  <Link color="inherit" to={routes.stock.index}>
+                    Stock
+                  </Link>
+                  <Typography color="textPrimary">Vista General</Typography>
+                  <Typography color="textPrimary" style={{ textTransform: "capitalize" }}>
+                    {match.params.id
+                      ? `${stockUnitDetailsQuery.data.stockUnit.name}`
+                      : "Nueva Unidad de Inventario"}
+                  </Typography>
+                </Breadcrumbs>
+              </Box>
+              <Box mb={3}>
+                <StockUnitNameField
+                  id={get(stockUnitDetailsQuery.data.stockUnit, ["id"], "")}
+                  value={get(stockUnitDetailsQuery.data.stockUnit, ["name"], "")}
+                />
+              </Box>
+              <Grid container spacing={2}>
+                <Grid item lg={4}>
+                  <Card actions={<Button size="small">Editar</Button>}>
+                    <CardTitle>Categoría</CardTitle>
+                    <Typography
+                      variant="h5"
+                      color="inherit"
+                      style={{ textTransform: "capitalize" }}
+                    >
+                      {get(stockUnitDetailsQuery.data.stockUnit, "category.name", "")}
+                    </Typography>
+                  </Card>
+                </Grid>
+                <Grid item lg={4}>
+                  <Card
+                    actions={
+                      <Button size="small" color="inherit">
+                        Inventario
+                      </Button>
+                    }
+                  >
+                    <CardTitle>Cantidad disponible</CardTitle>
+                    <Typography variant="h5" color="inherit">
+                      3 libras
+                    </Typography>
+                  </Card>
+                </Grid>
+                <Grid item lg={4}>
+                  <Card
+                    variant="urgent"
+                    actions={
+                      <Button size="small" color="inherit">
+                        Inventario
+                      </Button>
+                    }
+                  >
+                    <CardTitle>Expira en</CardTitle>
+                    <Typography variant="h5" color="inherit">
+                      5 días
+                    </Typography>
+                  </Card>
+                </Grid>
+              </Grid>
+              <Box mt={3}>
+                <Grid container spacing={2}>
+                  <Grid item lg={6}>
+                    <Card>
+                      <CardTitle
+                        actions={
+                          <Box>
+                            <Grid container>
+                              <Grid item>
+                                <Button
+                                  variant="text"
+                                  size="small"
+                                  onClick={() => {
+                                    setDisplayStockUnitsModal(true);
+                                  }}
+                                >
+                                  Vincular
+                                </Button>
+                              </Grid>
+                            </Grid>
+                          </Box>
+                        }
+                      >
+                        Se conforma de estos componentes
+                      </CardTitle>
+                      <StockUnitComponents stockUnitID={match.params.id} />
+                    </Card>
+                  </Grid>
+                  <Grid item lg={6}>
+                    <Card>
+                      <CardTitle>Se utiliza en estas unidades</CardTitle>
+                      <List>
+                        <ListItem button>
+                          <ListItemText primary="Cazuela de Pepián" />
+                        </ListItem>
+                        <ListItem button>
+                          <ListItemText primary="Cazuela de Hilachas" />
+                        </ListItem>
+                      </List>
+                    </Card>
+                  </Grid>
+                </Grid>
+              </Box>
+            </Box>
+          )}
+        </Container>
+      </Box>
+    </div>
   );
 });
