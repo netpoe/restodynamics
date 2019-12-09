@@ -1,14 +1,14 @@
 import gql from "graphql-tag";
 
 export const QueryStockUnits = gql`
-  query StockUnit($where: StockUnitWhereInput) {
+  query QueryStockUnits($where: StockUnitWhereInput) {
     stockUnits(where: $where, orderBy: name_ASC) {
       id
       name
       category {
         name
       }
-      inventoryUnit {
+      inventoryUnits {
         id
         quantity
         createdAt

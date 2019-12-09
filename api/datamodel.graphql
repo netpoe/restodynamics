@@ -14,7 +14,7 @@ type StockUnitCategory {
 type Inventory {
   id: ID! @id @unique
   createdAt: DateTime! @createdAt
-  inventoryUnit: [InventoryUnit]
+  inventoryUnits: [InventoryUnit]
 }
 
 type InventoryUnit {
@@ -31,11 +31,8 @@ type InventoryUnit {
 
 type Component {
   id: ID! @id @unique
-  stockUnitID: ID!
   stockUnit: StockUnit!
-  quantity: String! @default(value: "0.00")
-  unit: MeasurementUnit!
-  expiresAt: DateTime
+  inventoryUnit: InventoryUnit
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
@@ -50,8 +47,8 @@ type StockUnit {
   id: ID! @id @unique
   name: String @unique
   category: StockUnitCategory
-  inventoryUnit: [InventoryUnit]
-  expenseUnit: [ExpenseUnit]
+  inventoryUnits: [InventoryUnit]
+  expenseUnits: [ExpenseUnit]
   components: [Component]
 }
 

@@ -1,4 +1,21 @@
-import { Backdrop, Box, Button, Chip, Container, Fade, Grid, List, ListItem, ListItemText, Modal, Paper, TextField, Theme, Typography, withStyles } from "@material-ui/core";
+import {
+  Backdrop,
+  Box,
+  Button,
+  Chip,
+  Container,
+  Fade,
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
+  Modal,
+  Paper,
+  TextField,
+  Theme,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
 import CachedOutlinedIcon from "@material-ui/icons/CachedOutlined";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
@@ -9,9 +26,19 @@ import React from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { CombinedError, useMutation, useQuery } from "urql";
-import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding } from "../../components";
-import { ConnectComponentsToStockUnit, CreateComponent } from "../../graphql/mutations";
-import { QueryComponents, QueryStockUnit, QueryStockUnits } from "../../graphql/queries";
+import {
+  Breadcrumbs,
+  Card,
+  CardTitle,
+  DashboardNavigationDrawer,
+  ToolbarPadding,
+} from "../../components";
+import {
+  ConnectComponentsToStockUnit,
+  CreateComponent,
+  UpsertStockUnit,
+} from "../../graphql/mutations";
+import { QueryStockUnit, QueryStockUnits } from "../../graphql/queries";
 import { routes } from "../routes";
 import { StockUnitDetailsDrawer } from "./components";
 
@@ -47,14 +74,7 @@ const StockUnitNameField = withStyles((theme: Theme) => ({
   const [name, setName] = React.useState(value);
   const [error, setError] = React.useState<CombinedError | undefined | string>(undefined);
   const [success, setSuccess] = React.useState(false);
-  const [mutation, executeMutation] = useMutation(`
-    mutation ($where: StockUnitWhereUniqueInput!, $create: StockUnitCreateInput!, $update: StockUnitUpdateInput!) {
-      upsertStockUnit(where: $where, create: $create, update: $update) {
-        id
-        name
-      }
-    }
-  `);
+  const [mutation, executeMutation] = useMutation(UpsertStockUnit);
 
   const upsert = async () => {
     if (!name) {
@@ -240,28 +260,25 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
   content: {
     flexGrow: 1,
   },
-}))(({ classes, stockUnitID }: { classes: any; stockUnitID: string }) => {
-  const [stockUnitComponentsQuery] = useQuery({
-    query: QueryComponents,
-    variables: { where: { stockUnitID } },
-  });
-
+}))(({ classes, components }: { classes: any; components: Component[] }) => {
   return (
-    <>
-      {stockUnitComponentsQuery.fetching ? (
-        <Typography>Cargando</Typography>
-      ) : stockUnitComponentsQuery.error || stockUnitComponentsQuery.data == null ? (
-        <Typography>Error</Typography>
-      ) : (
-        <List>
-          {stockUnitComponentsQuery.data.components.map((component: any, i: number) => (
-            <ListItem button key={i}>
-              <ListItemText primary={component.stockUnit.name} />
-            </ListItem>
-          ))}
-        </List>
-      )}
-    </>
+    <Box>
+      {components.map((component: any, i: number) => (
+        <Grid container key={i}>
+          <Grid item lg={6}>
+            <Typography style={{ textTransform: "capitalize" }}>
+              {component.inventoryUnit.stockUnit.name}
+            </Typography>
+          </Grid>
+          <Grid item lg={3}>
+            <Typography>{component.inventoryUnit.quantity}</Typography>
+          </Grid>
+          <Grid item lg={3}>
+            <Typography>{component.inventoryUnit.unit.symbol}</Typography>
+          </Grid>
+        </Grid>
+      ))}
+    </Box>
   );
 });
 
@@ -290,15 +307,23 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({
         new Promise(async (resolve, reject) => {
           const { data, error } = await executeCreateComponentMutation({
             data: {
-              unit: {
-                connect: {
-                  symbol: "U",
-                },
-              },
-              stockUnitID: match.params.id,
               stockUnit: {
                 connect: {
-                  id,
+                  id: match.params.id,
+                },
+              },
+              inventoryUnit: {
+                create: {
+                  stockUnit: {
+                    connect: {
+                      id,
+                    },
+                  },
+                  unit: {
+                    connect: {
+                      symbol: "U",
+                    },
+                  },
                 },
               },
             },
@@ -422,7 +447,9 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({
                       >
                         Se conforma de estos componentes
                       </CardTitle>
-                      <StockUnitComponents stockUnitID={match.params.id} />
+                      <StockUnitComponents
+                        components={stockUnitDetailsQuery.data.stockUnit.components}
+                      />
                     </Card>
                   </Grid>
                   <Grid item lg={6}>

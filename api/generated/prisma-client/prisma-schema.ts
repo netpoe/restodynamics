@@ -40,11 +40,8 @@ type BatchPayload {
 
 type Component {
   id: ID!
-  stockUnitID: ID!
   stockUnit: StockUnit!
-  quantity: String!
-  unit: MeasurementUnit!
-  expiresAt: DateTime
+  inventoryUnit: InventoryUnit
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -57,11 +54,8 @@ type ComponentConnection {
 
 input ComponentCreateInput {
   id: ID
-  stockUnitID: ID!
   stockUnit: StockUnitCreateOneWithoutComponentsInput!
-  quantity: String
-  unit: MeasurementUnitCreateOneInput!
-  expiresAt: DateTime
+  inventoryUnit: InventoryUnitCreateOneInput
 }
 
 input ComponentCreateManyWithoutStockUnitInput {
@@ -71,10 +65,7 @@ input ComponentCreateManyWithoutStockUnitInput {
 
 input ComponentCreateWithoutStockUnitInput {
   id: ID
-  stockUnitID: ID!
-  quantity: String
-  unit: MeasurementUnitCreateOneInput!
-  expiresAt: DateTime
+  inventoryUnit: InventoryUnitCreateOneInput
 }
 
 type ComponentEdge {
@@ -85,12 +76,6 @@ type ComponentEdge {
 enum ComponentOrderByInput {
   id_ASC
   id_DESC
-  stockUnitID_ASC
-  stockUnitID_DESC
-  quantity_ASC
-  quantity_DESC
-  expiresAt_ASC
-  expiresAt_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -99,9 +84,6 @@ enum ComponentOrderByInput {
 
 type ComponentPreviousValues {
   id: ID!
-  stockUnitID: ID!
-  quantity: String!
-  expiresAt: DateTime
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -121,42 +103,6 @@ input ComponentScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  stockUnitID: ID
-  stockUnitID_not: ID
-  stockUnitID_in: [ID!]
-  stockUnitID_not_in: [ID!]
-  stockUnitID_lt: ID
-  stockUnitID_lte: ID
-  stockUnitID_gt: ID
-  stockUnitID_gte: ID
-  stockUnitID_contains: ID
-  stockUnitID_not_contains: ID
-  stockUnitID_starts_with: ID
-  stockUnitID_not_starts_with: ID
-  stockUnitID_ends_with: ID
-  stockUnitID_not_ends_with: ID
-  quantity: String
-  quantity_not: String
-  quantity_in: [String!]
-  quantity_not_in: [String!]
-  quantity_lt: String
-  quantity_lte: String
-  quantity_gt: String
-  quantity_gte: String
-  quantity_contains: String
-  quantity_not_contains: String
-  quantity_starts_with: String
-  quantity_not_starts_with: String
-  quantity_ends_with: String
-  quantity_not_ends_with: String
-  expiresAt: DateTime
-  expiresAt_not: DateTime
-  expiresAt_in: [DateTime!]
-  expiresAt_not_in: [DateTime!]
-  expiresAt_lt: DateTime
-  expiresAt_lte: DateTime
-  expiresAt_gt: DateTime
-  expiresAt_gte: DateTime
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -197,23 +143,8 @@ input ComponentSubscriptionWhereInput {
 }
 
 input ComponentUpdateInput {
-  stockUnitID: ID
   stockUnit: StockUnitUpdateOneRequiredWithoutComponentsInput
-  quantity: String
-  unit: MeasurementUnitUpdateOneRequiredInput
-  expiresAt: DateTime
-}
-
-input ComponentUpdateManyDataInput {
-  stockUnitID: ID
-  quantity: String
-  expiresAt: DateTime
-}
-
-input ComponentUpdateManyMutationInput {
-  stockUnitID: ID
-  quantity: String
-  expiresAt: DateTime
+  inventoryUnit: InventoryUnitUpdateOneInput
 }
 
 input ComponentUpdateManyWithoutStockUnitInput {
@@ -225,19 +156,10 @@ input ComponentUpdateManyWithoutStockUnitInput {
   update: [ComponentUpdateWithWhereUniqueWithoutStockUnitInput!]
   upsert: [ComponentUpsertWithWhereUniqueWithoutStockUnitInput!]
   deleteMany: [ComponentScalarWhereInput!]
-  updateMany: [ComponentUpdateManyWithWhereNestedInput!]
-}
-
-input ComponentUpdateManyWithWhereNestedInput {
-  where: ComponentScalarWhereInput!
-  data: ComponentUpdateManyDataInput!
 }
 
 input ComponentUpdateWithoutStockUnitDataInput {
-  stockUnitID: ID
-  quantity: String
-  unit: MeasurementUnitUpdateOneRequiredInput
-  expiresAt: DateTime
+  inventoryUnit: InventoryUnitUpdateOneInput
 }
 
 input ComponentUpdateWithWhereUniqueWithoutStockUnitInput {
@@ -266,44 +188,8 @@ input ComponentWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  stockUnitID: ID
-  stockUnitID_not: ID
-  stockUnitID_in: [ID!]
-  stockUnitID_not_in: [ID!]
-  stockUnitID_lt: ID
-  stockUnitID_lte: ID
-  stockUnitID_gt: ID
-  stockUnitID_gte: ID
-  stockUnitID_contains: ID
-  stockUnitID_not_contains: ID
-  stockUnitID_starts_with: ID
-  stockUnitID_not_starts_with: ID
-  stockUnitID_ends_with: ID
-  stockUnitID_not_ends_with: ID
   stockUnit: StockUnitWhereInput
-  quantity: String
-  quantity_not: String
-  quantity_in: [String!]
-  quantity_not_in: [String!]
-  quantity_lt: String
-  quantity_lte: String
-  quantity_gt: String
-  quantity_gte: String
-  quantity_contains: String
-  quantity_not_contains: String
-  quantity_starts_with: String
-  quantity_not_starts_with: String
-  quantity_ends_with: String
-  quantity_not_ends_with: String
-  unit: MeasurementUnitWhereInput
-  expiresAt: DateTime
-  expiresAt_not: DateTime
-  expiresAt_in: [DateTime!]
-  expiresAt_not_in: [DateTime!]
-  expiresAt_lt: DateTime
-  expiresAt_lte: DateTime
-  expiresAt_gt: DateTime
-  expiresAt_gte: DateTime
+  inventoryUnit: InventoryUnitWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -490,7 +376,7 @@ input ExpenseUnitCreateInput {
   id: ID
   amount: String
   currency: CurrencyCreateOneInput!
-  stockUnit: StockUnitCreateOneWithoutExpenseUnitInput!
+  stockUnit: StockUnitCreateOneWithoutExpenseUnitsInput!
 }
 
 input ExpenseUnitCreateManyWithoutStockUnitInput {
@@ -592,13 +478,13 @@ input ExpenseUnitSubscriptionWhereInput {
 input ExpenseUnitUpdateDataInput {
   amount: String
   currency: CurrencyUpdateOneRequiredInput
-  stockUnit: StockUnitUpdateOneRequiredWithoutExpenseUnitInput
+  stockUnit: StockUnitUpdateOneRequiredWithoutExpenseUnitsInput
 }
 
 input ExpenseUnitUpdateInput {
   amount: String
   currency: CurrencyUpdateOneRequiredInput
-  stockUnit: StockUnitUpdateOneRequiredWithoutExpenseUnitInput
+  stockUnit: StockUnitUpdateOneRequiredWithoutExpenseUnitsInput
 }
 
 input ExpenseUnitUpdateManyDataInput {
@@ -707,7 +593,7 @@ input ExpenseUnitWhereUniqueInput {
 type Inventory {
   id: ID!
   createdAt: DateTime!
-  inventoryUnit(where: InventoryUnitWhereInput, orderBy: InventoryUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InventoryUnit!]
+  inventoryUnits(where: InventoryUnitWhereInput, orderBy: InventoryUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InventoryUnit!]
 }
 
 type InventoryConnection {
@@ -718,15 +604,15 @@ type InventoryConnection {
 
 input InventoryCreateInput {
   id: ID
-  inventoryUnit: InventoryUnitCreateManyWithoutInventoryInput
+  inventoryUnits: InventoryUnitCreateManyWithoutInventoryInput
 }
 
-input InventoryCreateOneWithoutInventoryUnitInput {
-  create: InventoryCreateWithoutInventoryUnitInput
+input InventoryCreateOneWithoutInventoryUnitsInput {
+  create: InventoryCreateWithoutInventoryUnitsInput
   connect: InventoryWhereUniqueInput
 }
 
-input InventoryCreateWithoutInventoryUnitInput {
+input InventoryCreateWithoutInventoryUnitsInput {
   id: ID
 }
 
@@ -785,11 +671,11 @@ type InventoryUnitConnection {
 
 input InventoryUnitCreateInput {
   id: ID
-  inventory: InventoryCreateOneWithoutInventoryUnitInput
+  inventory: InventoryCreateOneWithoutInventoryUnitsInput
   quantity: String
   unit: MeasurementUnitCreateOneInput!
   expenseUnit: ExpenseUnitCreateOneInput
-  stockUnit: StockUnitCreateOneWithoutInventoryUnitInput
+  stockUnit: StockUnitCreateOneWithoutInventoryUnitsInput
   expiresAt: DateTime
 }
 
@@ -803,18 +689,23 @@ input InventoryUnitCreateManyWithoutStockUnitInput {
   connect: [InventoryUnitWhereUniqueInput!]
 }
 
+input InventoryUnitCreateOneInput {
+  create: InventoryUnitCreateInput
+  connect: InventoryUnitWhereUniqueInput
+}
+
 input InventoryUnitCreateWithoutInventoryInput {
   id: ID
   quantity: String
   unit: MeasurementUnitCreateOneInput!
   expenseUnit: ExpenseUnitCreateOneInput
-  stockUnit: StockUnitCreateOneWithoutInventoryUnitInput
+  stockUnit: StockUnitCreateOneWithoutInventoryUnitsInput
   expiresAt: DateTime
 }
 
 input InventoryUnitCreateWithoutStockUnitInput {
   id: ID
-  inventory: InventoryCreateOneWithoutInventoryUnitInput
+  inventory: InventoryCreateOneWithoutInventoryUnitsInput
   quantity: String
   unit: MeasurementUnitCreateOneInput!
   expenseUnit: ExpenseUnitCreateOneInput
@@ -923,12 +814,21 @@ input InventoryUnitSubscriptionWhereInput {
   NOT: [InventoryUnitSubscriptionWhereInput!]
 }
 
-input InventoryUnitUpdateInput {
-  inventory: InventoryUpdateOneWithoutInventoryUnitInput
+input InventoryUnitUpdateDataInput {
+  inventory: InventoryUpdateOneWithoutInventoryUnitsInput
   quantity: String
   unit: MeasurementUnitUpdateOneRequiredInput
   expenseUnit: ExpenseUnitUpdateOneInput
-  stockUnit: StockUnitUpdateOneWithoutInventoryUnitInput
+  stockUnit: StockUnitUpdateOneWithoutInventoryUnitsInput
+  expiresAt: DateTime
+}
+
+input InventoryUnitUpdateInput {
+  inventory: InventoryUpdateOneWithoutInventoryUnitsInput
+  quantity: String
+  unit: MeasurementUnitUpdateOneRequiredInput
+  expenseUnit: ExpenseUnitUpdateOneInput
+  stockUnit: StockUnitUpdateOneWithoutInventoryUnitsInput
   expiresAt: DateTime
 }
 
@@ -971,16 +871,25 @@ input InventoryUnitUpdateManyWithWhereNestedInput {
   data: InventoryUnitUpdateManyDataInput!
 }
 
+input InventoryUnitUpdateOneInput {
+  create: InventoryUnitCreateInput
+  update: InventoryUnitUpdateDataInput
+  upsert: InventoryUnitUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: InventoryUnitWhereUniqueInput
+}
+
 input InventoryUnitUpdateWithoutInventoryDataInput {
   quantity: String
   unit: MeasurementUnitUpdateOneRequiredInput
   expenseUnit: ExpenseUnitUpdateOneInput
-  stockUnit: StockUnitUpdateOneWithoutInventoryUnitInput
+  stockUnit: StockUnitUpdateOneWithoutInventoryUnitsInput
   expiresAt: DateTime
 }
 
 input InventoryUnitUpdateWithoutStockUnitDataInput {
-  inventory: InventoryUpdateOneWithoutInventoryUnitInput
+  inventory: InventoryUpdateOneWithoutInventoryUnitsInput
   quantity: String
   unit: MeasurementUnitUpdateOneRequiredInput
   expenseUnit: ExpenseUnitUpdateOneInput
@@ -995,6 +904,11 @@ input InventoryUnitUpdateWithWhereUniqueWithoutInventoryInput {
 input InventoryUnitUpdateWithWhereUniqueWithoutStockUnitInput {
   where: InventoryUnitWhereUniqueInput!
   data: InventoryUnitUpdateWithoutStockUnitDataInput!
+}
+
+input InventoryUnitUpsertNestedInput {
+  update: InventoryUnitUpdateDataInput!
+  create: InventoryUnitCreateInput!
 }
 
 input InventoryUnitUpsertWithWhereUniqueWithoutInventoryInput {
@@ -1076,11 +990,11 @@ input InventoryUnitWhereUniqueInput {
 }
 
 input InventoryUpdateInput {
-  inventoryUnit: InventoryUnitUpdateManyWithoutInventoryInput
+  inventoryUnits: InventoryUnitUpdateManyWithoutInventoryInput
 }
 
-input InventoryUpdateOneWithoutInventoryUnitInput {
-  create: InventoryCreateWithoutInventoryUnitInput
+input InventoryUpdateOneWithoutInventoryUnitsInput {
+  create: InventoryCreateWithoutInventoryUnitsInput
   delete: Boolean
   disconnect: Boolean
   connect: InventoryWhereUniqueInput
@@ -1109,9 +1023,9 @@ input InventoryWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
-  inventoryUnit_every: InventoryUnitWhereInput
-  inventoryUnit_some: InventoryUnitWhereInput
-  inventoryUnit_none: InventoryUnitWhereInput
+  inventoryUnits_every: InventoryUnitWhereInput
+  inventoryUnits_some: InventoryUnitWhereInput
+  inventoryUnits_none: InventoryUnitWhereInput
   AND: [InventoryWhereInput!]
   OR: [InventoryWhereInput!]
   NOT: [InventoryWhereInput!]
@@ -1268,7 +1182,6 @@ input MeasurementUnitWhereUniqueInput {
 type Mutation {
   createComponent(data: ComponentCreateInput!): Component!
   updateComponent(data: ComponentUpdateInput!, where: ComponentWhereUniqueInput!): Component
-  updateManyComponents(data: ComponentUpdateManyMutationInput!, where: ComponentWhereInput): BatchPayload!
   upsertComponent(where: ComponentWhereUniqueInput!, create: ComponentCreateInput!, update: ComponentUpdateInput!): Component!
   deleteComponent(where: ComponentWhereUniqueInput!): Component
   deleteManyComponents(where: ComponentWhereInput): BatchPayload!
@@ -1364,8 +1277,8 @@ type StockUnit {
   id: ID!
   name: String
   category: StockUnitCategory
-  inventoryUnit(where: InventoryUnitWhereInput, orderBy: InventoryUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InventoryUnit!]
-  expenseUnit(where: ExpenseUnitWhereInput, orderBy: ExpenseUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExpenseUnit!]
+  inventoryUnits(where: InventoryUnitWhereInput, orderBy: InventoryUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [InventoryUnit!]
+  expenseUnits(where: ExpenseUnitWhereInput, orderBy: ExpenseUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExpenseUnit!]
   components(where: ComponentWhereInput, orderBy: ComponentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Component!]
 }
 
@@ -1500,8 +1413,8 @@ input StockUnitCreateInput {
   id: ID
   name: String
   category: StockUnitCategoryCreateOneInput
-  inventoryUnit: InventoryUnitCreateManyWithoutStockUnitInput
-  expenseUnit: ExpenseUnitCreateManyWithoutStockUnitInput
+  inventoryUnits: InventoryUnitCreateManyWithoutStockUnitInput
+  expenseUnits: ExpenseUnitCreateManyWithoutStockUnitInput
   components: ComponentCreateManyWithoutStockUnitInput
 }
 
@@ -1510,13 +1423,13 @@ input StockUnitCreateOneWithoutComponentsInput {
   connect: StockUnitWhereUniqueInput
 }
 
-input StockUnitCreateOneWithoutExpenseUnitInput {
-  create: StockUnitCreateWithoutExpenseUnitInput
+input StockUnitCreateOneWithoutExpenseUnitsInput {
+  create: StockUnitCreateWithoutExpenseUnitsInput
   connect: StockUnitWhereUniqueInput
 }
 
-input StockUnitCreateOneWithoutInventoryUnitInput {
-  create: StockUnitCreateWithoutInventoryUnitInput
+input StockUnitCreateOneWithoutInventoryUnitsInput {
+  create: StockUnitCreateWithoutInventoryUnitsInput
   connect: StockUnitWhereUniqueInput
 }
 
@@ -1524,23 +1437,23 @@ input StockUnitCreateWithoutComponentsInput {
   id: ID
   name: String
   category: StockUnitCategoryCreateOneInput
-  inventoryUnit: InventoryUnitCreateManyWithoutStockUnitInput
-  expenseUnit: ExpenseUnitCreateManyWithoutStockUnitInput
+  inventoryUnits: InventoryUnitCreateManyWithoutStockUnitInput
+  expenseUnits: ExpenseUnitCreateManyWithoutStockUnitInput
 }
 
-input StockUnitCreateWithoutExpenseUnitInput {
+input StockUnitCreateWithoutExpenseUnitsInput {
   id: ID
   name: String
   category: StockUnitCategoryCreateOneInput
-  inventoryUnit: InventoryUnitCreateManyWithoutStockUnitInput
+  inventoryUnits: InventoryUnitCreateManyWithoutStockUnitInput
   components: ComponentCreateManyWithoutStockUnitInput
 }
 
-input StockUnitCreateWithoutInventoryUnitInput {
+input StockUnitCreateWithoutInventoryUnitsInput {
   id: ID
   name: String
   category: StockUnitCategoryCreateOneInput
-  expenseUnit: ExpenseUnitCreateManyWithoutStockUnitInput
+  expenseUnits: ExpenseUnitCreateManyWithoutStockUnitInput
   components: ComponentCreateManyWithoutStockUnitInput
 }
 
@@ -1582,8 +1495,8 @@ input StockUnitSubscriptionWhereInput {
 input StockUnitUpdateInput {
   name: String
   category: StockUnitCategoryUpdateOneInput
-  inventoryUnit: InventoryUnitUpdateManyWithoutStockUnitInput
-  expenseUnit: ExpenseUnitUpdateManyWithoutStockUnitInput
+  inventoryUnits: InventoryUnitUpdateManyWithoutStockUnitInput
+  expenseUnits: ExpenseUnitUpdateManyWithoutStockUnitInput
   components: ComponentUpdateManyWithoutStockUnitInput
 }
 
@@ -1598,17 +1511,17 @@ input StockUnitUpdateOneRequiredWithoutComponentsInput {
   connect: StockUnitWhereUniqueInput
 }
 
-input StockUnitUpdateOneRequiredWithoutExpenseUnitInput {
-  create: StockUnitCreateWithoutExpenseUnitInput
-  update: StockUnitUpdateWithoutExpenseUnitDataInput
-  upsert: StockUnitUpsertWithoutExpenseUnitInput
+input StockUnitUpdateOneRequiredWithoutExpenseUnitsInput {
+  create: StockUnitCreateWithoutExpenseUnitsInput
+  update: StockUnitUpdateWithoutExpenseUnitsDataInput
+  upsert: StockUnitUpsertWithoutExpenseUnitsInput
   connect: StockUnitWhereUniqueInput
 }
 
-input StockUnitUpdateOneWithoutInventoryUnitInput {
-  create: StockUnitCreateWithoutInventoryUnitInput
-  update: StockUnitUpdateWithoutInventoryUnitDataInput
-  upsert: StockUnitUpsertWithoutInventoryUnitInput
+input StockUnitUpdateOneWithoutInventoryUnitsInput {
+  create: StockUnitCreateWithoutInventoryUnitsInput
+  update: StockUnitUpdateWithoutInventoryUnitsDataInput
+  upsert: StockUnitUpsertWithoutInventoryUnitsInput
   delete: Boolean
   disconnect: Boolean
   connect: StockUnitWhereUniqueInput
@@ -1617,21 +1530,21 @@ input StockUnitUpdateOneWithoutInventoryUnitInput {
 input StockUnitUpdateWithoutComponentsDataInput {
   name: String
   category: StockUnitCategoryUpdateOneInput
-  inventoryUnit: InventoryUnitUpdateManyWithoutStockUnitInput
-  expenseUnit: ExpenseUnitUpdateManyWithoutStockUnitInput
+  inventoryUnits: InventoryUnitUpdateManyWithoutStockUnitInput
+  expenseUnits: ExpenseUnitUpdateManyWithoutStockUnitInput
 }
 
-input StockUnitUpdateWithoutExpenseUnitDataInput {
+input StockUnitUpdateWithoutExpenseUnitsDataInput {
   name: String
   category: StockUnitCategoryUpdateOneInput
-  inventoryUnit: InventoryUnitUpdateManyWithoutStockUnitInput
+  inventoryUnits: InventoryUnitUpdateManyWithoutStockUnitInput
   components: ComponentUpdateManyWithoutStockUnitInput
 }
 
-input StockUnitUpdateWithoutInventoryUnitDataInput {
+input StockUnitUpdateWithoutInventoryUnitsDataInput {
   name: String
   category: StockUnitCategoryUpdateOneInput
-  expenseUnit: ExpenseUnitUpdateManyWithoutStockUnitInput
+  expenseUnits: ExpenseUnitUpdateManyWithoutStockUnitInput
   components: ComponentUpdateManyWithoutStockUnitInput
 }
 
@@ -1640,14 +1553,14 @@ input StockUnitUpsertWithoutComponentsInput {
   create: StockUnitCreateWithoutComponentsInput!
 }
 
-input StockUnitUpsertWithoutExpenseUnitInput {
-  update: StockUnitUpdateWithoutExpenseUnitDataInput!
-  create: StockUnitCreateWithoutExpenseUnitInput!
+input StockUnitUpsertWithoutExpenseUnitsInput {
+  update: StockUnitUpdateWithoutExpenseUnitsDataInput!
+  create: StockUnitCreateWithoutExpenseUnitsInput!
 }
 
-input StockUnitUpsertWithoutInventoryUnitInput {
-  update: StockUnitUpdateWithoutInventoryUnitDataInput!
-  create: StockUnitCreateWithoutInventoryUnitInput!
+input StockUnitUpsertWithoutInventoryUnitsInput {
+  update: StockUnitUpdateWithoutInventoryUnitsDataInput!
+  create: StockUnitCreateWithoutInventoryUnitsInput!
 }
 
 input StockUnitWhereInput {
@@ -1680,12 +1593,12 @@ input StockUnitWhereInput {
   name_ends_with: String
   name_not_ends_with: String
   category: StockUnitCategoryWhereInput
-  inventoryUnit_every: InventoryUnitWhereInput
-  inventoryUnit_some: InventoryUnitWhereInput
-  inventoryUnit_none: InventoryUnitWhereInput
-  expenseUnit_every: ExpenseUnitWhereInput
-  expenseUnit_some: ExpenseUnitWhereInput
-  expenseUnit_none: ExpenseUnitWhereInput
+  inventoryUnits_every: InventoryUnitWhereInput
+  inventoryUnits_some: InventoryUnitWhereInput
+  inventoryUnits_none: InventoryUnitWhereInput
+  expenseUnits_every: ExpenseUnitWhereInput
+  expenseUnits_some: ExpenseUnitWhereInput
+  expenseUnits_none: ExpenseUnitWhereInput
   components_every: ComponentWhereInput
   components_some: ComponentWhereInput
   components_none: ComponentWhereInput

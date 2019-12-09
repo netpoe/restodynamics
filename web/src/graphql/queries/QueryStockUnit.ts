@@ -8,7 +8,7 @@ export const QueryStockUnit = gql`
       category {
         name
       }
-      expenseUnit {
+      expenseUnits {
         id
         amount
         createdAt
@@ -16,7 +16,7 @@ export const QueryStockUnit = gql`
           symbol
         }
       }
-      inventoryUnit {
+      inventoryUnits {
         id
         quantity
         expiresAt
@@ -27,14 +27,24 @@ export const QueryStockUnit = gql`
         }
       }
       components {
-        quantity
-        unit {
-          symbol
-        }
+        id
         stockUnit {
           id
           name
-          category {
+        }
+        inventoryUnit {
+          quantity
+          expiresAt
+          expenseUnit {
+            amount
+            currency {
+              symbol
+            }
+          }
+          unit {
+            symbol
+          }
+          stockUnit {
             id
             name
           }
