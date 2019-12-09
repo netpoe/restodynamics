@@ -1,44 +1,18 @@
-import {
-  Backdrop,
-  Box,
-  Button,
-  Chip,
-  Container,
-  Fade,
-  Grid,
-  List,
-  ListItem,
-  ListItemText,
-  Modal,
-  Paper,
-  TextField,
-  Theme,
-  Typography,
-  withStyles,
-} from "@material-ui/core";
+import { Backdrop, Box, Button, Chip, Container, Fade, Grid, Menu, MenuItem, Modal, Paper, TextField, Theme, Typography, withStyles } from "@material-ui/core";
 import CachedOutlinedIcon from "@material-ui/icons/CachedOutlined";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
-import { Component, StockUnit } from "@netpoe/restodynamics-api";
+import { Component, MeasurementUnit, StockUnit } from "@netpoe/restodynamics-api";
 import { History } from "history";
 import { get } from "lodash";
 import React from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { CombinedError, useMutation, useQuery } from "urql";
-import {
-  Breadcrumbs,
-  Card,
-  CardTitle,
-  DashboardNavigationDrawer,
-  ToolbarPadding,
-} from "../../components";
-import {
-  ConnectComponentsToStockUnit,
-  CreateComponent,
-  UpsertStockUnit,
-} from "../../graphql/mutations";
-import { QueryStockUnit, QueryStockUnits } from "../../graphql/queries";
+import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding } from "../../components";
+import { ConnectComponentsToStockUnit, CreateComponent, UpdateComponent, UpsertStockUnit } from "../../graphql/mutations";
+import { QueryStockUnit, QueryStockUnitRelationships, QueryStockUnits } from "../../graphql/queries";
+import { styles } from "../../theme";
 import { routes } from "../routes";
 import { StockUnitDetailsDrawer } from "./components";
 
@@ -254,6 +228,10 @@ const LinkStockUnitsModal = withStyles((theme: Theme) => ({
 );
 
 export const StockUnitComponents = withStyles((theme: Theme) => ({
+  ...styles(theme),
+  stockUnitInput: {
+    fontSize: theme.typography.body1.fontSize,
+  },
   root: {
     display: "flex",
   },
@@ -261,20 +239,121 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
     flexGrow: 1,
   },
 }))(({ classes, components }: { classes: any; components: Component[] }) => {
+  const [updateComponentMutation, executeUpdateComponentMutation] = useMutation(UpdateComponent);
+  const [currentComponentID, setCurrentComponentID] = React.useState<string | null>(null);
+  const [stockUnitRelationshipsQuery] = useQuery({
+    query: QueryStockUnitRelationships,
+  });
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+
+  const updateComponentMeasurementUnitSymbol = async (
+    e: React.MouseEvent<HTMLLIElement, MouseEvent>,
+  ) => {
+    try {
+      const symbol = e.currentTarget.innerText;
+      await executeUpdateComponentMutation({
+        where: {
+          id: currentComponentID,
+        },
+        data: {
+          inventoryUnit: {
+            update: {
+              unit: {
+                connect: {
+                  symbol,
+                },
+              },
+            }
+          }
+        },
+      });
+      setAnchorEl(null);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updateComponentQuantity = async (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    if (!Boolean(e.target.value)) {
+      return;
+    }
+    try {
+      const quantity = Number(e.target.value)
+        .toFixed(2)
+        .toString();
+      await executeUpdateComponentMutation({
+        where: {
+          id,
+        },
+        data: {
+          inventoryUnit: {
+            update: {
+              quantity,
+            },
+          },
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const measurementUnits = get(stockUnitRelationshipsQuery.data, "measurementUnits", []);
+
   return (
     <Box>
       {components.map((component: any, i: number) => (
-        <Grid container key={i}>
+        <Grid container key={i} spacing={1}>
           <Grid item lg={6}>
-            <Typography style={{ textTransform: "capitalize" }}>
-              {component.inventoryUnit.stockUnit.name}
-            </Typography>
+            <Box minHeight={28} display="flex" flexDirection="column" justifyContent="center">
+              <Typography style={{ textTransform: "capitalize" }}>
+                {component.inventoryUnit.stockUnit.name}
+              </Typography>
+            </Box>
           </Grid>
-          <Grid item lg={3}>
-            <Typography>{component.inventoryUnit.quantity}</Typography>
+          <Grid item lg={2}>
+            <Box minHeight={28} display="flex" flexDirection="column" justifyContent="center">
+              <TextField
+                InputProps={{ className: `${classes.stockUnitInput} ${classes.stockUnitInputBase}` }}
+                fullWidth
+                onBlur={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  updateComponentQuantity(e, component.id);
+                }}
+                placeholder={component.inventoryUnit.quantity || "0.00"}
+              />
+            </Box>
           </Grid>
-          <Grid item lg={3}>
-            <Typography>{component.inventoryUnit.unit.symbol}</Typography>
+          <Grid item lg={2}>
+            <Box minHeight={28} display="flex" flexDirection="column" justifyContent="center">
+              <Typography
+                onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+                  setAnchorEl(e.currentTarget);
+                  setCurrentComponentID(component.id);
+                }}
+              >
+                {component.inventoryUnit.unit.symbol}
+              </Typography>
+              <Menu
+                id={`inventory-unit-measurement-symbol-${component.id}`}
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={() => {
+                  setAnchorEl(null);
+                }}
+              >
+                {measurementUnits.map((unit: MeasurementUnit, i: number) => (
+                  <MenuItem
+                    key={i}
+                    onClick={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+                      updateComponentMeasurementUnitSymbol(e);
+                    }}
+                  >
+                    {unit.symbol}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
           </Grid>
         </Grid>
       ))}
@@ -455,14 +534,6 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({
                   <Grid item lg={6}>
                     <Card>
                       <CardTitle>Se utiliza en estas unidades</CardTitle>
-                      <List>
-                        <ListItem button>
-                          <ListItemText primary="Cazuela de Pepián" />
-                        </ListItem>
-                        <ListItem button>
-                          <ListItemText primary="Cazuela de Hilachas" />
-                        </ListItem>
-                      </List>
                     </Card>
                   </Grid>
                 </Grid>
