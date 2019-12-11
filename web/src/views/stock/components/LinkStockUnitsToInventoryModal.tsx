@@ -1,14 +1,4 @@
-import {
-  Backdrop,
-  Box,
-  Button,
-  Chip,
-  Fade,
-  Modal,
-  Theme,
-  Typography,
-  withStyles,
-} from "@material-ui/core";
+import { Backdrop, Box, Button, Chip, Fade, Modal, Theme, Typography, withStyles } from "@material-ui/core";
 import { StockUnit } from "@netpoe/restodynamics-api";
 import React from "react";
 import { useQuery } from "urql";
@@ -16,39 +6,39 @@ import { Card, CardTitle } from "../../../components";
 import { QueryStockUnits } from "../../../graphql/queries";
 import { styles } from "../../../theme";
 
-export const LinkStockUnitsModal = withStyles((theme: Theme) => ({
+export const LinkStockUnitsToInventoryModal = withStyles((theme: Theme) => ({
   ...styles(theme),
 }))(
   ({
     classes,
     onClose,
-    id,
+    ids,
     onConnect,
   }: {
     classes: any;
     onClose: () => void;
-    id: string;
-    onConnect: (componentsIDs: string[]) => Promise<void>;
+    ids: string[];
+    onConnect: (stockUnitsIDs: string[]) => Promise<void>;
   }) => {
     const [open, setOpen] = React.useState(true);
-    const [selectedComponentsIDs, setSelectedComponentsIDs] = React.useState<string[]>([]);
+    const [selectedStockUnitsIDs, setSelectedStockUnitsIDs] = React.useState<string[]>([]);
     const [stockUnitsQuery] = useQuery({
       query: QueryStockUnits,
-      variables: { where: { id_not: id } },
+      variables: { where: { id_not_in: ids } },
     });
 
     const onSelectStockUnit = (id: string) => {
-      if (selectedComponentsIDs.includes(id)) {
-        selectedComponentsIDs.splice(selectedComponentsIDs.indexOf(id), 1);
-        setSelectedComponentsIDs([...selectedComponentsIDs]);
+      if (selectedStockUnitsIDs.includes(id)) {
+        selectedStockUnitsIDs.splice(selectedStockUnitsIDs.indexOf(id), 1);
+        setSelectedStockUnitsIDs([...selectedStockUnitsIDs]);
       } else {
-        setSelectedComponentsIDs([...selectedComponentsIDs, id]);
+        setSelectedStockUnitsIDs([...selectedStockUnitsIDs, id]);
       }
     };
 
     const onConnectStockUnitsIDs = async () => {
       try {
-        await onConnect(selectedComponentsIDs);
+        await onConnect(selectedStockUnitsIDs);
         onClose();
       } catch (error) {
         console.error(error);
@@ -97,9 +87,9 @@ export const LinkStockUnitsModal = withStyles((theme: Theme) => ({
                           onSelectStockUnit(stockUnit.id);
                         }}
                         variant={
-                          selectedComponentsIDs.includes(stockUnit.id) ? "outlined" : "default"
+                          selectedStockUnitsIDs.includes(stockUnit.id) ? "outlined" : "default"
                         }
-                        color={selectedComponentsIDs.includes(stockUnit.id) ? "primary" : "default"}
+                        color={selectedStockUnitsIDs.includes(stockUnit.id) ? "primary" : "default"}
                       />
                     ))}
                   </>

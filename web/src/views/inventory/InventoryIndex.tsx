@@ -1,106 +1,88 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  Grid,
-  Theme,
-  Toolbar,
-  Typography,
-  withStyles,
-} from "@material-ui/core";
+import { AppBar, Box, Button, Container, Grid, Theme, Toolbar, Typography, withStyles } from "@material-ui/core";
 import { ButtonProps } from "@material-ui/core/Button";
 import CachedOutlinedIcon from "@material-ui/icons/CachedOutlined";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import { History } from "history";
-import moment from "moment";
+import { DateTime as LuxonDateTime } from "luxon";
 import React from "react";
 import { Link } from "react-router-dom";
 import { CombinedError, useMutation, useQuery } from "urql";
-import {
-  Breadcrumbs,
-  Card,
-  CardTitle,
-  DashboardNavigationDrawer,
-  ToolbarPadding,
-} from "../../components";
-import { QueryStockUnits } from "../../graphql/queries";
+import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding } from "../../components";
+import { QueryInventories } from "../../graphql/queries/QueryInventories";
+import { styles } from "../../theme";
+import { datetime } from "../../utils";
 import { routes } from "../routes";
 
 export const InventoryIndex = withStyles((theme: Theme) => ({
-  root: {
-    display: "flex",
-  },
-  content: {
-    flexGrow: 1,
-  },
-  appBar: {
-    marginBottom: theme.spacing(3),
-    [theme.breakpoints.down("sm")]: {},
-  },
-  toolbar: {
-    justifyContent: "space-between",
-    [theme.breakpoints.down("sm")]: {},
-  },
+  ...styles(theme),
 }))(({ classes, history }: { classes: any; history: History }) => {
-  const [queryStockUnits] = useQuery({
-    query: QueryStockUnits,
+  const [inventoriesQuery] = useQuery({
+    query: QueryInventories,
   });
 
   return (
-    <div className={classes.root}>
+    <Box display="flex">
       <DashboardNavigationDrawer history={history} />
-      <Box minHeight="100vh" bgcolor="default" className={classes.content}>
-        <ToolbarPadding />
-        {queryStockUnits.fetching ? (
-          <Typography>Cargando</Typography>
-        ) : queryStockUnits.error || queryStockUnits.data == null ? (
-          <Typography>Error</Typography>
-        ) : (
-          <Container maxWidth="xl">
-            <AppBar className={classes.appBar} elevation={0} position="relative" color="default">
-              <Toolbar className={classes.toolbar} disableGutters>
-                <Breadcrumbs>
-                  <Link color="inherit" to={routes.inventory.index}>
-                    Inicio
-                  </Link>
-                  <Typography color="textPrimary">Inventario</Typography>
-                </Breadcrumbs>
-                <Box>
-                  <Grid container spacing={2}>
-                    <Grid item>
-                      <CreateInventoryButton
-                        disabled={
-                          moment(queryStockUnits.data.stockUnits[0].createdAt).format(
-                            "YYYYMMDD",
-                          ) === moment().format("YYYYMMDD")
-                        }
-                        onSuccess={(inventoryID: string) =>
-                          history.push(`${routes.inventory.overview}/${inventoryID}`)
-                        }
-                      />
+      <Box minHeight="100vh" bgcolor="default" flexGrow={1}>
+        <Container maxWidth="xl">
+          <ToolbarPadding />
+          {inventoriesQuery.fetching ? (
+            <Typography>Cargando</Typography>
+          ) : inventoriesQuery.error || inventoriesQuery.data == null ? (
+            <Typography>Error</Typography>
+          ) : (
+            <Box>
+              <AppBar className={classes.appBar} elevation={0} position="relative" color="default">
+                <Toolbar className={classes.toolbar} disableGutters>
+                  <Breadcrumbs>
+                    <Link color="inherit" to={routes.inventory.index}>
+                      Inicio
+                    </Link>
+                    <Typography color="textPrimary">Inventario</Typography>
+                  </Breadcrumbs>
+                  <Box>
+                    <Grid container spacing={2}>
+                      <Grid item>
+                        <CreateInventoryButton
+                          onSuccess={(inventoryID: string) =>
+                            history.push(`${routes.inventory.overview}/${inventoryID}`)
+                          }
+                        />
+                      </Grid>
                     </Grid>
+                  </Box>
+                </Toolbar>
+              </AppBar>
+              <Grid container spacing={2}>
+                {inventoriesQuery.data.inventories.map((inventory: any, i: number) => (
+                  <Grid item lg={4} key={i}>
+                    <Card
+                      onClick={() => history.push(`${routes.inventory.overview}/${inventory.id}`)}
+                    >
+                      <CardTitle>Fecha</CardTitle>
+                      <Typography
+                        variant="h5"
+                        color="inherit"
+                        style={{ textTransform: "capitalize" }}
+                      >
+                        {
+                          datetime.locale(inventory.createdAt)
+                            .weekdayShort
+                        }{" "}
+                        {datetime
+                          .locale(inventory.createdAt)
+                          .toLocaleString(LuxonDateTime.DATETIME_MED)}
+                      </Typography>
+                    </Card>
                   </Grid>
-                </Box>
-              </Toolbar>
-            </AppBar>
-            <Grid container spacing={2}>
-              {queryStockUnits.data.stockUnits.map((row: any, i: number) => (
-                <Grid item lg={4} key={i}>
-                  <Card onClick={() => history.push(`${routes.inventory.overview}/${row.id}`)}>
-                    <CardTitle>Fecha</CardTitle>
-                    <Typography variant="h5" color="inherit">
-                      {moment(row.createdAt).format("MMMM DD, YYYY")}
-                    </Typography>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-          </Container>
-        )}
+                ))}
+              </Grid>
+            </Box>
+          )}
+        </Container>
       </Box>
-    </div>
+    </Box>
   );
 });
 

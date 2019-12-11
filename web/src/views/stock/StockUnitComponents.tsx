@@ -1,14 +1,4 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  Grid,
-  Theme,
-  Toolbar,
-  Typography,
-  withStyles,
-} from "@material-ui/core";
+import { AppBar, Box, Button, Container, Grid, Theme, Toolbar, Typography, withStyles } from "@material-ui/core";
 import { Component } from "@netpoe/restodynamics-api";
 import { History } from "history";
 import * as math from "mathjs";
@@ -16,22 +6,12 @@ import React from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "urql";
-import {
-  Breadcrumbs,
-  Card,
-  CardTitle,
-  DashboardNavigationDrawer,
-  ToolbarPadding,
-} from "../../components";
+import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding } from "../../components";
 import { CreateComponent } from "../../graphql/mutations";
 import { QueryStockUnit } from "../../graphql/queries";
 import { styles } from "../../theme";
 import { routes } from "../routes";
-import {
-  LinkStockUnitsModal,
-  StockUnitChildComponents,
-  StockUnitDetailsDrawer,
-} from "./components";
+import { LinkStockUnitsModal, StockUnitChildComponents, StockUnitDetailsDrawer } from "./components";
 
 interface IStockUnitComponentsProps extends RouteComponentProps<{ id: string }> {
   classes: any;
@@ -45,6 +25,11 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
     query: QueryStockUnit,
     variables: {
       where: { id: match.params.id || "" },
+      componentInventoryUnitStockUnitInventoryUnitWhere: {
+        expenseUnit: {
+          amount_gte: 0,
+        }
+      },
       componentInventoryUnitStockUnitInventoryUnitOrderBy: "createdAt_DESC",
       componentInventoryUnitStockUnitInventoryUnitFirst: 1,
     },

@@ -1,18 +1,20 @@
-import { Box, Container, Grid, Menu, MenuItem, Paper, TextField, Theme, Typography, withStyles } from "@material-ui/core";
+import { AppBar, Box, Button, Container, Grid, Menu, MenuItem, Paper, TextField, Theme, Toolbar, Typography, withStyles } from "@material-ui/core";
 import { Inventory, MeasurementUnit } from "@netpoe/restodynamics-api";
 import { History } from "history";
 import { get } from "lodash";
 import { DateTime } from "luxon";
 import * as math from "mathjs";
-import React from "react";
+import { default as React } from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "urql";
 import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding } from "../../components";
-import { UpdateInventoryUnit } from "../../graphql/mutations";
+import { UpdateInventory, UpdateInventoryUnit } from "../../graphql/mutations";
 import { QueryInventory, QueryStockUnitRelationships } from "../../graphql/queries";
+import { styles } from "../../theme";
 import { datetime } from "../../utils";
 import { routes } from "../routes";
+import { LinkStockUnitsToInventoryModal } from "../stock/components";
 
 interface IInventoryOverviewProps extends RouteComponentProps<{ id: string }> {
   classes: any;
@@ -20,14 +22,9 @@ interface IInventoryOverviewProps extends RouteComponentProps<{ id: string }> {
 }
 
 export const InventoryOverview = withStyles((theme: Theme) => ({
-  content: {
-    flexGrow: 1,
-  },
+  ...styles(theme),
   stockUnitInput: {
     fontSize: theme.typography.h5.fontSize,
-    "& input::placeholder": {
-      opacity: 1,
-    },
   },
 }))(({ classes, match, history }: IInventoryOverviewProps) => {
   const [inventoryQuery] = useQuery({
@@ -39,6 +36,7 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
   });
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
   const [currentInventoryUnitID, setCurrentInventoryUnitID] = React.useState<string | null>(null);
+  const [displayLinkStockUnitsModal, setDisplayStockUnitsModal] = React.useState(false);
 
   const [updateInventoryUnitMutation, executeUpdateInventoryUnitMutation] = useMutation(
     UpdateInventoryUnit,
@@ -130,11 +128,71 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
 
   const measurementUnits = get(stockUnitRelationshipsQuery.data, "measurementUnits", []);
 
+  const [createComponentMutation, executeCreateComponentMutation] = useMutation(UpdateInventory);
+
+  const connectStockUnits = async (stockUnitsIDs: string[]) => {
+    try {
+      const mutation = (id: string): Promise<any> =>
+        new Promise(async (resolve, reject) => {
+          const { data, error } = await executeCreateComponentMutation({
+            where: {
+              id: match.params.id,
+            },
+            data: {
+              inventoryUnits: {
+                create: {
+                  quantity: "0.00",
+                  stockUnit: {
+                    connect: {
+                      id,
+                    },
+                  },
+                  expenseUnit: {
+                    create: {
+                      amount: "0.00",
+                      stockUnit: {
+                        connect: {
+                          id,
+                        },
+                      },
+                      currency: {
+                        connect: {
+                          symbol: "GTQ",
+                        },
+                      },
+                    },
+                  },
+                  unit: {
+                    connect: {
+                      symbol: "U",
+                    },
+                  },
+                },
+              },
+            },
+          });
+          resolve();
+        });
+      await Promise.all(stockUnitsIDs.map((id: string) => mutation(id)));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Box display="flex">
       <DashboardNavigationDrawer history={history} />
-      <Box minHeight="100vh" bgcolor="default" className={classes.content}>
+      <Box minHeight="100vh" bgcolor="default" flexGrow={1}>
         <ToolbarPadding />
+        {displayLinkStockUnitsModal && (
+          <LinkStockUnitsToInventoryModal
+            onConnect={connectStockUnits}
+            onClose={() => {
+              setDisplayStockUnitsModal(false);
+            }}
+            ids={inventoryQuery.data.inventory.inventoryUnits.map((inventoryUnit: any) => inventoryUnit.stockUnit.id)}
+          />
+        )}
         <Container maxWidth="xl">
           {inventoryQuery.fetching ? (
             <Typography>Cargando</Typography>
@@ -142,19 +200,36 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
             <Typography>Error</Typography>
           ) : (
             <Box>
-              <Box mb={3}>
-                <Breadcrumbs>
-                  <Link color="inherit" to={routes.inventory.index}>
-                    Inventario
-                  </Link>
-                  <Typography color="textPrimary">Vista General</Typography>
-                  <Typography color="textPrimary">
-                    {datetime
-                      .locale((inventoryQuery.data.inventory as Inventory).createdAt)
-                      .toLocaleString(DateTime.DATE_FULL)}
-                  </Typography>
-                </Breadcrumbs>
-              </Box>
+              <AppBar className={classes.appBar} elevation={0} position="relative" color="default">
+                <Toolbar className={classes.toolbar} disableGutters>
+                  <Breadcrumbs>
+                    <Link color="inherit" to={routes.inventory.index}>
+                      Inventario
+                    </Link>
+                    <Typography color="textPrimary">Vista General</Typography>
+                    <Typography color="textPrimary">
+                      {datetime
+                        .locale((inventoryQuery.data.inventory as Inventory).createdAt)
+                        .toLocaleString(DateTime.DATE_FULL)}
+                    </Typography>
+                  </Breadcrumbs>
+                  <Box>
+                    <Grid container spacing={2}>
+                      <Grid item>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => {
+                            setDisplayStockUnitsModal(true);
+                          }}
+                        >
+                          Agregar unidades
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </Toolbar>
+              </AppBar>
               <Box>
                 <Grid container spacing={2}>
                   <Grid item lg={3}>
@@ -215,9 +290,11 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                               flexDirection="column"
                               justifyContent="center"
                             >
-                              <Typography variant="h5" style={{ textTransform: "capitalize" }}>
-                                {inventoryUnit.stockUnit.name}
-                              </Typography>
+                              <Link to={`${routes.stock.overview}/${inventoryUnit.stockUnit.id}`}>
+                                <Typography variant="h5" style={{ textTransform: "capitalize" }}>
+                                  {inventoryUnit.stockUnit.name}
+                                </Typography>
+                              </Link>
                             </Box>
                           </Grid>
                           <Grid item lg={7}>
@@ -232,7 +309,9 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                                     justifyContent="center"
                                   >
                                     <TextField
-                                      InputProps={{ className: classes.stockUnitInput }}
+                                      InputProps={{
+                                        className: `${classes.stockUnitInput} ${classes.stockUnitInputBase}`,
+                                      }}
                                       fullWidth
                                       onBlur={(e: React.ChangeEvent<HTMLInputElement>) => {
                                         updateInventoryUnitQuantity(e, inventoryUnit.id);
@@ -291,7 +370,9 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                                     justifyContent="center"
                                   >
                                     <TextField
-                                      InputProps={{ className: classes.stockUnitInput }}
+                                      InputProps={{
+                                        className: `${classes.stockUnitInput} ${classes.stockUnitInputBase}`,
+                                      }}
                                       fullWidth
                                       onBlur={(e: React.ChangeEvent<HTMLInputElement>) => {
                                         updateInventoryUnitExpenseUnitAmount(e, inventoryUnit.id);

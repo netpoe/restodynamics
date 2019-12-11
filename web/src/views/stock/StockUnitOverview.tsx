@@ -1,16 +1,14 @@
 import { Box, Button, Container, Grid, Theme, Typography, withStyles } from "@material-ui/core";
-import { Component } from "@netpoe/restodynamics-api";
 import { History } from "history";
 import { get } from "lodash";
 import React from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
-import { useMutation, useQuery } from "urql";
+import { useQuery } from "urql";
 import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding } from "../../components";
-import { CreateComponent } from "../../graphql/mutations";
 import { QueryStockUnit } from "../../graphql/queries";
 import { routes } from "../routes";
-import { LinkStockUnitsModal, StockUnitDetailsDrawer, StockUnitNameField, StockUnitParentComponents } from "./components";
+import { StockUnitDetailsDrawer, StockUnitNameField, StockUnitParentComponents } from "./components";
 
 interface IStockUnitDetailsProps extends RouteComponentProps<{ id: string }> {
   classes: any;
@@ -25,60 +23,12 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({
     variables: { where: { id: match.params.id || "" } },
   });
 
-  const [createComponentMutation, executeCreateComponentMutation] = useMutation(CreateComponent);
-
-  const connectStockUnits = async (componentsIDs: string[]) => {
-    try {
-      const mutation = (id: string): Promise<Component> =>
-        new Promise(async (resolve, reject) => {
-          const { data, error } = await executeCreateComponentMutation({
-            data: {
-              stockUnit: {
-                connect: {
-                  id: match.params.id,
-                },
-              },
-              inventoryUnit: {
-                create: {
-                  stockUnit: {
-                    connect: {
-                      id,
-                    },
-                  },
-                  unit: {
-                    connect: {
-                      symbol: "U",
-                    },
-                  },
-                },
-              },
-            },
-          });
-          resolve();
-        });
-      await Promise.all(componentsIDs.map((id: string) => mutation(id)));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const [displayLinkStockUnitsModal, setDisplayStockUnitsModal] = React.useState(false);
-
   return (
     <Box display="flex">
       <DashboardNavigationDrawer history={history} />
       <StockUnitDetailsDrawer history={history} />
       <Box minHeight="100vh" bgcolor="default" flexGrow={1}>
         <ToolbarPadding />
-        {displayLinkStockUnitsModal && (
-          <LinkStockUnitsModal
-            onConnect={connectStockUnits}
-            onClose={() => {
-              setDisplayStockUnitsModal(false);
-            }}
-            id={match.params.id}
-          />
-        )}
         <Container maxWidth="xl">
           {stockUnitDetailsQuery.fetching ? (
             <Typography>Cargando</Typography>

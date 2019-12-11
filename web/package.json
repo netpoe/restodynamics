@@ -31,6 +31,9 @@
     "typescript": "3.5.3",
     "urql": "^1.3.0"
   },
+  "resolutions": {
+    "react-scripts/**/serialize-javascript": "^2.1.1"
+  },
   "prettier": {
     "trailingComma": "all",
     "printWidth": 100

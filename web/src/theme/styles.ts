@@ -14,4 +14,19 @@ export const styles = (theme: Theme) => ({
     justifyContent: "space-between",
     [theme.breakpoints.down("sm")]: {},
   },
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  stockUnitsList: {
+    backgroundColor: theme.palette.background.default,
+    minHeight: 140,
+    paddingRight: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+  },
+  chip: {
+    marginTop: theme.spacing(1),
+    marginLeft: theme.spacing(1),
+  },
 });

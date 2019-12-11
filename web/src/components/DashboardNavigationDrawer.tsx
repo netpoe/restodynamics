@@ -1,12 +1,4 @@
-import {
-  Divider,
-  Drawer,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Theme,
-} from "@material-ui/core";
+import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Theme } from "@material-ui/core";
 import ArrowBackOutlinedIcon from "@material-ui/icons/ArrowBackOutlined";
 import CategoryOutlinedIcon from "@material-ui/icons/CategoryOutlined";
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
@@ -58,12 +50,6 @@ export const DashboardNavigationDrawer = withStyles((theme: Theme) => ({
           <CategoryOutlinedIcon />
         </ListItemIcon>
         <ListItemText primary="Stock" />
-      </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <TimelapseOutlinedIcon />
-        </ListItemIcon>
-        <ListItemText primary="Productos" />
       </ListItem>
       <ListItem
         button

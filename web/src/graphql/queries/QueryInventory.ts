@@ -18,6 +18,7 @@ export const QueryInventory = gql`
           symbol
         }
         stockUnit {
+          id
           name
         }
       }
