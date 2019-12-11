@@ -9,21 +9,15 @@ import { useMutation, useQuery } from "urql";
 import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, drawerWidth, ToolbarPadding } from "../../components";
 import { CreateInventory, CreateInventoryUnit } from "../../graphql/mutations";
 import { QueryStockUnits } from "../../graphql/queries";
+import { styles } from "../../theme";
 import { datetime } from "../../utils";
 import { routes } from "../routes";
 
 export const StockUnitIndex = withStyles((theme: Theme) => ({
+  ...styles(theme),
   content: {
     flexGrow: 1,
     position: "relative",
-  },
-  appBar: {
-    marginBottom: theme.spacing(3),
-    [theme.breakpoints.down("sm")]: {},
-  },
-  toolbar: {
-    justifyContent: "space-between",
-    [theme.breakpoints.down("sm")]: {},
   },
   newInventoryCollection: {
     backgroundColor: theme.palette.primary.main,

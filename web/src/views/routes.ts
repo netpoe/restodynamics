@@ -10,6 +10,7 @@ export const routes = {
     overview: "/stock/overview",
     details: "/stock/details",
     inventory: "/stock/inventory",
+    components: "/stock/components",
     costs: "/stock/costs",
     suppliers: "/stock/suppliers",
   },

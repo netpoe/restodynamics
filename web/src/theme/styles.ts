@@ -6,4 +6,12 @@ export const styles = (theme: Theme) => ({
       opacity: 1,
     },
   },
+  appBar: {
+    marginBottom: theme.spacing(3),
+    [theme.breakpoints.down("sm")]: {},
+  },
+  toolbar: {
+    justifyContent: "space-between",
+    [theme.breakpoints.down("sm")]: {},
+  },
 });

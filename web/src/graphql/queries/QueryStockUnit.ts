@@ -1,7 +1,12 @@
 import gql from "graphql-tag";
 
 export const QueryStockUnit = gql`
-  query StockUnit($where: StockUnitWhereUniqueInput!) {
+  query StockUnit(
+    $where: StockUnitWhereUniqueInput!
+    $componentInventoryUnitStockUnitInventoryUnitWhere: InventoryUnitWhereInput
+    $componentInventoryUnitStockUnitInventoryUnitOrderBy: InventoryUnitOrderByInput
+    $componentInventoryUnitStockUnitInventoryUnitFirst: Int
+  ) {
     stockUnit(where: $where) {
       id
       name
@@ -47,6 +52,21 @@ export const QueryStockUnit = gql`
           stockUnit {
             id
             name
+            inventoryUnits(
+              orderBy: $componentInventoryUnitStockUnitInventoryUnitOrderBy
+              first: $componentInventoryUnitStockUnitInventoryUnitFirst
+              where: $componentInventoryUnitStockUnitInventoryUnitWhere
+            ) {
+              quantity
+              expiresAt
+              createdAt
+              expenseUnit {
+                amount
+                currency {
+                  symbol
+                }
+              }
+            }
           }
         }
       }

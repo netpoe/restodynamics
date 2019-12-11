@@ -10,7 +10,7 @@ import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding
 import { CreateComponent } from "../../graphql/mutations";
 import { QueryStockUnit } from "../../graphql/queries";
 import { routes } from "../routes";
-import { LinkStockUnitsModal, StockUnitComponents, StockUnitDetailsDrawer, StockUnitNameField, StockUnitParentComponents } from "./components";
+import { LinkStockUnitsModal, StockUnitDetailsDrawer, StockUnitNameField, StockUnitParentComponents } from "./components";
 
 interface IStockUnitDetailsProps extends RouteComponentProps<{ id: string }> {
   classes: any;
@@ -18,12 +18,7 @@ interface IStockUnitDetailsProps extends RouteComponentProps<{ id: string }> {
 }
 
 export const StockUnitOverview = withStyles((theme: Theme) => ({
-  root: {
-    display: "flex",
-  },
-  content: {
-    flexGrow: 1,
-  },
+  
 }))(({ classes, match, history }: IStockUnitDetailsProps) => {
   const [stockUnitDetailsQuery] = useQuery({
     query: QueryStockUnit,
@@ -70,10 +65,10 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({
   const [displayLinkStockUnitsModal, setDisplayStockUnitsModal] = React.useState(false);
 
   return (
-    <div className={classes.root}>
+    <Box display="flex">
       <DashboardNavigationDrawer history={history} />
       <StockUnitDetailsDrawer history={history} />
-      <Box minHeight="100vh" bgcolor="default" className={classes.content}>
+      <Box minHeight="100vh" bgcolor="default" flexGrow={1}>
         <ToolbarPadding />
         {displayLinkStockUnitsModal && (
           <LinkStockUnitsModal
@@ -153,7 +148,7 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({
                   </Card>
                 </Grid>
               </Grid>
-              <Box mt={3}>
+              <Box mt={2}>
                 <Grid container spacing={2}>
                   <Grid item lg={6}>
                     <Card>
@@ -166,10 +161,10 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({
                                   variant="text"
                                   size="small"
                                   onClick={() => {
-                                    setDisplayStockUnitsModal(true);
+                                    history.push(`${routes.stock.components}/${match.params.id}`);
                                   }}
                                 >
-                                  Vincular
+                                  Componentes
                                 </Button>
                               </Grid>
                             </Grid>
@@ -178,11 +173,54 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({
                       >
                         Se conforma de estos componentes
                       </CardTitle>
-                      {stockUnitDetailsQuery.data.stockUnit && (
-                        <StockUnitComponents
-                          components={stockUnitDetailsQuery.data.stockUnit.components}
-                        />
+                      <Box mt={1}>
+                      {stockUnitDetailsQuery.data.stockUnit.components.map(
+                        (component: any, i: number) => (
+                          <Grid container key={i} spacing={1}>
+                            <Grid item lg={8}>
+                              <Box
+                                minHeight={28}
+                                display="flex"
+                                flexDirection="column"
+                                justifyContent="center"
+                              >
+                                <Link
+                                  to={`${routes.stock.overview}/${component.inventoryUnit.stockUnit.id}`}
+                                >
+                                  <Typography style={{ textTransform: "capitalize" }}>
+                                    {component.inventoryUnit.stockUnit.name}
+                                  </Typography>
+                                </Link>
+                              </Box>
+                            </Grid>
+                            <Grid item lg={2}>
+                              <Box
+                                minHeight={28}
+                                display="flex"
+                                flexDirection="column"
+                                justifyContent="center"
+                                textAlign="right"
+                              >
+                                <Typography style={{ textTransform: "capitalize" }}>
+                                  {component.inventoryUnit.quantity || "0.00"}
+                                </Typography>
+                              </Box>
+                            </Grid>
+                            <Grid item lg={2}>
+                              <Box
+                                minHeight={28}
+                                display="flex"
+                                flexDirection="column"
+                                justifyContent="center"
+                                textAlign="right"
+                              >
+                                <Typography>{component.inventoryUnit.unit.symbol}</Typography>
+                              </Box>
+                            </Grid>
+                          </Grid>
+                        ),
                       )}
+                      </Box>
                     </Card>
                   </Grid>
                   <Grid item lg={6}>
@@ -199,6 +237,6 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({
           )}
         </Container>
       </Box>
-    </div>
+    </Box>
   );
 });
