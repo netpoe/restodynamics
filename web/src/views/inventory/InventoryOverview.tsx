@@ -1,15 +1,4 @@
-import {
-  Box,
-  Container,
-  Grid,
-  Menu,
-  MenuItem,
-  Paper,
-  TextField,
-  Theme,
-  Typography,
-  withStyles,
-} from "@material-ui/core";
+import { Box, Container, Grid, Menu, MenuItem, Paper, TextField, Theme, Typography, withStyles } from "@material-ui/core";
 import { Inventory, MeasurementUnit } from "@netpoe/restodynamics-api";
 import { History } from "history";
 import { get } from "lodash";
@@ -19,13 +8,7 @@ import React from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "urql";
-import {
-  Breadcrumbs,
-  Card,
-  CardTitle,
-  DashboardNavigationDrawer,
-  ToolbarPadding,
-} from "../../components";
+import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding } from "../../components";
 import { UpdateInventoryUnit } from "../../graphql/mutations";
 import { QueryInventory, QueryStockUnitRelationships } from "../../graphql/queries";
 import { datetime } from "../../utils";
@@ -196,7 +179,7 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                     <Card>
                       <CardTitle>Stock</CardTitle>
                       <Typography variant="h5" color="inherit">
-                        {inventoryQuery.data.inventory.inventoryUnit.length} unidades
+                        {inventoryQuery.data.inventory.inventoryUnits.length} unidades
                       </Typography>
                     </Card>
                   </Grid>
@@ -204,7 +187,7 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                     <Card>
                       <CardTitle>Costo Total</CardTitle>
                       <Typography variant="h5" color="inherit">
-                        {getTotalCosts(inventoryQuery.data.inventory.inventoryUnit)} GTQ
+                        {getTotalCosts(inventoryQuery.data.inventory.inventoryUnits)} GTQ
                       </Typography>
                     </Card>
                   </Grid>
@@ -219,7 +202,7 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                 </Grid>
               </Box>
               <Box pt={6}>
-                {inventoryQuery.data.inventory.inventoryUnit.map(
+                {inventoryQuery.data.inventory.inventoryUnits.map(
                   (inventoryUnit: any, i: number) => (
                     <Box mb={2} key={i}>
                       <Paper>

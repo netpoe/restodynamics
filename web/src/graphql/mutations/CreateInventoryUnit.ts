@@ -7,7 +7,7 @@ export const CreateInventoryUnit = gql`
       createdAt
       stockUnit {
         name
-        inventoryUnit {
+        inventoryUnits {
           id
           createdAt
         }

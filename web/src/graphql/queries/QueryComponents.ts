@@ -8,7 +8,7 @@ export const QueryComponents = gql`
         id
         name
       }
-      inventoryUnits {
+      inventoryUnit {
         quantity
         unit {
           symbol

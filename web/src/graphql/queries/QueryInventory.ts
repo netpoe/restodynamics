@@ -5,7 +5,7 @@ export const QueryInventory = gql`
     inventory(where: $where) {
       id
       createdAt
-      inventoryUnit {
+      inventoryUnits {
         id
         expenseUnit {
           amount
