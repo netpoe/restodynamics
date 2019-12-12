@@ -60,6 +60,9 @@ export const QueryStockUnit = gql`
               quantity
               expiresAt
               createdAt
+              unit {
+                symbol
+              }
               expenseUnit {
                 amount
                 currency {

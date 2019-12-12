@@ -10,6 +10,7 @@ import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding
 import { CreateComponent } from "../../graphql/mutations";
 import { QueryStockUnit } from "../../graphql/queries";
 import { styles } from "../../theme";
+import { getComponentCostByMeasurementUnit } from "../../utils";
 import { routes } from "../routes";
 import { LinkStockUnitsModal, StockUnitChildComponents, StockUnitDetailsDrawer } from "./components";
 
@@ -27,8 +28,8 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
       where: { id: match.params.id || "" },
       componentInventoryUnitStockUnitInventoryUnitWhere: {
         expenseUnit: {
-          amount_gte: 0,
-        }
+          amount_gte: "0.00",
+        },
       },
       componentInventoryUnitStockUnitInventoryUnitOrderBy: "createdAt_DESC",
       componentInventoryUnitStockUnitInventoryUnitFirst: 1,
@@ -76,10 +77,13 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
 
   const getEstimatedCost = () => {
     const components = stockUnitDetailsQuery.data.stockUnit.components;
+    if (components.length <= 0) {
+      return "0.00";
+    }
     return components
       .reduce((chain: math.MathJsChain, component: any) => {
         if (Boolean(component.inventoryUnit.stockUnit.inventoryUnits[0])) {
-          return chain.add(component.inventoryUnit.stockUnit.inventoryUnits[0].expenseUnit.amount);
+          return chain.add(getComponentCostByMeasurementUnit(component));
         }
         return chain.add(0);
       }, math.chain("0.00"))
@@ -99,7 +103,12 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
             onClose={() => {
               setDisplayStockUnitsModal(false);
             }}
-            id={match.params.id}
+            ids={[
+              match.params.id,
+              ...stockUnitDetailsQuery.data.stockUnit.components.map(
+                (component: any) => component.inventoryUnit.stockUnit.id,
+              ),
+            ]}
           />
         )}
         <Container maxWidth="xl">
@@ -130,7 +139,7 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
                             setDisplayStockUnitsModal(true);
                           }}
                         >
-                          Vincular
+                          Agregar componentes
                         </Button>
                       </Grid>
                     </Grid>
@@ -146,7 +155,7 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
                       color="inherit"
                       style={{ textTransform: "capitalize" }}
                     >
-                      {getEstimatedCost()}
+                      {getEstimatedCost()} GTQ
                     </Typography>
                   </Card>
                 </Grid>

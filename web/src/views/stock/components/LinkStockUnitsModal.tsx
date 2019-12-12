@@ -22,19 +22,19 @@ export const LinkStockUnitsModal = withStyles((theme: Theme) => ({
   ({
     classes,
     onClose,
-    id,
+    ids,
     onConnect,
   }: {
     classes: any;
     onClose: () => void;
-    id: string;
+    ids: string[];
     onConnect: (componentsIDs: string[]) => Promise<void>;
   }) => {
     const [open, setOpen] = React.useState(true);
     const [selectedComponentsIDs, setSelectedComponentsIDs] = React.useState<string[]>([]);
     const [stockUnitsQuery] = useQuery({
       query: QueryStockUnits,
-      variables: { where: { id_not: id } },
+      variables: { where: { id_not_in: ids } },
     });
 
     const onSelectStockUnit = (id: string) => {

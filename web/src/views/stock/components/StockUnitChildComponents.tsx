@@ -7,6 +7,7 @@ import { useMutation, useQuery } from "urql";
 import { UpdateComponent } from "../../../graphql/mutations";
 import { QueryStockUnitRelationships } from "../../../graphql/queries";
 import { styles } from "../../../theme";
+import { getComponentCostByMeasurementUnit } from "../../../utils";
 import { routes } from "../../routes";
 
 export const StockUnitChildComponents = withStyles((theme: Theme) => ({
@@ -76,6 +77,10 @@ export const StockUnitChildComponents = withStyles((theme: Theme) => ({
 
   const measurementUnits = get(stockUnitRelationshipsQuery.data, "measurementUnits", []);
 
+  const getCost = (component: any) => {
+    return getComponentCostByMeasurementUnit(component);
+  };
+
   return (
     <Box>
       {components.map((component: any, i: number) => (
@@ -99,7 +104,7 @@ export const StockUnitChildComponents = withStyles((theme: Theme) => ({
               </Grid>
               <Grid item lg={7}>
                 <Box>
-                  <Grid container>
+                  <Grid container spacing={1}>
                     <Grid item lg={2}>
                       <Box
                         px={2}
@@ -166,7 +171,10 @@ export const StockUnitChildComponents = withStyles((theme: Theme) => ({
                         display="flex"
                         flexDirection="column"
                         justifyContent="center"
-                      ></Box>
+                        textAlign="right"
+                      >
+                        <Typography variant="h5">{getCost(component)}</Typography>
+                      </Box>
                     </Grid>
                     <Grid item lg={2}>
                       <Box
@@ -175,7 +183,15 @@ export const StockUnitChildComponents = withStyles((theme: Theme) => ({
                         display="flex"
                         flexDirection="column"
                         justifyContent="center"
-                      ></Box>
+                      >
+                        <Typography variant="h5">
+                          {get(
+                            component.inventoryUnit.stockUnit,
+                            "inventoryUnits.0.expenseUnit.currency.symbol",
+                            "GTQ",
+                          )}
+                        </Typography>
+                      </Box>
                     </Grid>
                   </Grid>
                 </Box>
