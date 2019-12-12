@@ -1,27 +1,45 @@
-import { AppBar, Box, Button, Container, Grid, Theme, Toolbar, Typography, withStyles } from "@material-ui/core";
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  Grid,
+  Theme,
+  Toolbar,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
 import { Component } from "@netpoe/restodynamics-api";
-import { History } from "history";
 import * as math from "mathjs";
 import React from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "urql";
-import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding } from "../../components";
+import {
+  Breadcrumbs,
+  Card,
+  CardTitle,
+  DashboardNavigationDrawer,
+  ToolbarPadding,
+} from "../../components";
 import { CreateComponent } from "../../graphql/mutations";
 import { QueryStockUnit } from "../../graphql/queries";
 import { styles } from "../../theme";
 import { getComponentCostByMeasurementUnit } from "../../utils";
 import { routes } from "../routes";
-import { LinkStockUnitsModal, StockUnitChildComponents, StockUnitDetailsDrawer } from "./components";
+import {
+  LinkStockUnitsModal,
+  StockUnitChildComponents,
+  StockUnitDetailsDrawer,
+} from "./components";
 
 interface IStockUnitComponentsProps extends RouteComponentProps<{ id: string }> {
   classes: any;
-  history: History;
 }
 
 export const StockUnitComponents = withStyles((theme: Theme) => ({
   ...styles(theme),
-}))(({ classes, match, history }: IStockUnitComponentsProps) => {
+}))(({ classes, match, history, ...props }: IStockUnitComponentsProps) => {
   const [stockUnitDetailsQuery] = useQuery({
     query: QueryStockUnit,
     variables: {
@@ -94,7 +112,7 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
   return (
     <Box display="flex">
       <DashboardNavigationDrawer history={history} />
-      <StockUnitDetailsDrawer history={history} />
+      <StockUnitDetailsDrawer match={match} history={history} {...props} />
       <Box minHeight="100vh" bgcolor="default" flexGrow={1}>
         <ToolbarPadding />
         {displayLinkStockUnitsModal && (

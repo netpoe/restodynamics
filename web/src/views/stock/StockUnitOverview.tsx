@@ -17,7 +17,7 @@ interface IStockUnitDetailsProps extends RouteComponentProps<{ id: string }> {
 
 export const StockUnitOverview = withStyles((theme: Theme) => ({
   
-}))(({ classes, match, history }: IStockUnitDetailsProps) => {
+}))(({ classes, match, history, ...props }: IStockUnitDetailsProps) => {
   const [stockUnitDetailsQuery] = useQuery({
     query: QueryStockUnit,
     variables: { where: { id: match.params.id || "" } },
@@ -26,7 +26,7 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({
   return (
     <Box display="flex">
       <DashboardNavigationDrawer history={history} />
-      <StockUnitDetailsDrawer history={history} />
+      <StockUnitDetailsDrawer match={match} history={history} {...props} />
       <Box minHeight="100vh" bgcolor="default" flexGrow={1}>
         <ToolbarPadding />
         <Container maxWidth="xl">
