@@ -1,20 +1,6 @@
 import LuxonUtils from "@date-io/luxon";
 import { DateType } from "@date-io/type";
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  Grid,
-  Menu,
-  MenuItem,
-  Paper,
-  TextField,
-  Theme,
-  Toolbar,
-  Typography,
-  withStyles,
-} from "@material-ui/core";
+import { AppBar, Box, Button, Container, Grid, Menu, MenuItem, Paper, TextField, Theme, Toolbar, Typography, withStyles } from "@material-ui/core";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { Inventory, MeasurementUnit } from "@netpoe/restodynamics-api";
@@ -27,13 +13,7 @@ import { default as React } from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "urql";
-import {
-  Breadcrumbs,
-  Card,
-  CardTitle,
-  DashboardNavigationDrawer,
-  ToolbarPadding,
-} from "../../components";
+import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding } from "../../components";
 import { UpdateInventory, UpdateInventoryUnit } from "../../graphql/mutations";
 import { QueryInventory, QueryStockUnitRelationships } from "../../graphql/queries";
 import { styles } from "../../theme";
@@ -52,12 +32,20 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
     fontSize: theme.typography.h5.fontSize,
     "& input": {
       fontSize: theme.typography.h5.fontSize,
+      [theme.breakpoints.down("md")]: {
+        fontSize: theme.typography.body1.fontSize,
+      },
+    },
+  },
+  typography: {
+    [theme.breakpoints.down("md")]: {
+      fontSize: theme.typography.body1.fontSize,
     },
   },
 }))(({ classes, match, history }: IInventoryOverviewProps) => {
   const [inventoryQuery] = useQuery({
     query: QueryInventory,
-    variables: { where: { id: match.params.id || "" } },
+    variables: { where: { id: match.params.id || "" }, inventoryUnitsOrderBy: "expiresAt_ASC" },
   });
   const [stockUnitRelationshipsQuery] = useQuery({
     query: QueryStockUnitRelationships,
@@ -292,11 +280,11 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                 </AppBar>
                 <Box>
                   <Grid container spacing={2}>
-                    <Grid item lg={3}>
+                    <Grid item lg={4} sm={4}>
                       <Card>
                         <CardTitle>Fecha</CardTitle>
                         <Typography
-                          variant="h5"
+                          variant="h5" className={classes.typography}
                           color="inherit"
                           style={{ textTransform: "capitalize" }}
                         >
@@ -310,27 +298,19 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                         </Typography>
                       </Card>
                     </Grid>
-                    <Grid item lg={3}>
+                    <Grid item lg={4} sm={4}>
                       <Card>
                         <CardTitle>Stock</CardTitle>
-                        <Typography variant="h5" color="inherit">
+                        <Typography variant="h5" className={classes.typography} color="inherit">
                           {inventoryQuery.data.inventory.inventoryUnits.length} unidades
                         </Typography>
                       </Card>
                     </Grid>
-                    <Grid item lg={3}>
+                    <Grid item lg={4} sm={4}>
                       <Card>
                         <CardTitle>Costo Total</CardTitle>
-                        <Typography variant="h5" color="inherit">
+                        <Typography variant="h5" className={classes.typography} color="inherit">
                           {getTotalCosts(inventoryQuery.data.inventory.inventoryUnits)} GTQ
-                        </Typography>
-                      </Card>
-                    </Grid>
-                    <Grid item lg={3}>
-                      <Card variant="urgent">
-                        <CardTitle>Expiración</CardTitle>
-                        <Typography variant="h5" color="inherit">
-                          3 unidades vencen pronto
                         </Typography>
                       </Card>
                     </Grid>
@@ -339,31 +319,31 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                 <Box pt={6}>
                   <Container maxWidth="xl">
                     <Grid container spacing={2}>
-                      <Grid item lg={5}>
+                      <Grid item lg={5} sm={4}>
                         <Typography variant="overline">Nombre</Typography>
                       </Grid>
-                      <Grid item lg={7}>
+                      <Grid item lg={7} sm={8}>
                         <Box>
                           <Grid container spacing={2}>
-                            <Grid item lg={2}>
+                            <Grid item lg={2} sm={2}>
                               <Typography variant="overline" align="center">
                                 Cantidad
                               </Typography>
                             </Grid>
-                            <Grid item lg={2}>
+                            <Grid item lg={2} sm={2}>
                               <Typography variant="overline">Unidad</Typography>
                             </Grid>
-                            <Grid item lg={2}>
+                            <Grid item lg={2} sm={2}>
                               <Typography variant="overline" align="center">
                                 Costo
                               </Typography>
                             </Grid>
-                            <Grid item lg={2}>
+                            <Grid item lg={2} sm={2}>
                               <Typography variant="overline" align="center">
                                 Divisa
                               </Typography>
                             </Grid>
-                            <Grid item lg={4}>
+                            <Grid item lg={4} sm={4}>
                               <Typography variant="overline">Expiración</Typography>
                             </Grid>
                           </Grid>
@@ -377,7 +357,7 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                         <Paper>
                           <Container maxWidth="xl">
                             <Grid container spacing={2}>
-                              <Grid item lg={5}>
+                              <Grid item lg={5} sm={4}>
                                 <Box
                                   minHeight={56}
                                   display="flex"
@@ -388,7 +368,7 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                                     to={`${routes.stock.overview}/${inventoryUnit.stockUnit.id}`}
                                   >
                                     <Typography
-                                      variant="h5"
+                                      variant="h5" className={classes.typography}
                                       style={{ textTransform: "capitalize" }}
                                     >
                                       {inventoryUnit.stockUnit.name}
@@ -396,10 +376,10 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                                   </Link>
                                 </Box>
                               </Grid>
-                              <Grid item lg={7}>
+                              <Grid item lg={7} sm={8}>
                                 <Box>
                                   <Grid container spacing={2}>
-                                    <Grid item lg={2}>
+                                    <Grid item lg={2} sm={2}>
                                       <Box
                                         minHeight={56}
                                         display="flex"
@@ -418,7 +398,7 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                                         />
                                       </Box>
                                     </Grid>
-                                    <Grid item lg={2}>
+                                    <Grid item lg={2} sm={2}>
                                       <Box
                                         minHeight={56}
                                         display="flex"
@@ -426,7 +406,7 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                                         justifyContent="center"
                                       >
                                         <Typography
-                                          variant="h5"
+                                          variant="h5" className={classes.typography}
                                           onClick={(
                                             e: React.MouseEvent<HTMLElement, MouseEvent>,
                                           ) => {
@@ -462,7 +442,7 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                                         </Menu>
                                       </Box>
                                     </Grid>
-                                    <Grid item lg={2}>
+                                    <Grid item lg={2} sm={2}>
                                       <Box
                                         minHeight={56}
                                         display="flex"
@@ -484,19 +464,19 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                                         />
                                       </Box>
                                     </Grid>
-                                    <Grid item lg={2}>
+                                    <Grid item lg={2} sm={2}>
                                       <Box
                                         minHeight={56}
                                         display="flex"
                                         flexDirection="column"
                                         justifyContent="center"
                                       >
-                                        <Typography variant="h5">
+                                        <Typography variant="h5" className={classes.typography}>
                                           {inventoryUnit.expenseUnit.currency.symbol}
                                         </Typography>
                                       </Box>
                                     </Grid>
-                                    <Grid item lg={4}>
+                                    <Grid item lg={4} sm={4}>
                                       <Box
                                         minHeight={56}
                                         display="flex"
