@@ -235,7 +235,7 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
     <MuiPickersUtilsProvider utils={LuxonUtils}>
       <Box display="flex">
         <DashboardNavigationDrawer history={history} />
-        <Box minHeight="100vh" bgcolor="default" flexGrow={1}>
+        <Box minHeight="100vh" bgcolor="default" flexGrow={1} pb={6}>
           <ToolbarPadding />
           {displayLinkStockUnitsModal && (
             <LinkStockUnitsToInventoryModal
@@ -337,152 +337,192 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                   </Grid>
                 </Box>
                 <Box pt={6}>
+                  <Container maxWidth="xl">
+                    <Grid container spacing={2}>
+                      <Grid item lg={5}>
+                        <Typography variant="overline">Nombre</Typography>
+                      </Grid>
+                      <Grid item lg={7}>
+                        <Box>
+                          <Grid container spacing={2}>
+                            <Grid item lg={2}>
+                              <Typography variant="overline" align="center">
+                                Cantidad
+                              </Typography>
+                            </Grid>
+                            <Grid item lg={2}>
+                              <Typography variant="overline">Unidad</Typography>
+                            </Grid>
+                            <Grid item lg={2}>
+                              <Typography variant="overline" align="center">
+                                Costo
+                              </Typography>
+                            </Grid>
+                            <Grid item lg={2}>
+                              <Typography variant="overline" align="center">
+                                Divisa
+                              </Typography>
+                            </Grid>
+                            <Grid item lg={4}>
+                              <Typography variant="overline">Expiración</Typography>
+                            </Grid>
+                          </Grid>
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </Container>
                   {inventoryQuery.data.inventory.inventoryUnits.map(
                     (inventoryUnit: any, i: number) => (
                       <Box mb={2} key={i}>
                         <Paper>
-                          <Grid container spacing={2}>
-                            <Grid item lg={5}>
-                              <Box
-                                px={2}
-                                minHeight={56}
-                                display="flex"
-                                flexDirection="column"
-                                justifyContent="center"
-                              >
-                                <Link to={`${routes.stock.overview}/${inventoryUnit.stockUnit.id}`}>
-                                  <Typography variant="h5" style={{ textTransform: "capitalize" }}>
-                                    {inventoryUnit.stockUnit.name}
-                                  </Typography>
-                                </Link>
-                              </Box>
-                            </Grid>
-                            <Grid item lg={7}>
-                              <Box>
-                                <Grid container>
-                                  <Grid item lg={2}>
-                                    <Box
-                                      px={2}
-                                      minHeight={56}
-                                      display="flex"
-                                      flexDirection="column"
-                                      justifyContent="center"
+                          <Container maxWidth="xl">
+                            <Grid container spacing={2}>
+                              <Grid item lg={5}>
+                                <Box
+                                  minHeight={56}
+                                  display="flex"
+                                  flexDirection="column"
+                                  justifyContent="center"
+                                >
+                                  <Link
+                                    to={`${routes.stock.overview}/${inventoryUnit.stockUnit.id}`}
+                                  >
+                                    <Typography
+                                      variant="h5"
+                                      style={{ textTransform: "capitalize" }}
                                     >
-                                      <TextField
-                                        InputProps={{
-                                          className: `${classes.stockUnitInput} ${classes.stockUnitInputBase}`,
-                                        }}
-                                        fullWidth
-                                        onBlur={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                          updateInventoryUnitQuantity(e, inventoryUnit.id);
-                                        }}
-                                        placeholder={inventoryUnit.quantity || "0.00"}
-                                      />
-                                    </Box>
-                                  </Grid>
-                                  <Grid item lg={1}>
-                                    <Box
-                                      px={2}
-                                      minHeight={56}
-                                      display="flex"
-                                      flexDirection="column"
-                                      justifyContent="center"
-                                    >
-                                      <Typography
-                                        variant="h5"
-                                        onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-                                          setAnchorEl(e.currentTarget);
-                                          setCurrentInventoryUnitID(inventoryUnit.id);
-                                        }}
+                                      {inventoryUnit.stockUnit.name}
+                                    </Typography>
+                                  </Link>
+                                </Box>
+                              </Grid>
+                              <Grid item lg={7}>
+                                <Box>
+                                  <Grid container spacing={2}>
+                                    <Grid item lg={2}>
+                                      <Box
+                                        minHeight={56}
+                                        display="flex"
+                                        flexDirection="column"
+                                        justifyContent="center"
                                       >
-                                        {inventoryUnit.unit.symbol}
-                                      </Typography>
-                                      <Menu
-                                        id={`inventory-unit-measurement-symbol-${inventoryUnit.id}`}
-                                        anchorEl={anchorEl}
-                                        keepMounted
-                                        open={Boolean(anchorEl)}
-                                        onClose={() => {
-                                          setAnchorEl(null);
-                                        }}
+                                        <TextField
+                                          InputProps={{
+                                            className: `${classes.stockUnitInput} ${classes.stockUnitInputBase}`,
+                                          }}
+                                          fullWidth
+                                          onBlur={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                            updateInventoryUnitQuantity(e, inventoryUnit.id);
+                                          }}
+                                          placeholder={inventoryUnit.quantity || "0.00"}
+                                        />
+                                      </Box>
+                                    </Grid>
+                                    <Grid item lg={2}>
+                                      <Box
+                                        minHeight={56}
+                                        display="flex"
+                                        flexDirection="column"
+                                        justifyContent="center"
                                       >
-                                        {measurementUnits.map(
-                                          (unit: MeasurementUnit, i: number) => (
-                                            <MenuItem
-                                              key={i}
-                                              onClick={(
-                                                e: React.MouseEvent<HTMLLIElement, MouseEvent>,
-                                              ) => {
-                                                updateInventoryUnitMeasurementUnitSymbol(e);
-                                              }}
-                                            >
-                                              {unit.symbol}
-                                            </MenuItem>
-                                          ),
-                                        )}
-                                      </Menu>
-                                    </Box>
+                                        <Typography
+                                          variant="h5"
+                                          onClick={(
+                                            e: React.MouseEvent<HTMLElement, MouseEvent>,
+                                          ) => {
+                                            setAnchorEl(e.currentTarget);
+                                            setCurrentInventoryUnitID(inventoryUnit.id);
+                                          }}
+                                        >
+                                          {inventoryUnit.unit.symbol}
+                                        </Typography>
+                                        <Menu
+                                          id={`inventory-unit-measurement-symbol-${inventoryUnit.id}`}
+                                          anchorEl={anchorEl}
+                                          keepMounted
+                                          open={Boolean(anchorEl)}
+                                          onClose={() => {
+                                            setAnchorEl(null);
+                                          }}
+                                        >
+                                          {measurementUnits.map(
+                                            (unit: MeasurementUnit, i: number) => (
+                                              <MenuItem
+                                                key={i}
+                                                onClick={(
+                                                  e: React.MouseEvent<HTMLLIElement, MouseEvent>,
+                                                ) => {
+                                                  updateInventoryUnitMeasurementUnitSymbol(e);
+                                                }}
+                                              >
+                                                {unit.symbol}
+                                              </MenuItem>
+                                            ),
+                                          )}
+                                        </Menu>
+                                      </Box>
+                                    </Grid>
+                                    <Grid item lg={2}>
+                                      <Box
+                                        minHeight={56}
+                                        display="flex"
+                                        flexDirection="column"
+                                        justifyContent="center"
+                                      >
+                                        <TextField
+                                          InputProps={{
+                                            className: `${classes.stockUnitInput} ${classes.stockUnitInputBase}`,
+                                          }}
+                                          fullWidth
+                                          onBlur={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                            updateInventoryUnitExpenseUnitAmount(
+                                              e,
+                                              inventoryUnit.id,
+                                            );
+                                          }}
+                                          placeholder={inventoryUnit.expenseUnit.amount || "0.00"}
+                                        />
+                                      </Box>
+                                    </Grid>
+                                    <Grid item lg={2}>
+                                      <Box
+                                        minHeight={56}
+                                        display="flex"
+                                        flexDirection="column"
+                                        justifyContent="center"
+                                      >
+                                        <Typography variant="h5">
+                                          {inventoryUnit.expenseUnit.currency.symbol}
+                                        </Typography>
+                                      </Box>
+                                    </Grid>
+                                    <Grid item lg={4}>
+                                      <Box
+                                        minHeight={56}
+                                        display="flex"
+                                        flexDirection="column"
+                                        justifyContent="center"
+                                      >
+                                        <DatePicker
+                                          disablePast
+                                          variant="inline"
+                                          value={inventoryUnit.expiresAt || new Date()}
+                                          format="yyyy-MM-dd"
+                                          className={classes.stockUnitInput}
+                                          onChange={(
+                                            date: MaterialUiPickersDate | null,
+                                            value?: string | null,
+                                          ) => {
+                                            handleDateChange(inventoryUnit.id, date, value);
+                                          }}
+                                        />
+                                      </Box>
+                                    </Grid>
                                   </Grid>
-                                  <Grid item lg={2}>
-                                    <Box
-                                      px={2}
-                                      minHeight={56}
-                                      display="flex"
-                                      flexDirection="column"
-                                      justifyContent="center"
-                                    >
-                                      <TextField
-                                        InputProps={{
-                                          className: `${classes.stockUnitInput} ${classes.stockUnitInputBase}`,
-                                        }}
-                                        fullWidth
-                                        onBlur={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                          updateInventoryUnitExpenseUnitAmount(e, inventoryUnit.id);
-                                        }}
-                                        placeholder={inventoryUnit.expenseUnit.amount || "0.00"}
-                                      />
-                                    </Box>
-                                  </Grid>
-                                  <Grid item lg={2}>
-                                    <Box
-                                      px={2}
-                                      minHeight={56}
-                                      display="flex"
-                                      flexDirection="column"
-                                      justifyContent="center"
-                                    >
-                                      <Typography variant="h5">
-                                        {inventoryUnit.expenseUnit.currency.symbol}
-                                      </Typography>
-                                    </Box>
-                                  </Grid>
-                                  <Grid item lg={5}>
-                                    <Box
-                                      px={2}
-                                      minHeight={56}
-                                      display="flex"
-                                      flexDirection="column"
-                                      justifyContent="center"
-                                    >
-                                      <DatePicker
-                                        disablePast
-                                        variant="inline"
-                                        value={inventoryUnit.expiresAt || new Date()}
-                                        format="yyyy-MM-dd"
-                                        className={classes.stockUnitInput}
-                                        onChange={(
-                                          date: MaterialUiPickersDate | null,
-                                          value?: string | null,
-                                        ) => {
-                                          handleDateChange(inventoryUnit.id, date, value);
-                                        }}
-                                      />
-                                    </Box>
-                                  </Grid>
-                                </Grid>
-                              </Box>
+                                </Box>
+                              </Grid>
                             </Grid>
-                          </Grid>
+                          </Container>
                         </Paper>
                       </Box>
                     ),
