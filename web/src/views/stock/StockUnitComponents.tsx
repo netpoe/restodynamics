@@ -6,9 +6,11 @@ import {
   Grid,
   Theme,
   Toolbar,
+  Tooltip,
   Typography,
   withStyles,
 } from "@material-ui/core";
+import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
 import { Component } from "@netpoe/restodynamics-api";
 import * as math from "mathjs";
 import React from "react";
@@ -98,15 +100,43 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
     if (components.length <= 0) {
       return "0.00";
     }
-    return components
-      .reduce((chain: math.MathJsChain, component: any) => {
-        if (Boolean(component.inventoryUnit.stockUnit.inventoryUnits[0])) {
-          return chain.add(getComponentCostByMeasurementUnit(component));
-        }
-        return chain.add(0);
-      }, math.chain("0.00"))
-      .done()
-      .toFixed(2);
+    return math.round(
+      components
+        .reduce((chain: math.MathJsChain, component: any) => {
+          const inventoryUnit = component.inventoryUnit.stockUnit.inventoryUnits[0];
+          if (Boolean(inventoryUnit)) {
+            return chain.add(getComponentCostByMeasurementUnit(component));
+          }
+          return chain.add(0);
+        }, math.chain("0.00"))
+        .done(),
+      4,
+    );
+  };
+
+  const getEstimatedProductionUnits = () => {
+    return "0.00";
+    // const components = stockUnitDetailsQuery.data.stockUnit.components;
+    // if (components.length <= 0) {
+    //   return "0.00";
+    // }
+    // return math.round(
+    //   components
+    //     .reduce((chain: math.MathJsChain, component: any) => {
+    //       const inventoryUnit = component.inventoryUnit.stockUnit.inventoryUnits[0];
+    //       if (Boolean(inventoryUnit)) {
+    //         return chain.add(
+    //           math.divide(
+    //             getComponentInventoryUnitAsMathUnit(component).toNumber(),
+    //             getComponentMeasurementUnitEquivalenceToInventory(component),
+    //           ),
+    //         );
+    //       }
+    //       return chain.add(0);
+    //     }, math.chain("0.00"))
+    //     .done(),
+    //   4,
+    // );
   };
 
   return (
@@ -167,13 +197,41 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
               <Grid container spacing={2}>
                 <Grid item lg={4}>
                   <Card>
-                    <CardTitle>Costo estimado</CardTitle>
+                    <CardTitle>
+                      Costo estimado
+                      <Tooltip
+                        title="Suma total del costo de cada componente en relación a su último inventario."
+                        placement="right"
+                      >
+                        <HelpOutlineOutlinedIcon fontSize="small" style={{ fontSize: "0.9rem" }} />
+                      </Tooltip>
+                    </CardTitle>
                     <Typography
                       variant="h5"
                       color="inherit"
                       style={{ textTransform: "capitalize" }}
                     >
                       {getEstimatedCost()} GTQ
+                    </Typography>
+                  </Card>
+                </Grid>
+                <Grid item lg={4}>
+                  <Card>
+                    <CardTitle>
+                      Producción estimada
+                      <Tooltip
+                        title="Número de unidades que se pueden producir según el último inventario de cada uno de los componentes."
+                        placement="right"
+                      >
+                        <HelpOutlineOutlinedIcon fontSize="small" style={{ fontSize: "0.9rem" }} />
+                      </Tooltip>
+                    </CardTitle>
+                    <Typography
+                      variant="h5"
+                      color="inherit"
+                      style={{ textTransform: "capitalize" }}
+                    >
+                      {getEstimatedProductionUnits()} unidades
                     </Typography>
                   </Card>
                 </Grid>

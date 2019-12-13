@@ -1,4 +1,14 @@
-import { Box, Grid, Menu, MenuItem, Paper, TextField, Theme, Typography, withStyles } from "@material-ui/core";
+import {
+  Box,
+  Grid,
+  Menu,
+  MenuItem,
+  Paper,
+  TextField,
+  Theme,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
 import { Component, MeasurementUnit } from "@netpoe/restodynamics-api";
 import { get } from "lodash";
 import { default as React } from "react";
@@ -78,7 +88,7 @@ export const StockUnitChildComponents = withStyles((theme: Theme) => ({
   const measurementUnits = get(stockUnitRelationshipsQuery.data, "measurementUnits", []);
 
   const getCost = (component: any) => {
-    return getComponentCostByMeasurementUnit(component);
+    return getComponentCostByMeasurementUnit(component).toFixed(4);
   };
 
   return (
@@ -173,7 +183,9 @@ export const StockUnitChildComponents = withStyles((theme: Theme) => ({
                         justifyContent="center"
                         textAlign="right"
                       >
-                        <Typography variant="h5">{getCost(component)}</Typography>
+                        <Typography variant="h5" color="textSecondary">
+                          {getCost(component)}
+                        </Typography>
                       </Box>
                     </Grid>
                     <Grid item lg={2}>
@@ -184,7 +196,7 @@ export const StockUnitChildComponents = withStyles((theme: Theme) => ({
                         flexDirection="column"
                         justifyContent="center"
                       >
-                        <Typography variant="h5">
+                        <Typography variant="h5" color="textSecondary">
                           {get(
                             component.inventoryUnit.stockUnit,
                             "inventoryUnits.0.expenseUnit.currency.symbol",

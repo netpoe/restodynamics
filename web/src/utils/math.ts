@@ -1,25 +1,48 @@
 import * as math from "mathjs";
 
-export const getComponentCostByMeasurementUnit = (component: any) => {
+math.createUnit(
+  {
+    unit: {
+      definition: "1 oz",
+      aliases: ["u", "U"],
+    },
+  },
+  {
+    override: true,
+  },
+);
+
+export const getComponentAsMathUnit = (component: any) => {
   const componentQuantity = component.inventoryUnit.quantity;
   const componentUnitSymbol = (component.inventoryUnit.unit.symbol as string).toLowerCase();
+  if (componentUnitSymbol === "u") {
+    return math.unit("unit");
+  }
+  return math.unit(componentQuantity, componentUnitSymbol);
+};
+
+export const getComponentInventoryUnitAsMathUnit = (component: any) => {
   const inventoryUnitQuantity = component.inventoryUnit.stockUnit.inventoryUnits[0].quantity;
-  const inventoryUnitCost = component.inventoryUnit.stockUnit.inventoryUnits[0].expenseUnit.amount;
   const inventoryUnitSymbol = (component.inventoryUnit.stockUnit.inventoryUnits[0].unit
     .symbol as string).toLowerCase();
-
-  if (componentUnitSymbol === "u" || inventoryUnitSymbol === "u") {
-    return 0;
+  if (inventoryUnitSymbol === "u") {
+    return math.unit("unit");
   }
+  return math.unit(inventoryUnitQuantity, inventoryUnitSymbol);
+};
 
-  const inventoryUnit = math.unit(inventoryUnitQuantity, inventoryUnitSymbol);
-  const componentUnit = math.unit(componentQuantity, componentUnitSymbol);
+export const getComponentMeasurementUnitEquivalenceToInventory = (component: any) => {
+  return math.divide(
+    getComponentAsMathUnit(component),
+    getComponentInventoryUnitAsMathUnit(component),
+  );
+};
+
+export const getComponentCostByMeasurementUnit = (component: any) => {
+  const inventoryUnit = component.inventoryUnit.stockUnit.inventoryUnits[0];
+  const cost = Boolean(inventoryUnit) ? inventoryUnit.expenseUnit.amount : 0;
   return math
-    .round(
-      math
-        .chain(math.divide(componentUnit, inventoryUnit))
-        .multiply(inventoryUnitCost)
-        .done(),
-      4,
-    );
+    .chain(getComponentMeasurementUnitEquivalenceToInventory(component))
+    .multiply(cost)
+    .done();
 };

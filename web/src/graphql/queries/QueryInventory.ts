@@ -7,6 +7,7 @@ export const QueryInventory = gql`
       createdAt
       inventoryUnits {
         id
+        expiresAt
         expenseUnit {
           amount
           currency {

@@ -73,6 +73,7 @@ export const StockUnitIndex = withStyles((theme: Theme) => ({
                 id: inventoryID,
               },
             },
+            expiresAt: LuxonDateTime.fromJSDate(new Date()).toISO(),
             unit: {
               connect: {
                 symbol: "U",

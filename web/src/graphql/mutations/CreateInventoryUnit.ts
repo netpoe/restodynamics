@@ -5,6 +5,7 @@ export const CreateInventoryUnit = gql`
     createInventoryUnit(data: $data) {
       id
       createdAt
+      expiresAt
       stockUnit {
         name
         inventoryUnits {

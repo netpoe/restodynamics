@@ -117,14 +117,18 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
     }
   };
 
-  const getTotalCosts = (inventoryUnits: any[]) =>
-    inventoryUnits
+  const getTotalCosts = (inventoryUnits: any[]) => {
+    if (inventoryUnits.length <= 0) {
+      return "0.00";
+    }
+    return inventoryUnits
       .reduce(
         (chain: math.MathJsChain, next: any) => chain.add(next.expenseUnit.amount),
         math.chain("0.00"),
       )
       .done()
       .toFixed(2);
+  };
 
   const measurementUnits = get(stockUnitRelationshipsQuery.data, "measurementUnits", []);
 
@@ -320,7 +324,7 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                                     />
                                   </Box>
                                 </Grid>
-                                <Grid item lg={2}>
+                                <Grid item lg={1}>
                                   <Box
                                     px={2}
                                     minHeight={56}
@@ -391,6 +395,20 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                                   >
                                     <Typography variant="h5">
                                       {inventoryUnit.expenseUnit.currency.symbol}
+                                    </Typography>
+                                  </Box>
+                                </Grid>
+                                <Grid item lg={5}>
+                                  <Box
+                                    px={2}
+                                    minHeight={56}
+                                    display="flex"
+                                    flexDirection="column"
+                                    justifyContent="center"
+                                  >
+                                    <Typography variant="h5">
+                                      {datetime.locale(inventoryUnit.expiresAt).weekdayShort}{" "}
+                                      {datetime.locale(inventoryUnit.expiresAt).toLocaleString(DateTime.DATETIME_MED)}
                                     </Typography>
                                   </Box>
                                 </Grid>
