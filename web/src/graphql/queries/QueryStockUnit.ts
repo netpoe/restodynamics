@@ -5,7 +5,9 @@ export const QueryStockUnit = gql`
     $where: StockUnitWhereUniqueInput!
     $componentInventoryUnitStockUnitInventoryUnitWhere: InventoryUnitWhereInput
     $componentInventoryUnitStockUnitInventoryUnitOrderBy: InventoryUnitOrderByInput
-    $componentInventoryUnitStockUnitInventoryUnitFirst: Int
+    $componentInventoryUnitStockUnitInventoryUnitFirst: Int,
+    $inventoryUnitsOrderBy: InventoryUnitOrderByInput,
+    $inventoryUnitWhere: InventoryUnitWhereInput
   ) {
     stockUnit(where: $where) {
       id
@@ -21,11 +23,20 @@ export const QueryStockUnit = gql`
           symbol
         }
       }
-      inventoryUnits {
+      inventoryUnits (
+        orderBy: $inventoryUnitsOrderBy,
+        where: $inventoryUnitWhere
+      ) {
         id
         quantity
         expiresAt
         createdAt
+        expenseUnit {
+          amount
+          currency {
+            symbol
+          }
+        }
         unit {
           name
           symbol

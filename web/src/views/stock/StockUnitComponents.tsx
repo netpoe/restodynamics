@@ -1,15 +1,4 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  Grid,
-  Theme,
-  Toolbar,
-  Tooltip,
-  Typography,
-  withStyles,
-} from "@material-ui/core";
+import { AppBar, Box, Button, Container, Grid, Theme, Toolbar, Tooltip, Typography, withStyles } from "@material-ui/core";
 import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
 import { Component } from "@netpoe/restodynamics-api";
 import * as math from "mathjs";
@@ -17,23 +6,13 @@ import React from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "urql";
-import {
-  Breadcrumbs,
-  Card,
-  CardTitle,
-  DashboardNavigationDrawer,
-  ToolbarPadding,
-} from "../../components";
+import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding } from "../../components";
 import { CreateComponent } from "../../graphql/mutations";
 import { QueryStockUnit } from "../../graphql/queries";
 import { styles } from "../../theme";
 import { getComponentCostByMeasurementUnit } from "../../utils";
 import { routes } from "../routes";
-import {
-  LinkStockUnitsModal,
-  StockUnitChildComponents,
-  StockUnitDetailsDrawer,
-} from "./components";
+import { LinkStockUnitsModal, StockUnitChildComponents, StockUnitDetailsDrawer } from "./components";
 
 interface IStockUnitComponentsProps extends RouteComponentProps<{ id: string }> {
   classes: any;
@@ -203,7 +182,7 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
                         title="Suma total del costo de cada componente en relación a su último inventario."
                         placement="right"
                       >
-                        <HelpOutlineOutlinedIcon fontSize="small" style={{ fontSize: "0.9rem" }} />
+                        <HelpOutlineOutlinedIcon style={{ fontSize: "0.9rem" }} />
                       </Tooltip>
                     </CardTitle>
                     <Typography
@@ -218,12 +197,12 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
                 <Grid item lg={4}>
                   <Card>
                     <CardTitle>
-                      Producción estimada
+                      Porciones estimadas
                       <Tooltip
                         title="Número de unidades que se pueden producir según el último inventario de cada uno de los componentes."
                         placement="right"
                       >
-                        <HelpOutlineOutlinedIcon fontSize="small" style={{ fontSize: "0.9rem" }} />
+                        <HelpOutlineOutlinedIcon style={{ fontSize: "0.9rem" }} />
                       </Tooltip>
                     </CardTitle>
                     <Typography
@@ -237,9 +216,42 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
                 </Grid>
               </Grid>
               <Box mt={2}>
-                <Box mb={2}>
-                  <Typography variant="overline">Se conforma de estos componentes</Typography>
-                </Box>
+                <Container maxWidth="xl">
+                  <Grid container spacing={2}>
+                    <Grid item lg={5} sm={4}>
+                      <Typography variant="overline">Nombre</Typography>
+                    </Grid>
+                    <Grid item lg={7} sm={8}>
+                      <Box>
+                        <Grid container spacing={2}>
+                          <Grid item lg={2} sm={2}>
+                            <Typography variant="overline">
+                              Cantidad
+                            </Typography>
+                          </Grid>
+                          <Grid item lg={2} sm={2}>
+                            <Typography variant="overline">Unidad</Typography>
+                          </Grid>
+                          <Grid item lg={2} sm={2} style={{ textAlign: "right" }}>
+                            <Typography variant="overline">
+                              Costo
+                            </Typography>
+                          </Grid>
+                          <Grid item lg={2} sm={2}>
+                            <Typography variant="overline">
+                              Divisa
+                            </Typography>
+                          </Grid>
+                          <Grid item lg={4} sm={4}>
+                            <Typography variant="overline">
+                              Expiración
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </Container>
                 <StockUnitChildComponents
                   components={stockUnitDetailsQuery.data.stockUnit.components}
                 />

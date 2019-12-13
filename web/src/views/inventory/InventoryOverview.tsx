@@ -1,6 +1,20 @@
 import LuxonUtils from "@date-io/luxon";
 import { DateType } from "@date-io/type";
-import { AppBar, Box, Button, Container, Grid, Menu, MenuItem, Paper, TextField, Theme, Toolbar, Typography, withStyles } from "@material-ui/core";
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  Grid,
+  Menu,
+  MenuItem,
+  Paper,
+  TextField,
+  Theme,
+  Toolbar,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { Inventory, MeasurementUnit } from "@netpoe/restodynamics-api";
@@ -13,7 +27,13 @@ import { default as React } from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "urql";
-import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding } from "../../components";
+import {
+  Breadcrumbs,
+  Card,
+  CardTitle,
+  DashboardNavigationDrawer,
+  ToolbarPadding,
+} from "../../components";
 import { UpdateInventory, UpdateInventoryUnit } from "../../graphql/mutations";
 import { QueryInventory, QueryStockUnitRelationships } from "../../graphql/queries";
 import { styles } from "../../theme";
@@ -284,7 +304,8 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                       <Card>
                         <CardTitle>Fecha</CardTitle>
                         <Typography
-                          variant="h5" className={classes.typography}
+                          variant="h5"
+                          className={classes.typography}
                           color="inherit"
                           style={{ textTransform: "capitalize" }}
                         >
@@ -368,7 +389,8 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                                     to={`${routes.stock.overview}/${inventoryUnit.stockUnit.id}`}
                                   >
                                     <Typography
-                                      variant="h5" className={classes.typography}
+                                      variant="h5"
+                                      className={classes.typography}
                                       style={{ textTransform: "capitalize" }}
                                     >
                                       {inventoryUnit.stockUnit.name}
@@ -406,7 +428,8 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                                         justifyContent="center"
                                       >
                                         <Typography
-                                          variant="h5" className={classes.typography}
+                                          variant="h5"
+                                          className={classes.typography}
                                           onClick={(
                                             e: React.MouseEvent<HTMLElement, MouseEvent>,
                                           ) => {
