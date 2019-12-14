@@ -27,7 +27,11 @@ import {
 import { CreateComponent } from "../../graphql/mutations";
 import { QueryStockUnit } from "../../graphql/queries";
 import { styles } from "../../theme";
-import { getComponentCostByMeasurementUnit } from "../../utils";
+import {
+  getComponentAsMathUnit,
+  getComponentCostByMeasurementUnit,
+  getComponentInventoryUnitAsMathUnit,
+} from "../../utils";
 import { routes } from "../routes";
 import {
   LinkStockUnitsModal,
@@ -115,28 +119,22 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
   };
 
   const getEstimatedProductionUnits = () => {
-    return "0.00";
-    // const components = stockUnitDetailsQuery.data.stockUnit.components;
-    // if (components.length <= 0) {
-    //   return "0.00";
-    // }
-    // return math.round(
-    //   components
-    //     .reduce((chain: math.MathJsChain, component: any) => {
-    //       const inventoryUnit = component.inventoryUnit.stockUnit.inventoryUnits[0];
-    //       if (Boolean(inventoryUnit)) {
-    //         return chain.add(
-    //           math.divide(
-    //             getComponentInventoryUnitAsMathUnit(component).toNumber(),
-    //             getComponentMeasurementUnitEquivalenceToInventory(component),
-    //           ),
-    //         );
-    //       }
-    //       return chain.add(0);
-    //     }, math.chain("0.00"))
-    //     .done(),
-    //   4,
-    // );
+    const components = stockUnitDetailsQuery.data.stockUnit.components;
+    if (components.length <= 0) {
+      return "0.00";
+    }
+    return (components.map((component: any) => {
+      const inventoryUnit = component.inventoryUnit.stockUnit.inventoryUnits[0];
+      if (Boolean(inventoryUnit)) {
+        const quantity = math.divide(
+          getComponentInventoryUnitAsMathUnit(component),
+          getComponentAsMathUnit(component),
+        );
+        return quantity;
+      }
+    }) as number[])
+      .sort((a, b) => a - b)[0]
+      .toFixed(2);
   };
 
   return (
@@ -231,7 +229,7 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
                       color="inherit"
                       style={{ textTransform: "capitalize" }}
                     >
-                      {getEstimatedProductionUnits()} unidades
+                      {getEstimatedProductionUnits()}
                     </Typography>
                   </Card>
                 </Grid>
