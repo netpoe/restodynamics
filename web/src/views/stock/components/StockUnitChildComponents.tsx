@@ -195,11 +195,23 @@ export const StockUnitChildComponents = withStyles((theme: Theme) => ({
                           justifyContent="center"
                         >
                           <Typography variant="h5" color="textSecondary">
-                            {datetime.locale(get(
-                              component.inventoryUnit.stockUnit,
-                              "inventoryUnits.0.expiresAt",
-                              null,
-                            )).toLocaleString(DateTime.DATE_MED)}
+                            {Boolean(
+                              get(
+                                component.inventoryUnit.stockUnit,
+                                "inventoryUnits.0.expiresAt",
+                                null,
+                              ),
+                            ) ? (
+                              <>
+                                {datetime
+                                  .locale(
+                                    component.inventoryUnit.stockUnit.inventoryUnits[0].expiresAt,
+                                  )
+                                  .toLocaleString(DateTime.DATE_MED)}
+                              </>
+                            ) : (
+                              <>{"N/A"}</>
+                            )}
                           </Typography>
                         </Box>
                       </Grid>

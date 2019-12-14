@@ -1,3 +1,3 @@
 export * from "./datetime";
-export * from "./math";
+export * from "./component";
 

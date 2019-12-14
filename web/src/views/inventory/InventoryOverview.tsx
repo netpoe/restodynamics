@@ -1,20 +1,6 @@
 import LuxonUtils from "@date-io/luxon";
 import { DateType } from "@date-io/type";
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  Grid,
-  Menu,
-  MenuItem,
-  Paper,
-  TextField,
-  Theme,
-  Toolbar,
-  Typography,
-  withStyles,
-} from "@material-ui/core";
+import { AppBar, Box, Button, Container, Grid, Menu, MenuItem, Paper, TextField, Theme, Toolbar, Typography, withStyles } from "@material-ui/core";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { Inventory, MeasurementUnit } from "@netpoe/restodynamics-api";
@@ -27,13 +13,7 @@ import { default as React } from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "urql";
-import {
-  Breadcrumbs,
-  Card,
-  CardTitle,
-  DashboardNavigationDrawer,
-  ToolbarPadding,
-} from "../../components";
+import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding } from "../../components";
 import { UpdateInventory, UpdateInventoryUnit } from "../../graphql/mutations";
 import { QueryInventory, QueryStockUnitRelationships } from "../../graphql/queries";
 import { styles } from "../../theme";
@@ -65,6 +45,7 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
 }))(({ classes, match, history }: IInventoryOverviewProps) => {
   const [inventoryQuery] = useQuery({
     query: QueryInventory,
+    requestPolicy: "network-only",
     variables: { where: { id: match.params.id || "" }, inventoryUnitsOrderBy: "expiresAt_ASC" },
   });
   const [stockUnitRelationshipsQuery] = useQuery({

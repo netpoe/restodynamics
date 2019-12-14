@@ -1,4 +1,15 @@
-import { AppBar, Box, Button, Container, Grid, Theme, Toolbar, Tooltip, Typography, withStyles } from "@material-ui/core";
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  Grid,
+  Theme,
+  Toolbar,
+  Tooltip,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
 import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
 import { Component } from "@netpoe/restodynamics-api";
 import * as math from "mathjs";
@@ -6,13 +17,23 @@ import React from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "urql";
-import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding } from "../../components";
+import {
+  Breadcrumbs,
+  Card,
+  CardTitle,
+  DashboardNavigationDrawer,
+  ToolbarPadding,
+} from "../../components";
 import { CreateComponent } from "../../graphql/mutations";
 import { QueryStockUnit } from "../../graphql/queries";
 import { styles } from "../../theme";
 import { getComponentCostByMeasurementUnit } from "../../utils";
 import { routes } from "../routes";
-import { LinkStockUnitsModal, StockUnitChildComponents, StockUnitDetailsDrawer } from "./components";
+import {
+  LinkStockUnitsModal,
+  StockUnitChildComponents,
+  StockUnitDetailsDrawer,
+} from "./components";
 
 interface IStockUnitComponentsProps extends RouteComponentProps<{ id: string }> {
   classes: any;
@@ -122,7 +143,7 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
     <Box display="flex">
       <DashboardNavigationDrawer history={history} />
       <StockUnitDetailsDrawer match={match} history={history} {...props} />
-      <Box minHeight="100vh" bgcolor="default" flexGrow={1}>
+      <Box minHeight="100vh" bgcolor="default" flexGrow={1} pb={6}>
         <ToolbarPadding />
         {displayLinkStockUnitsModal && (
           <LinkStockUnitsModal
@@ -195,7 +216,7 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
                   </Card>
                 </Grid>
                 <Grid item lg={4}>
-                  <Card>
+                  <Card actions={<Button size="small">Agregar a inventario</Button>}>
                     <CardTitle>
                       Porciones estimadas
                       <Tooltip
@@ -225,27 +246,19 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
                       <Box>
                         <Grid container spacing={2}>
                           <Grid item lg={2} sm={2}>
-                            <Typography variant="overline">
-                              Cantidad
-                            </Typography>
+                            <Typography variant="overline">Cantidad</Typography>
                           </Grid>
                           <Grid item lg={2} sm={2}>
                             <Typography variant="overline">Unidad</Typography>
                           </Grid>
                           <Grid item lg={2} sm={2} style={{ textAlign: "right" }}>
-                            <Typography variant="overline">
-                              Costo
-                            </Typography>
+                            <Typography variant="overline">Costo</Typography>
                           </Grid>
                           <Grid item lg={2} sm={2}>
-                            <Typography variant="overline">
-                              Divisa
-                            </Typography>
+                            <Typography variant="overline">Divisa</Typography>
                           </Grid>
                           <Grid item lg={4} sm={4}>
-                            <Typography variant="overline">
-                              Expiración
-                            </Typography>
+                            <Typography variant="overline">Expiración</Typography>
                           </Grid>
                         </Grid>
                       </Box>

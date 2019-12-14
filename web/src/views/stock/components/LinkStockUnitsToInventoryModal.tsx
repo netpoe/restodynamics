@@ -1,4 +1,5 @@
-import { Backdrop, Box, Button, Chip, Fade, Modal, Theme, Typography, withStyles } from "@material-ui/core";
+import { Backdrop, Box, Button, Chip, Fade, Modal, Theme, Tooltip, Typography, withStyles } from "@material-ui/core";
+import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
 import { StockUnit } from "@netpoe/restodynamics-api";
 import React from "react";
 import { useQuery } from "urql";
@@ -59,12 +60,21 @@ export const LinkStockUnitsToInventoryModal = withStyles((theme: Theme) => ({
         }}
       >
         <Fade in={open}>
-          <Box maxWidth="50vh">
+          <Box maxWidth="50vw" minWidth="50vw">
             <Card
               actions={
                 <>
                   <Button onClick={onClose}>Cancelar</Button>
-                  <Button onClick={onConnectStockUnitsIDs} color="primary">
+                  <Button color="primary">
+                    Vincular existentes
+                      <Tooltip
+                        title="Importa a este inventario las unidades que no han expirado al día de hoy."
+                        placement="right"
+                      >
+                        <HelpOutlineOutlinedIcon style={{ fontSize: "0.9rem" }} />
+                      </Tooltip>
+                  </Button>
+                  <Button onClick={onConnectStockUnitsIDs} color="primary" variant="contained" style={{ marginLeft: "auto" }}>
                     Vincular
                   </Button>
                 </>

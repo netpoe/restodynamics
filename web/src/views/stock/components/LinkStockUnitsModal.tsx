@@ -1,14 +1,4 @@
-import {
-  Backdrop,
-  Box,
-  Button,
-  Chip,
-  Fade,
-  Modal,
-  Theme,
-  Typography,
-  withStyles,
-} from "@material-ui/core";
+import { Backdrop, Box, Button, Chip, Fade, Modal, Theme, Typography, withStyles } from "@material-ui/core";
 import { StockUnit } from "@netpoe/restodynamics-api";
 import React from "react";
 import { useQuery } from "urql";
@@ -69,7 +59,7 @@ export const LinkStockUnitsModal = withStyles((theme: Theme) => ({
         }}
       >
         <Fade in={open}>
-          <Box maxWidth="50vh">
+          <Box maxWidth="50vw" minWidth="50vw">
             <Card
               actions={
                 <>
