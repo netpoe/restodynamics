@@ -6,8 +6,8 @@ export const QueryStockUnit = gql`
     $componentInventoryUnitStockUnitInventoryUnitWhere: InventoryUnitWhereInput
     $componentInventoryUnitStockUnitInventoryUnitOrderBy: InventoryUnitOrderByInput
     $componentInventoryUnitStockUnitInventoryUnitFirst: Int,
-    $inventoryUnitsOrderBy: InventoryUnitOrderByInput,
-    $inventoryUnitWhere: InventoryUnitWhereInput
+  	$inventoryUnitsOrderBy: InventoryUnitOrderByInput,
+  	$inventoryUnitsWhere: InventoryUnitWhereInput
   ) {
     stockUnit(where: $where) {
       id
@@ -18,6 +18,7 @@ export const QueryStockUnit = gql`
       expenseUnits {
         id
         amount
+        formula
         createdAt
         currency {
           symbol
@@ -25,17 +26,27 @@ export const QueryStockUnit = gql`
       }
       inventoryUnits (
         orderBy: $inventoryUnitsOrderBy,
-        where: $inventoryUnitWhere
+        where: $inventoryUnitsWhere
       ) {
         id
         quantity
+        formula
         expiresAt
         createdAt
+        inventory {
+          id
+          createdAt
+        }
         expenseUnit {
           amount
+          formula
           currency {
             symbol
           }
+        }
+        inventory {
+          id
+          createdAt
         }
         unit {
           name
@@ -50,9 +61,11 @@ export const QueryStockUnit = gql`
         }
         inventoryUnit {
           quantity
+          formula
           expiresAt
           expenseUnit {
             amount
+            formula
             currency {
               symbol
             }
@@ -69,6 +82,7 @@ export const QueryStockUnit = gql`
               where: $componentInventoryUnitStockUnitInventoryUnitWhere
             ) {
               quantity
+              formula
               expiresAt
               createdAt
               unit {
@@ -76,6 +90,7 @@ export const QueryStockUnit = gql`
               }
               expenseUnit {
                 amount
+                formula
                 currency {
                   symbol
                 }

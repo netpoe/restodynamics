@@ -29,20 +29,31 @@ export const getComponentInventoryUnitAsMathUnit = (component: any) => {
 };
 
 export const getComponentMeasurementUnitEquivalenceToInventory = (component: any) => {
-  return math.divide(
-    getComponentAsMathUnit(component),
-    getComponentInventoryUnitAsMathUnit(component),
-  );
+  try {
+    return math.divide(
+      getComponentAsMathUnit(component),
+      getComponentInventoryUnitAsMathUnit(component),
+    );
+  } catch (error) {
+    console.error(error);
+    return 0;
+  }
 };
 
-export const getComponentCostByMeasurementUnit = (component: any) => {
+export const getComponentCostByMeasurementUnit = (component: any): number => {
   const inventoryUnit = component.inventoryUnit.stockUnit.inventoryUnits[0];
   if (!Boolean(inventoryUnit)) {
     return 0;
   }
   const cost = Boolean(inventoryUnit) ? inventoryUnit.expenseUnit.amount : 0;
-  return math
-    .chain(getComponentMeasurementUnitEquivalenceToInventory(component))
-    .multiply(cost)
-    .done();
+  try {
+    const result = math
+      .chain(getComponentMeasurementUnitEquivalenceToInventory(component))
+      .multiply(cost)
+      .done(); // .done() may return a Unit when units' taxonomy do not match
+    return typeof result === "object" ? 0 : result;
+  } catch (error) {
+    console.error(error);
+    return 0;
+  }
 };

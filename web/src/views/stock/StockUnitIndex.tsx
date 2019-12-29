@@ -15,10 +15,6 @@ import { routes } from "../routes";
 
 export const StockUnitIndex = withStyles((theme: Theme) => ({
   ...styles(theme),
-  content: {
-    flexGrow: 1,
-    position: "relative",
-  },
   newInventoryCollection: {
     backgroundColor: theme.palette.primary.main,
     width: "100%",
@@ -115,7 +111,7 @@ export const StockUnitIndex = withStyles((theme: Theme) => ({
   return (
     <Box display="flex">
       <DashboardNavigationDrawer history={history} />
-      <Box minHeight="200vh" bgcolor="default" className={classes.content}>
+      <Box minHeight="200vh" bgcolor="default" position="relative" pb={6} flexGrow={1}>
         <ToolbarPadding />
         <Container maxWidth="xl">
           {stockUnitsQuery.fetching ? (

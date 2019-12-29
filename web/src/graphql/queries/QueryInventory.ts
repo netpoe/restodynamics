@@ -21,6 +21,9 @@ export const QueryInventory = gql`
         stockUnit {
           id
           name
+          components {
+            id
+          }
         }
       }
     }

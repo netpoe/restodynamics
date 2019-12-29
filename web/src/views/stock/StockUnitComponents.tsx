@@ -48,6 +48,7 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
 }))(({ classes, match, history, ...props }: IStockUnitComponentsProps) => {
   const [stockUnitDetailsQuery] = useQuery({
     query: QueryStockUnit,
+    requestPolicy: "network-only",
     variables: {
       where: { id: match.params.id || "" },
       componentInventoryUnitStockUnitInventoryUnitWhere: {
@@ -129,8 +130,8 @@ export const StockUnitComponents = withStyles((theme: Theme) => ({
         const quantity = math.divide(
           getComponentInventoryUnitAsMathUnit(component),
           getComponentAsMathUnit(component),
-        );
-        return quantity;
+        ); // this may return a Unit when units' taxonomy do not match
+        return typeof quantity === "object" ? 0 : quantity;
       }
     }) as number[])
       .sort((a, b) => a - b)[0]

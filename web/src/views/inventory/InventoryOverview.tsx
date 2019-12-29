@@ -1,6 +1,8 @@
 import LuxonUtils from "@date-io/luxon";
 import { DateType } from "@date-io/type";
-import { AppBar, Box, Button, Container, Grid, Menu, MenuItem, Paper, TextField, Theme, Toolbar, Typography, withStyles } from "@material-ui/core";
+import { AppBar, Box, Button, Container, Grid, Menu, MenuItem, Paper, TextField, Theme, Toolbar, Tooltip, Typography, withStyles } from "@material-ui/core";
+import DonutLargeOutlinedIcon from "@material-ui/icons/DonutLargeOutlined";
+import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { Inventory, MeasurementUnit } from "@netpoe/restodynamics-api";
@@ -42,6 +44,19 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
       fontSize: theme.typography.body1.fontSize,
     },
   },
+  stockUnitIndicatorsBox: {
+    position: "absolute",
+    left: 0,
+    top: -8,
+    background: "whitesmoke",
+    padding: "3px 4px",
+    minWidth: 70,
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: "column",
+    borderBottomLeftRadius: 3,
+    borderBottomRightRadius: 3,
+  },
 }))(({ classes, match, history }: IInventoryOverviewProps) => {
   const [inventoryQuery] = useQuery({
     query: QueryInventory,
@@ -67,9 +82,7 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
       return;
     }
     try {
-      const quantity = Number(e.target.value)
-        .toFixed(2)
-        .toString();
+      const quantity = math.round(Number(math.evaluate(e.target.value)), 2).toString();
       await executeUpdateInventoryUnitMutation({
         where: {
           id,
@@ -91,9 +104,7 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
       return;
     }
     try {
-      const amount = Number(e.target.value)
-        .toFixed(2)
-        .toString();
+      const amount = math.round(Number(math.evaluate(e.target.value)), 2).toString();
       await executeUpdateInventoryUnitMutation({
         where: {
           id,
@@ -139,10 +150,12 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
       return "0.00";
     }
     return inventoryUnits
-      .reduce(
-        (chain: math.MathJsChain, next: any) => chain.add(next.expenseUnit.amount),
-        math.chain("0.00"),
-      )
+      .reduce((chain: math.MathJsChain, inventoryUnit: any) => {
+        if (inventoryUnit.stockUnit.components.length > 0) {
+          return chain.add(0);
+        }
+        return chain.add(inventoryUnit.expenseUnit.amount);
+      }, math.chain("0.00"))
       .done()
       .toFixed(2);
   };
@@ -310,7 +323,15 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                     </Grid>
                     <Grid item lg={4} sm={4}>
                       <Card>
-                        <CardTitle>Costo Total</CardTitle>
+                        <CardTitle>
+                          Costo Total
+                          <Tooltip
+                            title="El costo total excluye el costo de las unidades de este inventario compuestas por 1 o más componentes."
+                            placement="right"
+                          >
+                            <HelpOutlineOutlinedIcon style={{ fontSize: "0.9rem" }} />
+                          </Tooltip>
+                        </CardTitle>
                         <Typography variant="h5" className={classes.typography} color="inherit">
                           {getTotalCosts(inventoryQuery.data.inventory.inventoryUnits)} GTQ
                         </Typography>
@@ -365,7 +386,18 @@ export const InventoryOverview = withStyles((theme: Theme) => ({
                                   display="flex"
                                   flexDirection="column"
                                   justifyContent="center"
+                                  position="relative"
                                 >
+                                  {inventoryUnit.stockUnit.components.length > 0 && (
+                                    <Box className={classes.stockUnitIndicatorsBox}>
+                                      <Tooltip
+                                        title="Unidad compuesta. * 1 o más componentes."
+                                        placement="right"
+                                      >
+                                        <DonutLargeOutlinedIcon style={{ fontSize: "0.9rem" }} />
+                                      </Tooltip>
+                                    </Box>
+                                  )}
                                   <Link
                                     to={`${routes.stock.overview}/${inventoryUnit.stockUnit.id}`}
                                   >

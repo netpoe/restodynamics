@@ -1,4 +1,13 @@
-import { Box, Button, Container, Grid, Theme, Tooltip, Typography, withStyles } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Theme,
+  Tooltip,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
 import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
 import { History } from "history";
 import { get } from "lodash";
@@ -7,11 +16,21 @@ import React from "react";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { useQuery } from "urql";
-import { Breadcrumbs, Card, CardTitle, DashboardNavigationDrawer, ToolbarPadding } from "../../components";
+import {
+  Breadcrumbs,
+  Card,
+  CardTitle,
+  DashboardNavigationDrawer,
+  ToolbarPadding,
+} from "../../components";
 import { QueryStockUnit } from "../../graphql/queries";
 import { datetime } from "../../utils";
 import { routes } from "../routes";
-import { StockUnitDetailsDrawer, StockUnitNameField, StockUnitParentComponents } from "./components";
+import {
+  StockUnitDetailsDrawer,
+  StockUnitNameField,
+  StockUnitParentComponents,
+} from "./components";
 
 interface IStockUnitDetailsProps extends RouteComponentProps<{ id: string }> {
   classes: any;
@@ -27,7 +46,7 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({}))(
           id: match.params.id || "",
         },
         inventoryUnitsOrderBy: "createdAt_DESC",
-        inventoryUnitWhere: {
+        inventoryUnitsWhere: {
           inventory: {
             id_not: null,
           },
@@ -89,14 +108,12 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({}))(
                       }
                     >
                       <CardTitle>
-                        Cantidad disponible 
+                        Cantidad disponible
                         <Tooltip
                           title="Cantidad disponible según el último inventario"
                           placement="right"
                         >
-                          <HelpOutlineOutlinedIcon
-                            style={{ fontSize: "0.9rem" }}
-                          />
+                          <HelpOutlineOutlinedIcon style={{ fontSize: "0.9rem" }} />
                         </Tooltip>
                       </CardTitle>
                       <Typography variant="h5" color="inherit">
@@ -109,11 +126,14 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({}))(
                           stockUnitDetailsQuery.data.stockUnit,
                           "inventoryUnits.0.unit.name",
                           "",
-                        )}{" a "}{get(
+                        )}
+                        {" a "}
+                        {get(
                           stockUnitDetailsQuery.data.stockUnit,
                           "inventoryUnits.0.expenseUnit.amount",
                           "0",
-                        )}{" "}{get(
+                        )}{" "}
+                        {get(
                           stockUnitDetailsQuery.data.stockUnit,
                           "inventoryUnits.0.expenseUnit.currency.symbol",
                           "",
@@ -132,11 +152,15 @@ export const StockUnitOverview = withStyles((theme: Theme) => ({}))(
                     >
                       <CardTitle>Expira en</CardTitle>
                       <Typography variant="h5" color="inherit">
-                        {datetime.locale(get(
-                          stockUnitDetailsQuery.data.stockUnit,
-                          "inventoryUnits.0.expiresAt",
-                          null,
-                        )).toLocaleString(DateTime.DATE_MED)}
+                        {datetime
+                          .locale(
+                            get(
+                              stockUnitDetailsQuery.data.stockUnit,
+                              "inventoryUnits.0.expiresAt",
+                              null,
+                            ),
+                          )
+                          .toLocaleString(DateTime.DATE_MED)}
                       </Typography>
                     </Card>
                   </Grid>

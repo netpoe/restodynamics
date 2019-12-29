@@ -1,7 +1,19 @@
-import { Box, Container, Grid, Menu, MenuItem, Paper, TextField, Theme, Typography, withStyles } from "@material-ui/core";
+import {
+  Box,
+  Container,
+  Grid,
+  Menu,
+  MenuItem,
+  Paper,
+  TextField,
+  Theme,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
 import { Component, MeasurementUnit } from "@netpoe/restodynamics-api";
 import { get } from "lodash";
 import { DateTime } from "luxon";
+import * as math from "mathjs";
 import { default as React } from "react";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "urql";
@@ -56,9 +68,8 @@ export const StockUnitChildComponents = withStyles((theme: Theme) => ({
       return;
     }
     try {
-      const quantity = Number(e.target.value)
-        .toFixed(2)
-        .toString();
+      const formula = e.target.value;
+      const quantity = math.round(Number(math.evaluate(formula)), 2).toString();
       await executeUpdateComponentMutation({
         where: {
           id,
@@ -67,6 +78,7 @@ export const StockUnitChildComponents = withStyles((theme: Theme) => ({
           inventoryUnit: {
             update: {
               quantity,
+              formula,
             },
           },
         },
@@ -116,6 +128,7 @@ export const StockUnitChildComponents = withStyles((theme: Theme) => ({
                             onBlur={(e: React.ChangeEvent<HTMLInputElement>) => {
                               updateComponentQuantity(e, component.id);
                             }}
+                            helperText={component.inventoryUnit.formula}
                             placeholder={component.inventoryUnit.quantity || "0.00"}
                           />
                         </Box>

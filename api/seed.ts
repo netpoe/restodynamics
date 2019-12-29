@@ -69,24 +69,32 @@ async function createMeasurementUnits() {
     symbol: "MANJ",
   });
   await prisma.$graphql(CreateMeasurementUnit, {
-    name: "Onzas",
+    name: "Onza",
     symbol: "OZ",
   });
   await prisma.$graphql(CreateMeasurementUnit, {
-    name: "Kilogramos",
+    name: "Kilogramo",
     symbol: "KG",
   });
   await prisma.$graphql(CreateMeasurementUnit, {
-    name: "Gramos",
+    name: "Gramo",
     symbol: "G",
   });
   await prisma.$graphql(CreateMeasurementUnit, {
-    name: "Litros",
+    name: "Litro",
     symbol: "L",
   });
   await prisma.$graphql(CreateMeasurementUnit, {
-    name: "Mililitros",
+    name: "Mililitro",
     symbol: "ML",
+  });
+  await prisma.$graphql(CreateMeasurementUnit, {
+    name: "Hora",
+    symbol: "HR",
+  });
+  await prisma.$graphql(CreateMeasurementUnit, {
+    name: "Minuto",
+    symbol: "MIN",
   });
 }
 

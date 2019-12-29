@@ -1,6 +1,7 @@
 type ExpenseUnit {
   id: ID! @id @unique
   amount: String! @default(value: "0.00")
+  formula: String
   currency: Currency!
   stockUnit: StockUnit!
   createdAt: DateTime! @createdAt
@@ -22,6 +23,7 @@ type InventoryUnit {
   id: ID! @id @unique
   inventory: Inventory
   quantity: String! @default(value: "0.00")
+  formula: String
   unit: MeasurementUnit!
   expenseUnit: ExpenseUnit
   stockUnit: StockUnit

@@ -4,7 +4,6 @@ import AttachMoneyOutlinedIcon from "@material-ui/icons/AttachMoneyOutlined";
 import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined";
 import DonutLargeOutlinedIcon from "@material-ui/icons/DonutLargeOutlined";
 import GroupOutlinedIcon from "@material-ui/icons/GroupOutlined";
-import ListOutlinedIcon from "@material-ui/icons/ListOutlined";
 import TimelapseOutlinedIcon from "@material-ui/icons/TimelapseOutlined";
 import { withStyles } from "@material-ui/styles";
 import React from "react";
@@ -60,13 +59,13 @@ export const StockUnitDetailsDrawer = withStyles((theme: Theme) => ({
           </ListItemIcon>
           <ListItemText primary="Componentes" />
         </ListItem>
-        <ListItem button selected={isSelected(routes.stock.details)}>
+        {/* <ListItem button selected={isSelected(routes.stock.details)}>
           <ListItemIcon>
             <ListOutlinedIcon />
           </ListItemIcon>
           <ListItemText primary="Detalles" />
-        </ListItem>
-        <ListItem button selected={isSelected(routes.stock.inventory)}>
+        </ListItem> */}
+        <ListItem button selected={isSelected(routes.stock.inventory)} onClick={() => { goToRoute(routes.stock.inventory); }}>
           <ListItemIcon>
             <TimelapseOutlinedIcon />
           </ListItemIcon>
